@@ -1,6 +1,13 @@
+### 招生管理平台系统
 
-#### 前端技术
- 
+### 介绍
+
+招生管理系统是基于VUE+ elementui的开源招生管理平台系统；其中提供包含如招生、录取、迎新等各个方面的服务，方便用户可以使用本系统快捷、简洁、从容的完成关于招生的数据操作、管理。
+
+### 软件架构
+
+架构上我们选择当下最主流的也是最具兼容性的方案。
+管理后台我们采用 vue2 + elementui 方便你快速的入门并实现开发。相较于传统的jq框架来说，vue2 + elementui 具有更容写逻辑、更容在后台开发中使用标准且美观的样式优点。
 - 基础框架：[ant-design-vue](https://github.com/vueComponent/ant-design-vue) - Ant Design Of Vue 实现
 - JavaScript框架：Vue
 - Webpack
@@ -12,56 +19,36 @@
 - [@antv/g2](https://antv.alipay.com/zh-cn/index.html) - Alipay AntV 数据可视化图表
 - [Viser-vue](https://viserjs.github.io/docs.html#/viser/guide/installation)  - antv/g2 封装实现
 
+### 功能清单
 
+![输入图片说明](src/assets/image5.png)
 
-项目下载和运行
-----
-
+### 项目下载和运行
 - 拉取项目代码
-
 - 安装依赖
-```
-yarn install
-```
+npm install
 
 - 开发模式运行
-```
-yarn run serve
-```
+npm run serve
 
 - 编译项目
-```
-yarn run build
-```
+npm run build
 
-- Lints and fixes files
-```
-yarn run lint
-```
+### 项目图片预览
+![输入图片说明](src/assets/image.png)
+![输入图片说明](src/assets/image1.png)
+![输入图片说明](src/assets/image2.png)
+![输入图片说明](src/assets/image3.png)
+### 联系方式
+### 微信联系方式
+
+![输入图片说明](src/assets/1715140097145.png)</br>
+
+### QQ群
+
+![输入图片说明](src/assets/63d9778d009ea49532a243ad744328c.png)
+### 期待您的联系
 
 
 
-其他说明
-----
 
-- 项目使用的 [vue-cli3](https://cli.vuejs.org/guide/), 请更新您的 cli
-
-- 关闭 Eslint (不推荐) 移除 `package.json` 中 `eslintConfig` 整个节点代码
-
-- 修改 Ant Design 配色，在文件 `vue.config.js` 中，其他 less 变量覆盖参考 [ant design](https://ant.design/docs/react/customize-theme-cn) 官方说明
-```ecmascript 6
-  css: {
-    loaderOptions: {
-      less: {
-        modifyVars: {
-          /* less 变量覆盖，用于自定义 ant design 主题 */
-
-          'primary-color': '#F5222D',
-          'link-color': '#F5222D',
-          'border-radius-base': '4px',
-        },
-        javascriptEnabled: true,
-      }
-    }
-  }
-```
