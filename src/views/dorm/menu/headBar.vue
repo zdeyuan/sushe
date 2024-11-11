@@ -87,7 +87,7 @@
 				this.token = window.sessionStorage.getItem('token')
 				this.appId = window.sessionStorage.getItem('appId')
 				this.userinfo = JSON.parse(window.sessionStorage.getItem('userInfo'))
-				this.manage = JSON.parse(sessionStorage.getItem('manage'))
+				this.manage = JSON.parse(window.sessionStorage.getItem('manage'))
 				// let index = this.manage.findIndex(item => item.APP_NAME == '宿舍管理系统')
 				// this.manage = this.manage.splice(index, 1)
 			}
