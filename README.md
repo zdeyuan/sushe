@@ -2,7 +2,10 @@
 
 ### 介绍
 
-招生管理系统是基于VUE+ elementui的开源招生管理平台系统；其中提供包含如招生、录取、迎新等各个方面的服务，方便用户可以使用本系统快捷、简洁、从容的完成关于招生的数据操作、管理。
+宿舍管理系统是基于VUE+ elementui的开源宿舍管理平台系统；其中提供包含如宿舍资产、宿务、住宿考勤、制度管理、宿舍统计等各个方面的服务，方便用户可以使用本系统快捷、简洁、从容的完成关于学生宿舍相关的数据操作、管理。
+
+### 提示：该项目为前后端分离，如需要后端请点击<a href='https://gitee.com/dysxsoft/dormitory-management-backend'>这里</a>
+
 
 ### 软件架构
 
@@ -35,10 +38,14 @@ npm run serve
 npm run build
 
 ### 项目图片预览
-![输入图片说明](src/assets/image.png)
 ![输入图片说明](src/assets/image1.png)
 ![输入图片说明](src/assets/image2.png)
 ![输入图片说明](src/assets/image3.png)
+
+
+###相关证书
+![输入图片说明](src/assets/9559befe22b102c4f42dc7e0eab0b19.jpg)
+
 ### 联系方式
 ### 微信联系方式
 
