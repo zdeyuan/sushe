@@ -6,7 +6,9 @@
 
 ### 提示：该项目为前后端分离，如需要后端请点击<a href='https://gitee.com/dysxsoft/dormitory-management-backend'>这里</a>
 ### 演示环境地址可以看看<a href='http://101.132.191.146/zhongmei/front/'>这里</a>
-测试账号 admin  密码 123456
+账号管理员 admin  密码 123456<br/>
+账号教师 20240728 密码 123456<br/>
+账号学生 20260106 密码 123456<br/>
 
 ### 软件架构
 
