@@ -1,289 +1,272 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			宿舍卫生评比
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿务管理 > <span class="notTop">宿舍卫生评比</span></div>
-			<div class="content-head">
-
-				<div style="min-width: 460px;"></div>
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">校区：</span>
 				<div>
-					<span class="head-span">校区</span>
 					<a-cascader class="condition" :options="school" placeholder="请选择类型" @change="schoolChange"
 						v-model="schoolId" />
 				</div>
-
+				<span class="head-span">宿舍楼：</span>
 				<div>
-					<span class="head-span">宿舍楼</span>
 					<a-cascader class="condition" :options="build" placeholder="请选择宿舍楼" @change="buildChange"
 						v-model="buildId" />
 				</div>
 
+				<span class="head-span">楼层：</span>
 				<div>
-					<span class="head-span">楼层</span>
 					<a-cascader class="condition" :options="floor" placeholder="请选择宿舍楼" @change="floorChange"
 						v-model="floorId" />
 				</div>
-
-				<a-button :size="size" class="content-button button-orange" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-					<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-					清空
-				</a-button>
-			</div>
-			<div class="content-head" style="margin-top: 8px;">
-				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="addJudge">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
-					<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @ok="addOK" @cancel="addCancel"
-						:width="1000">
-
-						<table class="scanTable">
-							<tr>
-								<td class="single">
-									<div>学期:</div>
-								</td>
-								<td class="double">
-									<a-input class="scanInput" v-model="scanTerm" :disabled="true"></a-input>
-								</td>
-								<td class="single">
-									<div>周:</div>
-								</td>
-								<td class="double">
-									<a-input class="scanInput" v-model="scanWeek" :disabled="true"></a-input>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>校区号-宿舍楼:</div>
-								</td>
-								<td class="double">
-									<a-cascader class="small" :options="scanSchool" placeholder="请选择校区"
-										v-model="scanSchoolId" @change="scanSchoolChange" />
-									<a-cascader class="small" :options="scanBuild" placeholder="请选择宿舍楼"
-										v-model="scanBuildId" @change="scanBuildChange" />
-								</td>
-								<td class="single">
-									<div>楼层-宿舍:</div>
-								</td>
-								<td class="double">
-									<a-cascader class="small" :options="scanFloor" placeholder="请选择楼层"
-										v-model="scanFloorId" @change="scanFloorChange" />
-									<a-cascader class="small" :options="scanDorm" placeholder="请选择宿舍"
-										v-model="scanDormId" />
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>周一:</div>
-								</td>
-								<td class="double">
-									<a-input-number class="scanInput" placeholder="请输入周一分数" v-model="one">
-									</a-input-number>
-								</td>
-								<td class="single">
-									<div>周二:</div>
-								</td>
-								<td class="double">
-									<a-input-number class="scanInput" placeholder="请输入周二分数" v-model="two">
-									</a-input-number>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>周三:</div>
-								</td>
-								<td class="double">
-									<a-input-number class="scanInput" placeholder="请输入周三分数" v-model="three">
-									</a-input-number>
-								</td>
-								<td class="single">
-									<div>周四:</div>
-								</td>
-								<td class="double">
-									<a-input-number class="scanInput" placeholder="请输入周四分数" v-model="four">
-									</a-input-number>
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>周五:</div>
-								</td>
-								<td class="double">
-									<a-input-number class="scanInput" placeholder="请输入周五分数" v-model="five">
-									</a-input-number>
-								</td>
-							</tr>
-						</table>
-
-						<template slot="footer">
-							<a-button style="background-color:#028be2;color:#ffffff;font-weight:bold" type="primary" @click="addOK">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="addCancel">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-blue button-after" style="font-size:16px;width:88px;height:34px; " @click="showUpload">
-						<icon-font type="iconfanhui" style="color: #FFFFFF;" />
-						导入
-					</a-button>
-					<a-modal v-model="upload" title="导入" @ok="uploadCancel" @cancel="uploadCancel">
-						<table class="scanTable">
-							<tr>
-								<td class="single">导入模版</td>
-								<td class="double">
-									<a style="font-size: 14px; margin-left: 20px;"
-										@click="handleExportXls('宿舍卫生评比模版')">点击下载</a>
-								</td>
-							</tr>
-							<tr>
-								<td class="single">选择Excel表格</td>
-								<td class="double">
-									<a-upload name="file" :showUploadList="false" :multiple="false"
-										:headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-										<a-button icon="import">选择文件</a-button>
-									</a-upload>
-								</td>
-							</tr>
-						</table>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff  " @click="getJudgeList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
 				</div>
-
-				<div style="min-width: 120px;"></div>
-
+				<div class="top">
+				<span class="head-span">宿舍：</span>
 				<div>
-					<span class="head-span">宿舍</span>
 					<a-cascader class="condition" :options="dorm" placeholder="请选择宿舍" v-model="dormId" />
 				</div>
 
+
+				<span class="head-span">学期：</span>
 				<div>
-					<span class="head-span">学期</span>
 					<a-cascader class="condition" :options="term" placeholder="请选择学期" @change="termChange"
 						v-model="termId" />
 				</div>
-
+				<span class="head-span">周：</span>
 				<div>
-					<span class="head-span">周</span>
 					<a-cascader class="condition" :options="week" placeholder="请选择周" v-model="weekId" />
 				</div>
-
-				<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getJudgeList">
-					<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+				<a-button type="primary" @click="getJudgeList" icon="search" style="margin-left: 20px;">
 					搜索
+				</a-button>
+				<a-button type="danger" style="margin-left:20px;" icon="reset" @click="resetAll">
+					清空
+				</a-button>
+			</div>
+			<div style="margin-bottom:20px;">
+				<a-button type="primary" @click="addJudge" icon="plus" style="margin-left:20px;">
+					添加
+				</a-button>
+				<!-- <a-button  type="primary" icon="import" @click="showUpload" style="margin-left:20px;">
+					导入
+				</a-button> -->
+				<a-button type="primary" icon="reload" @click="getJudgeList" style="margin-left: 20px;">
+					刷新
 				</a-button>
 			</div>
 			<div>
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;border-bottom: 1px solid #66C3FD;" @click="editJudge(record.key)">编辑</a>
-						<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK"
-							@cancel="editCancel" :width="1000">
-
-							<table class="scanTable">
-								<tr>
-									<td class="single">
-										<div>学期:</div>
-									</td>
-									<td class="double">
-										<a-input class="scanInput" v-model="scanTerm" :disabled="true"></a-input>
-									</td>
-									<td class="single">
-										<div>周:</div>
-									</td>
-									<td class="double">
-										<a-input class="scanInput" v-model="scanWeek" :disabled="true"></a-input>
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>校区号-宿舍楼:</div>
-									</td>
-									<td class="double">
-										<a-cascader class="small" :options="scanSchool" placeholder="请选择校区"
-											v-model="scanSchoolId" @change="scanSchoolChange" :disabled="true" />
-										<a-cascader class="small" :options="scanBuild" placeholder="请选择宿舍楼"
-											v-model="scanBuildId" @change="scanBuildChange" :disabled="true" />
-									</td>
-									<td class="single">
-										<div>楼层-宿舍:</div>
-									</td>
-									<td class="double">
-										<a-cascader class="small" :options="scanFloor" placeholder="请选择楼层"
-											v-model="scanFloorId" @change="scanFloorChange" :disabled="true" />
-										<a-cascader class="small" :options="scanDorm" placeholder="请选择宿舍"
-											v-model="scanDormId" :disabled="true" />
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>周一:</div>
-									</td>
-									<td class="double">
-										<a-input-number class="scanInput" placeholder="请输入周一分数" v-model="one">
-										</a-input-number>
-									</td>
-									<td class="single">
-										<div>周二:</div>
-									</td>
-									<td class="double">
-										<a-input-number class="scanInput" placeholder="请输入周二分数" v-model="two">
-										</a-input-number>
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>周三:</div>
-									</td>
-									<td class="double">
-										<a-input-number class="scanInput" placeholder="请输入周三分数" v-model="three">
-										</a-input-number>
-									</td>
-									<td class="single">
-										<div>周四:</div>
-									</td>
-									<td class="double">
-										<a-input-number class="scanInput" placeholder="请输入周四分数" v-model="four">
-										</a-input-number>
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>周五:</div>
-									</td>
-									<td class="double">
-										<a-input-number class="scanInput" placeholder="请输入周五分数" v-model="five">
-										</a-input-number>
-									</td>
-								</tr>
-							</table>
-
-							<template slot="footer">
-								<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="editOK">确定</a-button>
-								<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel">取消</a-button>
-							</template>
-						</a-modal>
-						<span>|</span>
-						<a style="font-size:18px;color:orange; border-bottom: 1px solid orange;"
-							@click="deleteJudge(record.key)">删除</a>
+						<a @click="editJudge(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a @click="deleteJudge(record.key)">删除</a>
 					</span>
 				</a-table>
+				<a-modal v-model="upload" title="导入" @ok="uploadCancel" @cancel="uploadCancel">
+					<table class="scanTable">
+						<tr>
+							<td class="single">导入模版</td>
+							<td class="double">
+								<a style="  margin-left: 20px;"
+									@click="handleExportXls('宿舍卫生评比模版')">点击下载</a>
+							</td>
+						</tr>
+						<tr>
+							<td class="single">选择Excel表格</td>
+							<td class="double">
+								<a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader"
+									:action="importExcelUrl" @change="handleImportExcel">
+									<a-button icon="import">选择文件</a-button>
+								</a-upload>
+							</td>
+						</tr>
+					</table>
+				</a-modal>
+
+				<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel"
+					:width="1000">
+
+					<table class="scanTable">
+						<tr>
+							<td class="single">
+								<div>学期:</div>
+							</td>
+							<td class="double">
+								<a-input class="scanInput" v-model="scanTerm" :disabled="true"></a-input>
+							</td>
+							<td class="single">
+								<div>周:</div>
+							</td>
+							<td class="double">
+								<a-input class="scanInput" v-model="scanWeek" :disabled="true"></a-input>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>校区号-宿舍楼:</div>
+							</td>
+							<td class="double">
+								<a-cascader class="small" :options="scanSchool" placeholder="请选择校区"
+									v-model="scanSchoolId" @change="scanSchoolChange" :disabled="true" />
+								<a-cascader class="small" :options="scanBuild" placeholder="请选择宿舍楼"
+									v-model="scanBuildId" @change="scanBuildChange" :disabled="true" />
+							</td>
+							<td class="single">
+								<div>楼层-宿舍:</div>
+							</td>
+							<td class="double">
+								<a-cascader class="small" :options="scanFloor" placeholder="请选择楼层" v-model="scanFloorId"
+									@change="scanFloorChange" :disabled="true" />
+								<a-cascader class="small" :options="scanDorm" placeholder="请选择宿舍" v-model="scanDormId"
+									:disabled="true" />
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>周一:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周一分数" v-model="one">
+								</a-input-number>
+							</td>
+							<td class="single">
+								<div>周二:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周二分数" v-model="two">
+								</a-input-number>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>周三:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周三分数" v-model="three">
+								</a-input-number>
+							</td>
+							<td class="single">
+								<div>周四:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周四分数" v-model="four">
+								</a-input-number>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>周五:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周五分数" v-model="five">
+								</a-input-number>
+							</td>
+						</tr>
+					</table>
+
+					<template slot="footer">
+						
+						<a-button 
+							@click="editCancel">取消</a-button>
+							<a-button type="primary" @click="editOK">确认</a-button>
+					</template>
+				</a-modal>
+				<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @ok="addOK" @cancel="addCancel"
+					:width="1000">
+
+					<table class="scanTable">
+						<tr>
+							<td class="single">
+								<div>学期:</div>
+							</td>
+							<td class="double">
+								<a-input class="scanInput" v-model="scanTerm" :disabled="true"></a-input>
+							</td>
+							<td class="single">
+								<div>周:</div>
+							</td>
+							<td class="double">
+								<a-input class="scanInput" v-model="scanWeek" :disabled="true"></a-input>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>校区号-宿舍楼:</div>
+							</td>
+							<td class="double">
+								<a-cascader class="small" :options="scanSchool" placeholder="请选择校区"
+									v-model="scanSchoolId" @change="scanSchoolChange" />
+								<a-cascader class="small" :options="scanBuild" placeholder="请选择宿舍楼"
+									v-model="scanBuildId" @change="scanBuildChange" />
+							</td>
+							<td class="single">
+								<div>楼层-宿舍:</div>
+							</td>
+							<td class="double">
+								<a-cascader class="small" :options="scanFloor" placeholder="请选择楼层" v-model="scanFloorId"
+									@change="scanFloorChange" />
+								<a-cascader class="small" :options="scanDorm" placeholder="请选择宿舍"
+									v-model="scanDormId" />
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>周一:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周一分数" v-model="one">
+								</a-input-number>
+							</td>
+							<td class="single">
+								<div>周二:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周二分数" v-model="two">
+								</a-input-number>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>周三:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周三分数" v-model="three">
+								</a-input-number>
+							</td>
+							<td class="single">
+								<div>周四:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周四分数" v-model="four">
+								</a-input-number>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="single">
+								<div>周五:</div>
+							</td>
+							<td class="double">
+								<a-input-number class="scanInput" placeholder="请输入周五分数" v-model="five">
+								</a-input-number>
+							</td>
+						</tr>
+					</table>
+
+					<template slot="footer">
+						<a-button @click="addCancel">取消</a-button>
+						<a-button type="primary" @click="addOK">确定</a-button>
+					</template>
+				</a-modal>
 			</div>
-		</div>
+		</a-card>
 	</div>
 
 
@@ -301,7 +284,7 @@
 	} from '@/mixins/EduListMixin';
 	import {
 		downFile
-	} from '@/api/manage'
+	} from '@/api/common/manage'
 
 	const IconFont = Icon.createFromIconfontCN({
 		scriptUrl: '//at.alicdn.com/t/font_2390461_f6v2cx4wmzq.js',
@@ -769,7 +752,7 @@
 					for (let week of res.result) {
 						this.week.push({
 							value: week.id,
-							label: week.dates+' 第'+week.week+'周'
+							label: week.dates + ' 第' + week.week + '周'
 						})
 					}
 				}).catch(err => {
@@ -938,8 +921,15 @@
 	};
 </script>
 
-<style>
-	..ant-pagination {
-		bottom: 40px;
+<style scoped>
+	.top {
+		padding-top: 10px !important;
+		display: flex;
+		align-items: center;
+	}
+	.head-span {
+		margin: 0 10px;
+		/* width:90px; */
+		text-align:right;
 	}
 </style>

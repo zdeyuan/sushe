@@ -1,102 +1,31 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			违纪情况管理
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">违纪管理 > <span class="notTop">违纪情况管理</span></div>
+	<div >
+		<a-card :bordered="false">
 			<div class="content-head">
-				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
-					<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel"
-						width="872px">
-						<table class="scanTable">
-							<tr>
-								<td class="single">
-									<div>选择学生:</div>
-								</td>
-								<td class="long">
-									<a-cascader class="small" :options="school" placeholder="请选择校区"
-										@change="schoolChange" v-model="schoolId" />
-									<a-cascader class="small" :options="build" placeholder="请选择建筑" @change="buildChange"
-										v-model="buildId" />
-									<a-cascader class="small" :options="dorm" placeholder="请选择宿舍" @change="dormChange"
-										v-model="dormId" />
-									<a-cascader class="small" :options="student" placeholder="请选择学生"
-										v-model="studentId" />
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>违纪类型:</div>
-								</td>
-								<td class="long">
-									<a-cascader class="scanInput" :options="type" placeholder="请选择违纪类型"
-										v-model="typeId" />
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>违纪时间:</div>
-								</td>
-								<td class="long">
-									<input type="date" v-model="scanTime" class="scanInput">
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>违纪说明</div>
-								</td>
-								<td class="double">
-									<a-input class="scanInput" placeholder="请输入违纪说明" v-model="scanDetail"></a-input>
-								</td>
-							</tr>
-						</table>
-
-						<template slot="footer">
-							<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="addOK()" class="buttonOk">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="addCancel()" class="buttonCancel">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="deletePatch">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						删除
-					</a-button>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getPrinList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
-				</div>
-
-				<div style="min-width: 400px;"></div>
-
-				<div>
-					<span class="head-span">学号</span>
-					<a-input class="condition" placeholder="请输入学号" v-model="stuId" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<span class="head-span">姓名</span>
-					<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getPrinList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+				<div class="top">
+					<span class="head-span">学号：</span>
+					<div><a-input class="condition" placeholder="请输入学号" v-model="stuId" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/></div>
+					<span class="head-span">姓名：</span>
+					<div>
+						<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+					</div>
+					<a-button type="primary" icon="search" style="margin-left:20px" @click="getPrinList">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button  type="danger" icon="reset" style="margin-left:20px" @click="resetAll">
 						清空
+					</a-button>
+				</div>
+				<div>
+					<a-button type="primary" icon="plus" style="margin-left:20px" @click="showModal">
+						添加
+					</a-button>
+					<a-button type="danger" icon="reset" style="margin-left:20px" @click="deletePatch">
+						删除
+					</a-button>
+				
+					<a-button  type="primary" icon="reload" style="margin-left:20px" @click="getPrinList">
+						刷新
 					</a-button>
 				</div>
 			</div>
@@ -104,14 +33,69 @@
 				<a-table :columns="columns" :data-source="data" :row-selection="{ selectedRowKeys: deleteList, onChange: onChange}" :defaultCurrent="6"
 					:pagination="pagination" @change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold;border-bottom: 1px solid #66C3FD;" @click="editPrin(record.key)">编辑</a>
-						<span>|</span>
-						<a style="font-size:18px;font-weigth:bold;color:orange; border-bottom: 1px solid orange;" @click="deletePrin(record.key)">删除</a>
+						<a  @click="editPrin(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a  @click="deletePrin(record.key)">删除</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
-		<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel" width="872px">
+		<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel"
+			width="1072px">
+			<table class="scanTable">
+				<tr>
+					<td class="single">
+						<div>选择学生:</div>
+					</td>
+					<td class="long">
+						<a-cascader class="small" :options="school" placeholder="请选择校区"
+							@change="schoolChange" v-model="schoolId" />
+						<a-cascader class="small" :options="build" placeholder="请选择建筑" @change="buildChange"
+							v-model="buildId" />
+						<a-cascader class="small" :options="dorm" placeholder="请选择宿舍" @change="dormChange"
+							v-model="dormId" />
+						<a-cascader class="small" :options="student" placeholder="请选择学生"
+							v-model="studentId" />
+					</td>
+				</tr>
+		
+				<tr>
+					<td class="single">
+						<div>违纪类型:</div>
+					</td>
+					<td class="long">
+						<a-cascader class="scanInput" :options="type" placeholder="请选择违纪类型"
+							v-model="typeId" />
+					</td>
+				</tr>
+		
+				<tr>
+					<td class="single">
+						<div>违纪时间:</div>
+					</td>
+					<td class="long">
+						<DatePickByCN
+						      v-model="scanTime"
+						      placeholder="请选择违纪时间"
+						    />
+					</td>
+				</tr>
+		
+				<tr>
+					<td class="single">
+						<div>违纪说明</div>
+					</td>
+					<td class="double">
+						<a-input class="scanInput" placeholder="请输入违纪说明" v-model="scanDetail"></a-input>
+					</td>
+				</tr>
+			</table>
+		
+			<template slot="footer">
+				<a-button   @click="addCancel()" class="buttonCancel">取消</a-button>
+				<a-button type="primary" @click="editOK()"  class="buttonOk">确定</a-button>
+			</template>
+		</a-modal>
+		<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel" width="1072px">
 			<table class="scanTable">
 				<tr>
 					<td class="single">
@@ -135,7 +119,10 @@
 						<div>违纪时间:</div>
 					</td>
 					<td class="long">
-						<input type="date" v-model="scanTime" class="scanInput">
+						<DatePickByCN
+						      v-model="scanTime"
+						      placeholder="请选择违纪时间"
+						    />
 					</td>
 				</tr>
 
@@ -150,10 +137,11 @@
 			</table>
 
 			<template slot="footer">
-				<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="editOK()" class="buttonOk">确定</a-button>
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel()" class="buttonCancel">取消</a-button>
+				<a-button   @click="editCancel()" class="buttonCancel">取消</a-button>
+				<a-button type="primary"   @click="editOK()" class="buttonOk">确定</a-button>
 			</template>
 		</a-modal>
+		</a-card>
 	</div>
 
 
@@ -574,6 +562,15 @@
 	};
 </script>
 
-<style>
-
+<style scoped>
+.top {
+		padding:20px;
+		padding-top:0;
+		display: flex;
+		align-items: center;
+	}
+	.head-span{
+		/* width:90px; */
+		text-align:right;
+	}
 </style>

@@ -1,0 +1,108 @@
+.ztree {
+}
+.ztree li span.button {
+  width: 19px !important;
+  height: 20px !important;
+  line-height: 20px !important;
+}
+/* 操作按钮的样式 */
+.ztree li span.button.add {
+  background-image: url('./img/metro.png');
+  margin-left: 8px;
+  margin-right: -1px;
+  background-position: -184px 1px !important;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.ztree li span.button.add:hover {
+  background-position: -163px 1px;
+}
+.ztree li span.button.remove {
+  background-image: url('./img/metro.png');
+  margin-left: 4px;
+  margin-right: -1px;
+  background-position: -184px -41px !important;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.ztree li span.button.remove:hover {
+  background-position: -163px -41px;
+}
+
+.ztree li span.button.edit {
+  background-image: url('./img/metro.png');
+  margin-left: 4px;
+  margin-right: -1px;
+  background-position: -184px -20px !important;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+
+.ztree li span.button.edit:hover {
+  background-position: -163px -20px;
+}
+
+.ztree li span.button.add {
+  background-image: url('./img/metro.png');
+  margin-left: 8px;
+  margin-right: -1px;
+  background-position: -184px 1px !important;
+  vertical-align: top;
+}
+/* 开关的样式 */
+.ztree li span.button.ico_open {
+  background-image: url('./img/metro.png');
+  margin-right: 2px;
+  background-position: -143px -21px !important;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.ztree li span.button.ico_open {
+  background-image: url('./img/metro.png');
+  margin-right: 2px;
+  background-position: -143px -21px !important;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+
+.ztree li span.button.ico_close {
+  background-image: url('./img/metro.png');
+  margin-right: 2px;
+  margin-right: 2px;
+  background-position: -143px 0 !important;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+
+.ztree li span.button.ico_docu {
+  background-image: url('./img/metro.png');
+  margin-right: 2px;
+  background-position: -142px -42px !important;
+  vertical-align: top;
+  *vertical-align: middle;
+}
+.tree_ext_span {
+  border: solid 1px #999999;
+  color: #999;
+  width: 17px;
+  height: 17px;
+  display: inline-block;
+  margin: 2px;
+  line-height: 17px;
+}
+/* .ztree .node_name{
+  max-width: 200Px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} */
+.ztree .button.checkbox_true_full {
+  border-color: #166fdc !important;
+  background-color: #166fdc !important;
+}
+.ztree .button.chk:after {
+  top: 2px !important;
+  left: 5px !important;
+  width: 6px !important;
+  height: 11px !important;
+}

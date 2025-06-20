@@ -7,7 +7,7 @@
     @ok="handleSubmit"
     @cancel="close"
     style="top:50px"
-    cancelText="关闭"
+    okText="确认"  cancelText="取消"
   >
     <a-row :gutter="10" style="background-color: #ececec; padding: 10px; margin: -10px">
       <a-col :md="6" :sm="24">
@@ -56,7 +56,7 @@
 
 <script>
   import {filterObj} from '@/utils/util'
-  import {queryDepartTreeList, getUserList, queryUserByDepId} from '@/api/api'
+  import {queryDepartTreeList, getUserList, queryUserByDepId} from '@/api/common/api'
 
   export default {
     name: 'JSelectUserByDepModal',

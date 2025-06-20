@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import {ajaxGetDictItems,getDictItemsFromCache} from '@/api/api'
+  import {ajaxGetDictItems,getDictItemsFromCache} from '@/api/common/api'
   export default {
     name: 'JMultiSelectTag',
     props: {

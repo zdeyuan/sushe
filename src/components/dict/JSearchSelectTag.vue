@@ -39,9 +39,9 @@
 </template>
 
 <script>
-  import { ajaxGetDictItems,getDictItemsFromCache } from '@/api/api'
+  import { ajaxGetDictItems,getDictItemsFromCache } from '@/api/common/api'
   import debounce from 'lodash/debounce';
-  import { getAction } from '../../api/manage'
+  import { getAction } from '@/api/common/manage'
 
   export default {
     name: 'JSearchSelectTag',

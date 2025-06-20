@@ -32,7 +32,7 @@
 <script>
   import Vue from 'vue'
   import { ACCESS_TOKEN } from "@/store/mutation-types"
-  import { getFileAccessHttpUrl } from '@/api/manage'
+  import { getFileAccessHttpUrl } from '@/api/common/manage'
 
   const uidGenerator=()=>{
     return '-'+parseInt(Math.random()*10000+1,10);

@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { ONL_AUTH_FIELDS } from "@/store/mutation-types"
-import { getAction } from '@/api/manage'
+import { getAction } from '@/api/common/manage'
 
 
 const online = {

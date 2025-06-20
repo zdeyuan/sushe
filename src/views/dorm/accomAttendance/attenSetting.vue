@@ -1,12 +1,6 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			考勤设置
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">住宿考勤 > <span class="notTop">考勤设置</span></div>
-			<div class="content-head">
-			</div>
+	<div >
+		<a-card :bordered="false">
 			<div style="margin-left: 30px;">
 				<span class="content-span"><span class="redSpan">*</span>晚归时间设置</span>
 				<a-time-picker format="HH:mm:ss" v-model="stime" placeholder="起始时间" class="time-picker" />
@@ -18,7 +12,7 @@
 				<span class="redSpan">(注:超过此时间后, 才可以将学生的考勤状态设置为夜不归宿)</span>
 			</div>
 			<a-button type="primary"  class="confirm" @click="setTime">提交</a-button>
-		</div>
+		</a-card>
 	</div>
 
 

@@ -3,8 +3,8 @@
     <router-link :to="{name:'dashboard'}">
 
       <!-- update-begin- author:sunjianlei --- date:20190814 --- for: logo颜色根据主题颜色变化 -->
-      <img v-if="navTheme === 'dark'" src="~@/assets/logo-white.png" alt="logo">
-      <img v-else src="~@/assets/logo.png" alt="logo">
+      <!-- <img v-if="navTheme === 'dark'" src="~@/assets/logo-white.png" alt="logo"> -->
+      <!-- <img v-else src="~@/assets/logo.png" alt="logo"> -->
       <!-- update-begin- author:sunjianlei --- date:20190814 --- for: logo颜色根据主题颜色变化 -->
 
       <h1 v-if="showTitle">{{ title }}</h1>
@@ -21,7 +21,7 @@
     props: {
       title: {
         type: String,
-        default: 'Edu-Boot Pro',
+        default: '人力资源管理系统',
         required: false
       },
       showTitle: {
@@ -43,7 +43,7 @@
       line-height: @height !important;
       box-shadow: none !important;
       transition: background 300ms;
-
+	  background: #2E437D !important;
       a {
         color: white;
         &:hover {
@@ -51,9 +51,8 @@
         }
       }
     }
-
     &.light .logo {
-      background-color: @primary-color;
+      background-color: #fff;
     }
   }
 </style>

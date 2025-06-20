@@ -7,7 +7,7 @@
     @ok="handleSubmit"
     @cancel="handleCancel"
     switchFullscreen
-    cancelText="关闭">
+    okText="确认"  cancelText="取消">
     <a-spin tip="Loading..." :spinning="false">
       <a-input-search style="margin-bottom: 1px" placeholder="请输入部门名称按回车进行搜索" @search="onSearch" />
       <a-tree
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import { queryDepartTreeList } from '@/api/api'
+  import { queryDepartTreeList } from '@/api/common/api'
   export default {
     name: 'JSelectDepartModal',
     props:['modalWidth','multi','rootOpened','departId'],

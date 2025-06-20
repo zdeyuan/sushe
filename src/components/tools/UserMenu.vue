@@ -1,190 +1,101 @@
 <template>
-  <div class="user-wrapper" :class="theme">
-    <!-- update_begin author:zhaoxin date:20191129 for: 做头部菜单栏导航 -->
-    <!-- update-begin author:sunjianlei date:20191@20 for: 解决全局样式冲突的问题 -->
-    <span class="action" @click="showClick">
-      <a-icon type="search"></a-icon>
-    </span>
-    <!-- update-begin author:sunjianlei date:20200219 for: 菜单搜索改为动态组件，在手机端呈现出弹出框 -->
-    <component :is="searchMenuComp" v-show="searchMenuVisible || isMobile()" class="borders" :visible="searchMenuVisible" title="搜索菜单" :footer="null" @cancel="searchMenuVisible=false">
-      <a-select
-        class="search-input"
-        showSearch
-        :showArrow="false"
-        placeholder="搜索菜单"
-        optionFilterProp="children"
-        :filterOption="filterOption"
-        :open="isMobile()?true:null"
-        :getPopupContainer="(node) => node.parentNode"
-        :style="isMobile()?{width: '100%',marginBottom:'50px'}:{}"
-        @change="searchMethods"
-        @blur="hiddenClick"
-      >
-        <a-select-option v-for="(site,index) in searchMenuOptions" :key="index" :value="site.id">{{site.meta.title}}</a-select-option>
-      </a-select>
-    </component>
-    <!-- update-end author:sunjianlei date:20200219 for: 菜单搜索改为动态组件，在手机端呈现出弹出框 -->
-    <!-- update-end author:sunjianlei date:20191220 for: 解决全局样式冲突的问题 -->
-    <!-- update_end  author:zhaoxin date:20191129 for: 做头部菜单栏导航 -->
-    <span class="action">
-    </span>
-    <header-notice class="action"/>
-    <a-dropdown>
-      <span class="action action-full ant-dropdown-link user-dropdown-menu">
-        <!-- 头像 -->
-        <a-avatar class="avatar" size="small" src="~@/assets/logo.png"/>
-        <span v-if="isDesktop()">欢迎您，{{ nickname() }}</span>
-      </span>
-      <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
-        <a-menu-item key="0">
-          <router-link :to="{ name: 'account-center' }">
-            <a-icon type="user"/>
-            <span>个人中心</span>
-          </router-link>
-        </a-menu-item>
-        <a-menu-item key="1">
-          <router-link :to="{ name: 'account-settings-base' }">
-            <a-icon type="setting"/>
-            <span>账户设置</span>
-          </router-link>
-        </a-menu-item>
-        <a-menu-item key="3"  @click="systemSetting">
-           <a-icon type="tool"/>
-           <span>系统设置</span>
-        </a-menu-item>
-        <a-menu-item key="4" @click="updatePassword">
-          <a-icon type="setting"/>
-          <span>密码修改</span>
-        </a-menu-item>
-        <a-menu-item key="5" @click="updateCurrentDepart">
-          <a-icon type="cluster"/>
-          <span>切换部门</span>
-        </a-menu-item>
-        <a-menu-item key="6" @click="clearCache">
-          <a-icon type="sync"/>
-          <span>清理缓存</span>
-        </a-menu-item>
-       <!-- <a-menu-item key="2" disabled>
-          <a-icon type="setting"/>
-          <span>测试</span>
-        </a-menu-item>
-        <a-menu-divider/>
-        <a-menu-item key="3">
-          <a href="javascript:;" @click="handleLogout">
-            <a-icon type="logout"/>
-            <span>退出登录</span>
+  <div>
+    <a-menu v-model="current" mode="horizontal">
+      <a-col :span="11">
+		<div class="title">
+			人事管理系统
+		</div>
+	  </a-col>
+      <a-col :span="13" class="nav-bottom">
+        <a-dropdown>
+          <a class="ant-dropdown-link" @click="e => e.preventDefault()">
+            <a-icon type="user" class="head-icon" />
+            <span class="admin">系统管理员</span>
+            <a-icon type="down" class="head-icon" />
           </a>
-        </a-menu-item>-->
-      </a-menu>
-    </a-dropdown>
-    <span class="action">
-      <a class="logout_title" href="javascript:;" @click="handleLogout">
-        <a-icon type="logout"/>
-        <span v-if="isDesktop()">&nbsp;退出登录</span>
-      </a>
-    </span>
-    <user-password ref="userPassword"></user-password>
-    <depart-select ref="departSelect" :closable="true" title="部门切换"></depart-select>
-    <setting-drawer ref="settingDrawer" :closable="true" title="系统设置"></setting-drawer>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a href="javascript:;">个人信息</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+        <a-dropdown>
+					<a class="ant-dropdown-link">
+						<span class="nav-item">切换系统</span>
+						<a-icon type="down" class="head-icon" />
+					</a>
+					<a-menu slot="overlay">
+						<a-menu-item v-for="(val,key) in manage">
+							<a :href="val.appAddress+'?token='+token+'&appId='+appId"
+								target="_blank">{{val.appName}}</a>
+						</a-menu-item>
+					</a-menu>
+          </a-dropdown>
+
+          <div>
+              <!-- <icon-font type="iconshouye-xuanzhong" class="head-icon" /> -->
+              <span class="nav-item">学校首页</span>
+          </div>
+
+          <div>
+              <!-- <icon-font type="iconxitong" class="head-icon" /> -->
+            <span class="nav-item">设置</span>
+          </div>
+
+          <div>
+              <!-- <icon-font type="iconfanhui" class="head-icon" /> -->
+            <span class="nav-item">返回</span>
+          </div>
+
+          <div @click="handleLogout">
+			<!-- <icon-font type="icontuichu" class="head-icon" /> -->
+            <span class="nav-item">退出登录</span>
+          </div>
+      </a-col>
+    </a-menu>
   </div>
 </template>
 
 <script>
-  import HeaderNotice from './HeaderNotice'
-  import UserPassword from './UserPassword'
-  import SettingDrawer from "@/components/setting/SettingDrawer";
-  import DepartSelect from './DepartSelect'
-  import { mapActions, mapGetters,mapState } from 'vuex'
-  import { mixinDevice } from '@/utils/mixin.js'
-  import { getFileAccessHttpUrl,getAction } from "@/api/manage"
-  import Vue from 'vue'
-  import { UI_CACHE_DB_DICT_DATA } from "@/store/mutation-types"
+  import { Icon } from 'ant-design-vue';
 
-  export default {
-    name: "UserMenu",
-    mixins: [mixinDevice],
-    data(){
-      return{
-        // update-begin author:sunjianlei date:20200219 for: 头部菜单搜索规范命名 --------------
-        searchMenuOptions:[],
-        searchMenuComp: 'span',
-        searchMenuVisible: false,
-        // update-begin author:sunjianlei date:20200219 for: 头部菜单搜索规范命名 --------------
-      }
-    },
-    components: {
-      HeaderNotice,
-      UserPassword,
-      DepartSelect,
-      SettingDrawer
-    },
-    props: {
-      theme: {
-        type: String,
-        required: false,
-        default: 'dark'
-      }
-    },
-    /* update_begin author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
-    created() {
-      let lists = []
-      this.searchMenus(lists,this.permissionMenuList)
-      this.searchMenuOptions=[...lists]
-    },
-    mounted() {
-      //如果是单点登录模式
-      if (process.env.VUE_APP_SSO == 'true') {
-        let depart = this.userInfo().orgCode
-        if (!depart) {
-          this.updateCurrentDepart()
-        }
-      }
-    },
-    computed: {
-      ...mapState({
-        // 后台菜单
-        permissionMenuList: state => state.user.permissionList
-
-      })
-    },
-    /* update_end author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
-    watch: {
-      // update-begin author:sunjianlei date:20200219 for: 菜单搜索改为动态组件，在手机端呈现出弹出框
-      device: {
-        immediate: true,
-        handler() {
-          this.searchMenuVisible = false
-          this.searchMenuComp = this.isMobile() ? 'a-modal' : 'span'
-        },
-      },
-      // update-end author:sunjianlei date:20200219 for: 菜单搜索改为动态组件，在手机端呈现出弹出框
-    },
+  const IconFont = Icon.createFromIconfontCN({
+    scriptUrl: '//at.alicdn.com/t/font_2390461_xsxva8v3rr.js',
+  });
+ import {
+ 	mapActions
+ } from 'vuex'
+ export default {
+ 	data() {
+ 		return {
+ 			manage: '',
+ 			token: '',
+ 			appId: '',
+ 		}
+ 	},
+ 	mounted() {
+ 		window.console.log('页面完成加载')
+ 		this.token = window.sessionStorage.getItem('token')
+ 		if (this.token !== undefined || this.token !== null) {
+ 			this.token = window.sessionStorage.getItem('token')
+ 			this.appId = window.sessionStorage.getItem('appId')
+ 			this.manage = JSON.parse(window.sessionStorage.getItem('manage'))
+ 			window.console.log(this.manage)
+ 			// let index = this.manage.findIndex(item => item.APP_NAME == '宿舍管理系统')
+ 			// this.manage = this.manage.splice(index, 1)
+ 		}
+ 	},
     methods: {
-      /* update_begin author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
-      showClick() {
-        this.searchMenuVisible = true
-      },
-      hiddenClick(){
-        this.shows = false
-      },
-      /* update_end author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
-      ...mapActions(["Logout"]),
-      ...mapGetters(["nickname", "avatar","userInfo"]),
-      getAvatar(){
-        return getFileAccessHttpUrl(this.avatar())
-      },
+	  ...mapActions(["Logout"]),
       handleLogout() {
         const that = this
-
         this.$confirm({
           title: '提示',
           content: '真的要注销登录吗 ?',
           onOk() {
             return that.Logout({}).then(() => {
-              // update-begin author:wangshuai date:20200601 for: 退出登录跳转登录页面
+			  
               that.$router.push({ path: '/user/login' });
-              // update-end author:wangshuai date:20200601 for: 退出登录跳转登录页面
-              //window.location.reload()
             }).catch(err => {
               that.$message.error({
                 title: '错误',
@@ -196,88 +107,57 @@
           },
         });
       },
-      updatePassword(){
-        let username = this.userInfo().username
-        this.$refs.userPassword.show(username)
-      },
-      updateCurrentDepart(){
-        this.$refs.departSelect.show()
-      },
-      systemSetting(){
-        this.$refs.settingDrawer.showDrawer()
-      },
-      /* update_begin author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
-      searchMenus(arr,menus){
-        for(let i of menus){
-          if(!i.hidden && "layouts/RouteView"!==i.component){
-           arr.push(i)
-          }
-          if(i.children&& i.children.length>0){
-            this.searchMenus(arr,i.children)
-          }
-        }
-      },
-      filterOption(input, option) {
-        return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      },
-      // update_begin author:sunjianlei date:20191230 for: 解决外部链接打开失败的问题
-      searchMethods(value) {
-        let route = this.searchMenuOptions.filter(item => item.id === value)[0]
-        if (route.meta.internalOrExternal === true || route.component.includes('layouts/IframePageView')) {
-          window.open(route.meta.url, '_blank')
-        } else {
-          this.$router.push({ path: route.path })
-        }
-        this.searchMenuVisible = false
-      },
-      // update_end author:sunjianlei date:20191230 for: 解决外部链接打开失败的问题
-      /*update_end author:zhaoxin date:20191129 for: 做头部菜单栏导航*/
-      /*update_begin author:liushaoqian date:20200507 for: 刷新缓存*/
-      clearCache(){
-        getAction("sys/dict/refleshCache").then((res) => {
-          if (res.success) {
-            //重新加载缓存
-            getAction("sys/dict/queryAllDictItems").then((res) => {
-              if (res.success) {
-                Vue.ls.remove(UI_CACHE_DB_DICT_DATA)
-                Vue.ls.set(UI_CACHE_DB_DICT_DATA, res.result, 7 * 24 * 60 * 60 * 1000)
-              }
-            })
-            this.$message.success("刷新缓存完成！");
-          }
-        }).catch(e=>{
-          this.$message.warn("刷新缓存失败！");
-          console.log("刷新失败",e)
-        })
-      }
-      /*update_end author:liushaoqian date:20200507 for: 刷新缓存*/
     }
   }
 </script>
 
-<style lang="less" scoped>
-  /* update_begin author:zhaoxin date:20191129 for: 让搜索框颜色能随主题颜色变换*/
-  /* update-begin author:sunjianlei date:20191220 for: 解决全局样式冲突问题 */
-  .user-wrapper .search-input {
-    width: 180px;
-    color: inherit;
-
-    /deep/ .ant-select-selection {
-      background-color: inherit;
-      border: 0;
-      border-bottom: 1px solid white;
-      &__placeholder, &__field__placeholder {
-        color: inherit;
-      }
-    }
+<style>
+  .ant-menu ant-menu-horizontal ant-menu-root ant-menu-light .nav-bottom{
+	  display: flex;
   }
-  /* update-end author:sunjianlei date:20191220 for: 解决全局样式冲突问题 */
-  /* update_end author:zhaoxin date:20191129 for: 让搜索框颜色能随主题颜色变换*/
-</style>
+  .nav-bottom {
+    height: 60px !important;
+    display: flex !important;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-around;
+	margin-bottom: 5px;
+  }
 
-<style scoped>
-  .logout_title {
-    color: inherit;
-    text-decoration: none;
+  .ant-menu {
+    height: 59px;
+  }
+
+  .title {
+    width: 320px;
+    border-radius: 0px;
+    font-size: 25px;
+	height: 58px;
+	line-height: 58px;
+    text-align: center;
+    font-family: "MicrosoftYaHei";
+	color: white;
+	background: #2E437D;
+  }
+
+  .admin {
+    color: #9F9F9F;
+    font-size: 14px;
+  }
+
+  .nav-item {
+    color: #707070;
+    font-size: 15px;
+    /* font-weight: bold; */
+    /* margin: 0 5px; */
+    line-height: 15px;
+  }
+
+  .head-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 28px;
+    color: #707070;
   }
 </style>

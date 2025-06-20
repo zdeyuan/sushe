@@ -6,7 +6,8 @@
           :confirmLoading="confirmLoading"
           @ok="handleSubmit"
           @cancel="close"
-          cancelText="关闭">
+          okText="确认"
+          cancelText="取消">
     <div class="card-container">
       <a-tabs type="card">
         <a-tab-pane key="1" type="card">

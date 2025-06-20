@@ -1,50 +1,18 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="desktop" class="dorm-modify-item">
-					<router-link class="link" to="/dorm/dormModifyApply">宿舍变更申请</router-link>
-				</a-menu-item>
-				<a-menu-item key="defined" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormModifyApprove">宿舍变更审批</router-link>
-				</a-menu-item>
-				<a-menu-item key="this.$message.success" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link-active" to="/dorm/dormModifyQuery">宿舍变更查询</router-link>
-				</a-menu-item>
-				<router-view></router-view>
-			</a-menu>
-		</span>
-		<hr align="left" width=147 color=#878787 SIZE=2 style="margin-left: 370px;" /> -->
-		<span>
-			<div class="content-title not-title">
-				<router-link class="link-active" to="/dorm/dormModifyApply">宿舍变更申请</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormModifyApprove">宿舍变更审批</router-link>
-			</div>
-			<div class="content-title ">
-				<router-link class="link" to="/dorm/dormModifyQuery">宿舍变更查询</router-link>
-			</div>
-		</span>
+	<div>
 		<div class="pageContentBox">
-			<div class="headTop">宿舍管理 > 宿舍管理 > <span class="notTop">宿舍变更查询</span></div>
-			<div class="content-head">
+			<div class="top">
 
-				<div style="min-width: 800px;"></div>
-
+				<span class="head-span">姓名：</span>
 				<div>
-					<span class="head-span">姓名</span>
-					<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
+					<a-input class="condition" placeholder="请输入姓名" v-model="name"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
-
 				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getModifyQuery">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+					<a-button type="primary" style="margin-left:20px" icon="search" @click="getModifyQuery">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button type="danger" style="margin-left:20px" @click="resetAll">
 						清空
 					</a-button>
 				</div>
@@ -53,103 +21,105 @@
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange" class="long-table">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold;color: #00d09d; border-bottom: 1px solid #00d09d;" @click="upMsg(record)">查看</a>
+						<a @click="upMsg(record)">查看</a>
 					</span>
 				</a-table>
 			</div>
-			<a-modal title="查看" :visible="visible" :confirm-loading="confirmLoading" @cancel="handleCancel" width='700px'>
-						<div class="systemSeeBox">
-							<div class="systemReleaseMsg">
-								<span class="msgs">
-									<a-row>
-										<a-col :span='5'>
-											<div class="lCount">
-												学生：
-											</div>
-										</a-col>
-										<a-col :span='12'>
-											<div class="rCount">
-												姓名：{{doingMsg.name}} （学号：{{doingMsg.id}}）
-											</div>
-										</a-col>
-									</a-row>
-								</span>
-								<span class="msgs">
-									<a-row>
-										<a-col :span='5'>
-											<div class="lCount">
-												原宿舍：
-											</div>
-										</a-col>
-										<a-col :span='12'>
-											<div class="rCount">
-												{{doingMsg.oldSchool}}  {{doingMsg.oldBuild}}  {{doingMsg.oldDorm}}
-											</div>
-										</a-col>
-									</a-row>
-								</span>
-								<span class="msgs">
-									<a-row>
-										<a-col :span='5'>
-											<div class="lCount">
-												申请情况：
-											</div>
-										</a-col>
-										<a-col :span='19'>
-											<div class="rCount">
-												申请人：{{doingMsg.name}}  申请时间：{{doingMsg.applyTime}} 
-											</div>
-										</a-col>
-									</a-row>
-								</span>
-								<span class="msgs">
-									<a-row>
-										<a-col :span='5'>
-											<div class="lCount">
-												审批结果：
-											</div>
-										</a-col>
-										<a-col :span='12'>
-											<div class="rCount red">
-												{{doingMsg.state}}
-											</div>
-										</a-col>
-									</a-row>
-								</span>
-								<span class="msgs">
-									<a-row>
-										<a-col :span='5'>
-											<div class="lCount">
-												审批情况：
-											</div>
-										</a-col>
-										<a-col :span='19'>
-											<div class="rCount">
-												审批人：{{doingMsg.approveName}}  审批时间：{{doingMsg.approveTime}} 
-											</div>
-										</a-col>
-									</a-row>
-								</span>
-								<span class="msgs">
-									<a-row>
-										<a-col :span='5'>
-											<div class="lCount">
-												新宿舍：
-											</div>
-										</a-col>
-										<a-col :span='12'>
-											<div class="rCount">
-												{{doingMsg.newSchool}}  {{doingMsg.newBuild}}  {{doingMsg.newDorm == null ? '暂无' : doingMsg.newDorm}}
-											</div>
-										</a-col>
-									</a-row>
-								</span>
-							</div>
-						</div>
-						<template slot="footer" class="floor-footer">
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="handleCancel">关闭</a-button>
-						</template>
-					</a-modal>
+			<a-modal title="查看" :visible="visible" :confirm-loading="confirmLoading" @cancel="handleCancel"
+				width='700px'>
+				<div class="systemSeeBox">
+					<div class="systemReleaseMsg">
+						<span class="msgs">
+							<a-row>
+								<a-col :span='5'>
+									<div class="lCount">
+										学生：
+									</div>
+								</a-col>
+								<a-col :span='12'>
+									<div class="rCount">
+										姓名：{{doingMsg.name}} （学号：{{doingMsg.id}}）
+									</div>
+								</a-col>
+							</a-row>
+						</span>
+						<span class="msgs">
+							<a-row>
+								<a-col :span='5'>
+									<div class="lCount">
+										原宿舍：
+									</div>
+								</a-col>
+								<a-col :span='12'>
+									<div class="rCount">
+										{{doingMsg.oldSchool}} {{doingMsg.oldBuild}} {{doingMsg.oldDorm}}
+									</div>
+								</a-col>
+							</a-row>
+						</span>
+						<span class="msgs">
+							<a-row>
+								<a-col :span='5'>
+									<div class="lCount">
+										申请情况：
+									</div>
+								</a-col>
+								<a-col :span='19'>
+									<div class="rCount">
+										申请人：{{doingMsg.name}} 申请时间：{{doingMsg.applyTime}}
+									</div>
+								</a-col>
+							</a-row>
+						</span>
+						<span class="msgs">
+							<a-row>
+								<a-col :span='5'>
+									<div class="lCount">
+										审批结果：
+									</div>
+								</a-col>
+								<a-col :span='12'>
+									<div class="rCount red">
+										{{doingMsg.state}}
+									</div>
+								</a-col>
+							</a-row>
+						</span>
+						<span class="msgs">
+							<a-row>
+								<a-col :span='5'>
+									<div class="lCount">
+										审批情况：
+									</div>
+								</a-col>
+								<a-col :span='19'>
+									<div class="rCount">
+										审批人：{{doingMsg.approveName}} 审批时间：{{doingMsg.approveTime}}
+									</div>
+								</a-col>
+							</a-row>
+						</span>
+						<span class="msgs">
+							<a-row>
+								<a-col :span='5'>
+									<div class="lCount">
+										新宿舍：
+									</div>
+								</a-col>
+								<a-col :span='12'>
+									<div class="rCount">
+										{{doingMsg.newSchool}} {{doingMsg.newBuild}}
+										{{doingMsg.newDorm == null ? '暂无' : doingMsg.newDorm}}
+									</div>
+								</a-col>
+							</a-row>
+						</span>
+					</div>
+				</div>
+				<template slot="footer" class="floor-footer">
+					<a-button @click="handleCancel">关闭</a-button>
+				</template>
+			</a-modal>
 		</div>
 	</div>
 </template>
@@ -275,7 +245,7 @@
 				confirmLoading: false,
 				name: '',
 				state: ['申请', '审批通过', '驳回', '已执行'],
-				doingMsg:''	
+				doingMsg: ''
 			};
 		},
 		components: {
@@ -357,7 +327,7 @@
 			resetAll() {
 				this.name = '';
 			},
-			upMsg(msg){
+			upMsg(msg) {
 				console.log(msg)
 				this.doingMsg = msg
 				this.confirmLoading = true;
@@ -370,49 +340,24 @@
 	};
 </script>
 
-<style>
-	.dorm-modify-top {
-		width: 500px;
-		height: 40px;
-		border: 0px;
-		background-color: #E9EDF6;
+<style scoped>
+	.top {
+		padding: 30px;
+		display: flex;
+		align-items: center;
 	}
 
-	.dorm-modify-item {
-		width: 150px;
-	}
-
-	.dorm-modify-after {
-		margin-left: 30px;
-	}
-
-	.link {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #999999 !important;
-	}
-
-	.link-active {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #666666 !important;
-	}
-	
-	.lCount{
-		font-size: 20px;
+	.lCount {
 		margin: 10px 0;
 		text-align: right;
 	}
-	.rCount{
+
+	.rCount {
 		margin: 10px 0;
-		font-size: 20px;
 		text-align: left;
 	}
-	.red{
+
+	.red {
 		color: red;
 	}
 </style>

@@ -1,16 +1,8 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			宿舍楼管理
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">基础管理 > <span class="notTop">宿舍楼管理</span></div>
+	<div>
+		<a-card :bordered="false">
 			<div class="content-head">
 				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
 					<a-modal title="添加宿舍楼" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk"
 						@cancel="handleCancel" :width="900">
 						<table class="scanTable">
@@ -19,13 +11,15 @@
 									<div><span class="spanRed">*</span>宿舍楼名称:</div>
 								</td>
 								<td class="double">
-									<a-input class="scanInput" placeholder="请输入宿舍楼名称" v-model="addName" onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
+									<a-input class="scanInput" placeholder="请输入宿舍楼名称" v-model="addName"
+										onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
 								</td>
 								<td class="single">
 									<div><span class="spanRed">*</span>宿舍楼代码:</div>
 								</td>
 								<td class="double">
-									<a-input class="scanInput" placeholder="请输入宿舍楼代码" v-model="addCode" onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
+									<a-input class="scanInput" placeholder="请输入宿舍楼代码" v-model="addCode"
+										onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
 								</td>
 							</tr>
 							<tr>
@@ -51,14 +45,16 @@
 									<div>总建筑面积:</div>
 								</td>
 								<td class="double">
-									<a-input class="scanInput" placeholder="请输入总建筑面积" v-model="addBuildSquare" onkeyup="this.value=this.value.replace(/[, ]/g,'')">
+									<a-input class="scanInput" placeholder="请输入总建筑面积" v-model="addBuildSquare"
+										onkeyup="this.value=this.value.replace(/[, ]/g,'')">
 									</a-input>
 								</td>
 								<td class="single">
 									<div>总使用面积:</div>
 								</td>
 								<td class="double">
-									<a-input class="scanInput" placeholder="请输入总使用面积" v-model="addTotalSquare" onkeyup="this.value=this.value.replace(/[, ]/g,'')">
+									<a-input class="scanInput" placeholder="请输入总使用面积" v-model="addTotalSquare"
+										onkeyup="this.value=this.value.replace(/[, ]/g,'')">
 									</a-input>
 								</td>
 							</tr>
@@ -67,13 +63,14 @@
 									<div><span class="spanRed">*</span>宿舍楼地址:</div>
 								</td>
 								<td class="double">
-									<a-input class="scanInput" placeholder="请输入宿舍楼地址" v-model="addAddress" onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
+									<a-input class="scanInput" placeholder="请输入宿舍楼地址" v-model="addAddress"
+										onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
 								</td>
 								<td class="single">
 									<div>楼层数:</div>
 								</td>
 								<td class="double">
-									<a-input class="scanInput" placeholder="请输入楼层数" type="number" v-model="addFloor" >
+									<a-input class="scanInput" placeholder="请输入楼层数" type="number" v-model="addFloor">
 									</a-input>
 								</td>
 							</tr>
@@ -107,15 +104,13 @@
 							</tr>
 						</table>
 						<template slot="footer">
-							<a-button type="primary" style="background-color:#0098f8;font-weight:bold;color:#ffffff" @click="handleOk()">确定</a-button>
-							<a-button style="background-color:#999999;font-weight:bold;color:#ffffff" @click="handleCancel()">取消</a-button>
+
+							<a-button @click="handleCancel()">取消</a-button>
+							<a-button type="primary" @click="handleOk()">确定</a-button>
 						</template>
 					</a-modal>
 
-					<a-button :size="size" class="content-button button-blue button-after" style="font-size:16px;width:88px;height:34px; " @click="showUpload">
-						<icon-font type="iconfanhui" style="color: #FFFFFF;" />
-						导入
-					</a-button>
+
 					<a-modal v-model="upload" title="导入" @ok="uploadCancel" @cancel="uploadCancel">
 						<table class="scanTable">
 							<tr>
@@ -138,54 +133,52 @@
 							</tr>
 						</table>
 					</a-modal>
-
-
-					<a-button :size="size" class="content-button button-green button-after" style="font-size:16px;width:88px;height:34px; "
-						@click="changeSuam">
-						<icon-font type="iconfanhui1" style="color: #FFFFFF;" />
-						导出
-					</a-button>
-
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getBuildList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
 				</div>
 
-				<div style="min-width: 350px;"></div>
 
-				<div>
-					<span class="head-span">宿舍楼名称</span>
-					<a-input class="condition" placeholder="请输入名称" v-model="buildName" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
-				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getBuildList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+				<div class="top">
+					<div class="head-label">
+						<span class="head-span">宿舍楼名称</span>
+						<a-input class="condition" placeholder="请输入名称" v-model="buildName"
+							onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
+					</div>
+					<a-button type="primary" @click="getBuildList" icon="search" style="margin-left: 20px;">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button type="danger" @click="resetAll" style="margin-left: 20px;">
 						清空
 					</a-button>
 				</div>
+				<a-button type="primary" @click="showModal" icon="plus" style="margin-right:10px;">
+					添加
+				</a-button>
+				<a-button type="primary" icon="import" @click="showUpload" style="margin-right:10px;">
+					导入
+				</a-button>
+				<a-button type="primary" icon="export" @click="changeSuam" style="margin-right:10px;">
+					导出
+				</a-button>
+				<a-button type="primary" icon="reload" @click="getBuildList">
+					刷新
+				</a-button>
 			</div>
+
 			<div>
+
+			</div>
+			<div class="table-useful">
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px; color:#00bad0; border-bottom: 1px solid #00bad0;" @click="addAdmin(record)">添加管理员</a>
-						<span>|</span>
-						<a style="font-size:18px; color:#0098f8; border-bottom: 1px solid #0098f8;" @click="editBuild(record.key)">编辑</a>
-						<span>|</span>
-						<a style="font-size:18px; color:#fc8950; border-bottom: 1px solid #fc8950;"
-							@click="deleteBuild(record.key)">删除</a>
+						<a @click="addAdmin(record)">添加管理员</a>
+						<a-divider type="vertical" />
+						<a @click="editBuild(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a @click="deleteBuild(record.key)">删除</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
+		</a-card>
 		<a-modal title="添加宿舍楼管理员" :visible="admin" :confirm-loading="confirmLoading" @ok="addAdminOK"
 			@cancel="addAdminCancel" :width="900">
 			<table class="scanTable">
@@ -214,8 +207,8 @@
 				</tr>
 			</table>
 			<template slot="footer">
-				<a-button type="primary" style="background-color:#0098f8;font-weight:bold;color:#ffffff" @click="addAdminOK">确定</a-button>
-				<a-button style="background-color:#999999;font-weight:bold;color:#ffffff" @click="addAdminCancel">取消</a-button>
+				<a-button @click="addAdminCancel">取消</a-button>
+				<a-button type="primary" @click="addAdminOK">确认</a-button>
 			</template>
 		</a-modal>
 
@@ -255,13 +248,13 @@
 				</tr>
 				<tr>
 					<td class="single">
-						<div>总建筑面积:</div>
+						<div><span class="spanRed">*</span>总建筑面积:</div>
 					</td>
 					<td class="double">
 						<a-input class="scanInput" placeholder="请输入总建筑面积" v-model="editBuildSquare"></a-input>
 					</td>
 					<td class="single">
-						<div>总使用面积:</div>
+						<div><span class="spanRed">*</span>总使用面积:</div>
 					</td>
 					<td class="double">
 						<a-input class="scanInput" placeholder="请输入总使用面积" v-model="editTotalSquare"></a-input>
@@ -275,7 +268,7 @@
 						<a-input class="scanInput" placeholder="请输入宿舍楼地址" v-model="editAddress"></a-input>
 					</td>
 					<td class="single">
-						<div>楼层数:</div>
+						<div><span class="spanRed">*</span>楼层数:</div>
 					</td>
 					<td class="double">
 						<a-input class="scanInput" placeholder="请输入楼层数" type="number" v-model="editFloor"></a-input>
@@ -309,8 +302,8 @@
 				</tr>
 			</table>
 			<template slot="footer">
-				<a-button type="primary" style="background-color:#0098f8;font-weight:bold;color:#ffffff" @click="editOK()">确定</a-button>
-				<a-button style="background-color:#999999;font-weight:bold;color:#ffffff" @click="editCancel()">取消</a-button>
+				<a-button @click="editCancel()">取消</a-button>
+				<a-button type="primary" @click="editOK()">确认</a-button>
 			</template>
 		</a-modal>
 	</div>
@@ -330,7 +323,7 @@
 	} from '@/mixins/EduListMixin';
 	import {
 		downFile
-	} from '@/api/manage'
+	} from '@/api/common/manage'
 
 	const IconFont = Icon.createFromIconfontCN({
 		scriptUrl: '//at.alicdn.com/t/font_2390461_vvis3tohqh.js',
@@ -382,12 +375,11 @@
 			key: 'state',
 		},
 		{
-			width: '10%',
-		},
-		{
 			title: '操作',
 			dataIndex: 'operator',
 			key: 'operator',
+			width: '20%',
+			align: 'center',
 			scopedSlots: {
 				customRender: 'operator'
 			},
@@ -482,8 +474,8 @@
 				}]
 			};
 		},
-		watch:{
-			
+		watch: {
+
 		},
 		mounted() {
 			this.getBuildList();
@@ -499,13 +491,13 @@
 			IconFont,
 		},
 		methods: {
-			changeSuam(){
+			changeSuam() {
 				var arr = []
 				arr.push({
 					key: "jzwmc",
 					value: this.buildName
 				})
-				this.handleExportXls('宿舍楼',arr)
+				this.handleExportXls('宿舍楼', arr)
 			},
 			showModal() {
 				this.schoolId = [];
@@ -523,7 +515,8 @@
 			},
 			handleOk(e) {
 				this.confirmLoading = true;
-				if (this.addName == "" || this.addCode == "" || this.addAddress == "" || this.stateId.length == 0) {
+				if (this.editName == "" || this.editCode == "" || this.editAddress == "" || this.stateId.length == 0 ||
+					this.editFloor == '' || this.editBuildSquare == '' || this.editTotalSquare == '') {
 					this.$message.warning("请将信息输入完整");
 					return;
 				}
@@ -575,12 +568,12 @@
 					console.log(res);
 					// data = []
 					data.splice(0, data.length);
-					console.log(data)
 					for (let build of res.result) {
 						data.push({
 							key: build.id,
 							name: build.jzwmc,
-							type: build.xbm == -1 ? this.radioName[0].value : this.radioName[build.xbm].value,
+							type: build.xbm == -1 ? this.radioName[0].value : this.radioName[build.xbm]
+								.value,
 							code: build.jzwh,
 							school: build.xqmc,
 							floor: build.jzwcs,
@@ -591,7 +584,6 @@
 						})
 					}
 					var ary = data
-					console.log(data)
 					for (let i = 0; i < ary.length - 1; i++) {
 						for (let j = 0; j < ary.length - i - 1; j++) {
 							if (ary[j].sort > ary[j + 1].sort) {
@@ -601,9 +593,7 @@
 							}
 						}
 					}
-					console.log(ary)
 					data = ary
-					console.log(data)
 					// data = data.reverse()
 					this.pagination.current = 1;
 					this.pagination.total = res.result.length;
@@ -677,7 +667,8 @@
 				})
 			},
 			editOK() {
-				if (this.editName == "" || this.editCode == "" || this.editAddress == "" || this.stateId.length == 0) {
+				if (this.editName == "" || this.editCode == "" || this.editAddress == "" || this.stateId.length == 0 ||
+					this.editFloor == '' || this.editBuildSquare == '' || this.editTotalSquare == '') {
 					this.$message.warning("请将信息输入完整");
 					return;
 				}
@@ -774,25 +765,25 @@
 				this.teacherId = [];
 				this.addAdminId = text.key;
 				this.dormName = text.name;
-				this.schoolName = text.school;	
+				this.schoolName = text.school;
 				axios({
-					url:'dorm/bulidMng/showMng',
+					url: 'dorm/bulidMng/showMng',
 					method: 'post',
 					params: {
 						sslId: text.key,
 					}
-				}).then(res => {	
-					if(res.result.adminId==null){
+				}).then(res => {
+					if (res.result.adminId == null) {
 						this.getTeacherList();
 						return;
 					}
-					this.teacherId = [res.result.adminId];					
+					this.teacherId = [res.result.adminId];
 					this.getTeacherList();
 				}).catch(err => {
 					this.$message.warning("未添加管理员");
 				})
 
-				
+
 			},
 			addAdminOK() {
 				if (this.teacherId.length == 0) {
@@ -837,7 +828,21 @@
 	};
 </script>
 
-<style>
+<style lang="less" scoped>
+	.top {
+		padding: 0 !important;
+		margin-bottom: 10px;
+		display: flex;
+		align-items: center;
+	}
 
+	.head-label {
+		display: flex;
+		align-items: center;
+	}
 
+	.head-span {
+		margin: 0 10px;
+		width: 120px;
+	}
 </style>

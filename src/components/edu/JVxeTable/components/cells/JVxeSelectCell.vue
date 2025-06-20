@@ -22,7 +22,7 @@
 
 <script>
   import JVxeCellMixins, { dispatchEvent } from '@/components/edu/JVxeTable/mixins/JVxeCellMixins'
-  import { JVXETypes } from '@comp/edu/JVxeTable/index'
+  import { JVXETypes } from '@/components/edu/JVxeTable/index'
 
   export default {
     name: 'JVxeSelectCell',

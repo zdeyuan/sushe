@@ -1,185 +1,159 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="desktop" class="dorm-modify-item">
-					<router-link class="link-active" to="/dorm/dormModifyApply">宿舍变更申请</router-link>
-				</a-menu-item>
-				<a-menu-item key="defined" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormModifyApprove">宿舍变更审批</router-link>
-				</a-menu-item>
-				<a-menu-item key="this.$message.success" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormModifyApprove">宿舍变更审批</router-link>
-				</a-menu-item>
-				<router-view></router-view>
+
+	<div>
+		<a-card :bordered="false">
+			<a-menu v-model="current" mode="horizontal">
+				<a-menu-item key="dormModifyApply"> 宿舍变更申请 </a-menu-item>
+				<a-menu-item key="dormModifyApprove" v-if="$hasPer(['system'])"> 宿舍变更审批 </a-menu-item>
+				<a-menu-item key="dormModifyQuery" v-if="$hasPer(['system'])"> 宿舍变更查询 </a-menu-item>
 			</a-menu>
-		</span> -->
-		<span>
-			<div class="content-title ">
-				<router-link class="link-active" to="/dorm/dormModifyApply">宿舍变更申请</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormModifyApprove">宿舍变更审批</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormModifyQuery">宿舍变更查询</router-link>
-			</div>
-		</span>
-<!-- 		<hr align="left" width=147 color=#878787 SIZE=2 style="margin-left: 3px;" /> -->
-		<div class="pageContentBox">
-			<div class="headTop">宿舍管理 > 宿舍管理 > <span class="notTop">宿舍变更申请</span></div>
-			<div class="content-head">
-				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff  " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
+			<div v-if="current == 'dormModifyApply'" >
+				<div class="top" v-if="$hasPer(['system'])">
+					<span class="head-span">姓名：</span>
+					<div>
+						<a-input  class="condition" placeholder="请输入姓名" v-model="name"
+							onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
+					</div>
+					<a-button type="primary" style="margin-left:20px;" icon="search" @click="getModifyApply">
+						搜索
+					</a-button>
+					<a-button type="danger" style="margin-left:20px;" @click="resetAll">
+						清空
+					</a-button>
+				</div>
+				<div style="margin:20px 0;">
+					<a-button type="primary" icon="plus" @click="showModal">
 						添加
 					</a-button>
-					<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel"
-						width="872px">
-						<table class="scanTable">
-							<tr>
-								<td class="single">
-									<div>用户</div>
-								</td>
-								<td class="long">
-									<a-cascader class="small" :options="oldSchool" placeholder="请选择校区"
-										@change="oldSchoolChange" v-model="oldSchoolId" />
-									<a-cascader class="small" :options="oldBuild" placeholder="请选择建筑"
-										@change="oldBuildChange" v-model="oldBuildId" />
-									<a-cascader class="small" :options="oldDorm" placeholder="请选择宿舍"
-										@change="oldDormChange" v-model="oldDormId" />
-									<a-cascader class="small" :options="stuName" placeholder="请选择学生"
-										v-model="studentId" />
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>新校区号</div>
-								</td>
-								<td class="double">
-									<a-cascader class="scanInput" :options="newSchool" placeholder="请选择校区"
-										@change="newSchoolChange" v-model="newSchoolId" />
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>新宿舍楼编号</div>
-								</td>
-								<td class="double">
-									<a-cascader class="scanInput" :options="newBuild" placeholder="请选择建筑"
-										v-model="newBuildId" />
-								</td>
-							</tr>
-
-							<tr>
-								<td class="single">
-									<div>申请原因</div>
-								</td>
-								<td class="double">
-									<a-input class="scanInput" placeholder="请输入申请原因" v-model="cause"></a-input>
-								</td>
-							</tr>
-						</table>
-
-						<template slot="footer">
-							<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="addOK()" class="buttonOk">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="addCancel()" class="buttonCancel">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getModifyApply">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
+					<a-button  type="primary" style="margin-left:20px;" icon="reload" @click="getModifyApply">
 						刷新
 					</a-button>
 				</div>
 
-				<div style="min-width: 550px;"></div>
-
 				<div>
-					<span class="head-span">姓名</span>
-					<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+					<a-table :columns="columns"  :scroll="{ x: true }" :data-source="data" :defaultCurrent="6" :pagination="pagination"
+						@change="tableChange" class="long-table">
+						<span slot="operator" slot-scope="text, record">
+							<a @click="editModifyApply(record.key)">编辑</a>
+							<a-divider type="vertical" />
+							<a  @click="deleteModifyApply(record.key)">删除</a>
+						</span>
+					</a-table>
 				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getModifyApply">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						搜索
-					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-						清空
-					</a-button>
-				</div>
+				<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel"
+					width="1072px">
+					<table class="scanTable">
+						<tr>
+							<td class="single">
+								<div>用户</div>
+							</td>
+							<td class="long">
+								<a-cascader class="small" :options="editOldSchool" placeholder="请选择校区"
+									@change="editOldSchoolChange" v-model="editOldSchoolId" />
+								<a-cascader class="small" :options="editOldBuild" placeholder="请选择建筑"
+									@change="editOldBuildChange" v-model="editOldBuildId" />
+								<a-cascader class="small" :options="editOldDorm" placeholder="请选择宿舍"
+									@change="editOldDormChange" v-model="editOldDormId" />
+								<a-cascader class="small" :options="editStuName" placeholder="请选择学生"
+									v-model="editOldStudentId" />
+							</td>
+						</tr>
+				
+						<tr>
+							<td class="single">
+								<div>新校区号</div>
+							</td>
+							<td class="double">
+								<a-cascader class="scanInput" :options="editNewSchool" placeholder="请选择校区"
+									@change="editNewSchoolChange" v-model="editNewSchoolId" />
+							</td>
+						</tr>
+				
+						<tr>
+							<td class="single">
+								<div>新宿舍楼编号</div>
+							</td>
+							<td class="double">
+								<a-cascader class="scanInput" :options="editNewBuild" placeholder="请选择建筑"
+									v-model="editNewBuildId" />
+							</td>
+						</tr>
+				
+						<tr>
+							<td class="single">
+								<div>申请原因</div>
+							</td>
+							<td class="double">
+								<a-input class="scanInput" placeholder="请输入申请原因"
+									v-model="editCause"></a-input>
+							</td>
+						</tr>
+					</table>
+				
+					<template slot="footer">
+						<a-button @click="editCancel()" >取消</a-button>
+						<a-button type="primary" @click="editOK()">确定</a-button>
+					</template>
+				</a-modal>
+				<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel"
+					width="1072px">
+					<table class="scanTable">
+						<tr>
+							<td class="single">
+								<div>用户</div>
+							</td>
+							<td class="long">
+								<a-cascader class="small" :options="oldSchool" placeholder="请选择校区"
+									@change="oldSchoolChange" v-model="oldSchoolId" />
+								<a-cascader class="small" :options="oldBuild" placeholder="请选择建筑"
+									@change="oldBuildChange" v-model="oldBuildId" />
+								<a-cascader class="small" :options="oldDorm" placeholder="请选择宿舍"
+									@change="oldDormChange" v-model="oldDormId" />
+								<a-cascader class="small" :options="stuName" placeholder="请选择学生"
+									v-model="studentId" />
+							</td>
+						</tr>
+						<tr>
+							<td class="single">
+								<div>新校区号</div>
+							</td>
+							<td class="double">
+								<a-cascader class="scanInput" :options="newSchool" placeholder="请选择校区"
+									@change="newSchoolChange" v-model="newSchoolId" />
+							</td>
+						</tr>
+				
+						<tr>
+							<td class="single">
+								<div>新宿舍楼编号</div>
+							</td>
+							<td class="double">
+								<a-cascader class="scanInput" :options="newBuild" placeholder="请选择建筑"
+									v-model="newBuildId" />
+							</td>
+						</tr>
+				
+						<tr>
+							<td class="single">
+								<div>申请原因</div>
+							</td>
+							<td class="double">
+								<a-input class="scanInput" placeholder="请输入申请原因" v-model="cause"></a-input>
+							</td>
+						</tr>
+					</table>
+				
+					<template slot="footer">
+						<a-button 
+							@click="addCancel()" class="buttonCancel">取消</a-button>
+						<a-button type="primary" 
+							@click="addOK()" class="buttonOk">确定</a-button>
+					</template>
+				</a-modal>
 			</div>
-			<div>
-				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
-					@change="tableChange" class="long-table">
-					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold;border-bottom: 1px solid #66C3FD;" @click="editModifyApply(record.key)">编辑</a>
-						<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel"
-							width="872px">
-							<table class="scanTable">
-								<tr>
-									<td class="single">
-										<div>用户</div>
-									</td>
-									<td class="long">
-										<a-cascader class="small" :options="editOldSchool" placeholder="请选择校区"
-											@change="editOldSchoolChange" v-model="editOldSchoolId" />
-										<a-cascader class="small" :options="editOldBuild" placeholder="请选择建筑"
-											@change="editOldBuildChange" v-model="editOldBuildId" />
-										<a-cascader class="small" :options="editOldDorm" placeholder="请选择宿舍"
-											@change="editOldDormChange" v-model="editOldDormId" />
-										<a-cascader class="small" :options="editStuName" placeholder="请选择学生"
-											v-model="editOldStudentId" />
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>新校区号</div>
-									</td>
-									<td class="double">
-										<a-cascader class="scanInput" :options="editNewSchool" placeholder="请选择校区"
-											@change="editNewSchoolChange" v-model="editNewSchoolId" />
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>新宿舍楼编号</div>
-									</td>
-									<td class="double">
-										<a-cascader class="scanInput" :options="editNewBuild" placeholder="请选择建筑"
-											v-model="editNewBuildId" />
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>申请原因</div>
-									</td>
-									<td class="double">
-										<a-input class="scanInput" placeholder="请输入申请原因" v-model="editCause"></a-input>
-									</td>
-								</tr>
-							</table>
-
-							<template slot="footer">
-								<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="editOK()" class="buttonOk">确定</a-button>
-								<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel()" class="buttonCancel">取消</a-button>
-							</template>
-						</a-modal>
-						<span>|</span>
-						<a style="font-size:18px;font-weigth:bold;color:orange; border-bottom: 1px solid orange;"
-							@click="deleteModifyApply(record.key)">删除</a>
-					</span>
-				</a-table>
-			</div>
-		</div>
+			<dormModifyApprove v-if="current == 'dormModifyApprove'"></dormModifyApprove>
+			<dormModifyQuery v-if="current == 'dormModifyQuery'"></dormModifyQuery>
+	</a-card>
 	</div>
 </template>
 
@@ -190,7 +164,8 @@
 	import {
 		axios
 	} from "@/utils/request"
-
+	import dormModifyApprove from '@/views/dorm/dormMng/dormModifyApprove'
+	import dormModifyQuery from '@/views/dorm/dormMng/dormModifyQuery'
 	const IconFont = Icon.createFromIconfontCN({
 		scriptUrl: '//at.alicdn.com/t/font_2390461_vvis3tohqh.js',
 	});
@@ -203,13 +178,7 @@
 		{
 			title: '姓名',
 			dataIndex: 'name',
-			key: 'name',
-		},
-		{
-			title: '原校区',
-			dataIndex: 'oldSchool',
-			key: 'oldSchool',
-			width: '9%',
+			key: 'name'
 		},
 		{
 			title: '原宿舍楼',
@@ -220,12 +189,6 @@
 			title: '原宿舍',
 			dataIndex: 'oldDorm',
 			key: 'oldDorm',
-		},
-		{
-			title: '新校区',
-			dataIndex: 'newSchool',
-			key: 'newSchool',
-			width: '9%',
 		},
 		{
 			title: '新宿舍楼',
@@ -266,7 +229,8 @@
 			title: '操作',
 			dataIndex: 'operator',
 			key: 'operator',
-			width: '12%',
+			width: '140px',
+			fixed: 'right',
 			scopedSlots: {
 				customRender: 'operator'
 			},
@@ -278,8 +242,13 @@
 
 
 	export default {
+		components: {
+			dormModifyApprove,
+			dormModifyQuery,
+		},
 		data() {
 			return {
+				current: ['dormModifyApply'],
 				cause: '',
 				editCause: '',
 				add: false,
@@ -339,9 +308,6 @@
 		mounted() {
 			this.getModifyApply();
 			this.getSchoolList();
-		},
-		components: {
-			IconFont,
 		},
 		methods: {
 			/* 获取校区列表 */
@@ -584,7 +550,7 @@
 					okText: '是',
 					okType: 'danger',
 					cancelText: '否',
-					onOk:() => {
+					onOk: () => {
 						axios({
 							url: 'dorm/change/delete',
 							method: 'post',
@@ -598,7 +564,7 @@
 							this.$message.warning("此处有异常");
 						})
 					},
-					onCancel:()=> {
+					onCancel: () => {
 						return
 					},
 				});
@@ -791,39 +757,16 @@
 	};
 </script>
 
-<style>
-	.dorm-modify-top {
-		width: 500px;
-		height: 40px;
-		border: 0px;
-		background-color: #E9EDF6;
+<style scoped>
+	/deep/ .ant-card-body{
+		padding:0 16px;
 	}
+	.top {
+		padding:30px;
+		padding-bottom:0;
+		display: flex;
+		align-items: center;
+	}
+	
 
-	.dorm-modify-item {
-		width: 150px;
-	}
-
-	.dorm-modify-after {
-		margin-left: 30px;
-	}
-
-	.link {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #999999 !important;
-	}
-
-	.link-active {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #666666 !important;
-	}
-
-	.long-table tr {
-		font-size: 20px;
-	}
 </style>

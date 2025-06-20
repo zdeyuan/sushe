@@ -60,7 +60,7 @@
 </template>
 
 <script>
-  import { getFileAccessHttpUrl } from '@api/manage'
+  import { getFileAccessHttpUrl } from '@/api/common/manage'
   import JVxeCellMixins from '@/components/edu/JVxeTable/mixins/JVxeCellMixins'
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import JFilePop from '@/components/edu/minipop/JFilePop'

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
+import router from '../router';
 import {
   VueAxios
 } from './axios'
@@ -19,22 +20,20 @@ import {
  * 则映射后端域名，通过 vue.config.js
  * @type {*|string}
  */
-let apiBaseUrl = window._CONFIG['domianURL'] || '/edu-boot'
+let apiBaseUrl = window._CONFIG['domianURL'] || ''
 // console.log("apiBaseUrl= ",apiBaseUrl)
 // 创建 axios 实例
 const service = axios.create({
   // baseURL: '/edu-boot',
   baseURL: apiBaseUrl, // api base_url
-  timeout: 9000 // 请求超时时间
+  timeout: 2000000 // 请求超时时间
 })
-
+let hasShownTokenExpiredModal=false;
 const err = (error) => {
   if (error.response) {
     let that = this
     let data = error.response.data
     const token = Vue.ls.get(ACCESS_TOKEN)
-    console.log('------异常响应------', token)
-    console.log('------异常响应------', error.response.status)
     switch (error.response.status) {
       case 403:
         notification.error({
@@ -44,39 +43,29 @@ const err = (error) => {
         })
         break
       case 500:
-        console.log('------error.response------', error.response)
         // update-begin- --- author:liusq ------ date:20200910 ---- for:处理Blob情况----
         let type = error.response.request.responseType
         if (type === 'blob') {
           blobToJson(data)
           break
         }
-        // update-end- --- author:liusq ------ date:20200910 ---- for:处理Blob情况----
-        // notification.error({ message: '系统提示', description:'Token失效，请重新登录!',duration: 4})
-        if (token && data.message.includes('Token失效')) {
-          // update-begin- --- author:scott ------ date:20190225 ---- for:Token失效采用弹框模式，不直接跳转----
+        if (token && data.message.includes('Token失效') &&!hasShownTokenExpiredModal) {
+			hasShownTokenExpiredModal=true;
           Modal.error({
             title: '登录已过期',
             content: '很抱歉，登录已过期，请重新登录',
             okText: '重新登录',
             mask: false,
             onOk: () => {
-              store.dispatch('Logout').then(() => {
+              store.dispatch('user/Logout').then(() => {
                 Vue.ls.remove(ACCESS_TOKEN)
-                try {
-                  let path = window.document.location.pathname
-                  console.log('location pathname -> ' + path)
-                  if (path != '/' && path.indexOf('/user/login') == -1) {
-                    window.location.reload()
-                  }
-                } catch (e) {
-                  window.location.reload()
-                }
+                router.push({path:'/user'})
               })
             }
           })
-          // update-end- --- author:scott ------ date:20190225 ---- for:Token失效采用弹框模式，不直接跳转----
-        }
+        }else{
+			 router.push({path:'/user'})
+		}
         break
       case 404:
         notification.error({
@@ -98,7 +87,7 @@ const err = (error) => {
           duration: 4
         })
         if (token) {
-          store.dispatch('Logout').then(() => {
+          store.dispatch('user/Logout').then(() => {
             setTimeout(() => {
               window.location.reload()
             }, 1500)
@@ -187,7 +176,7 @@ function blobToJson(data) {
             okText: '重新登录',
             mask: false,
             onOk: () => {
-              store.dispatch('Logout').then(() => {
+              store.dispatch('user/Logout').then(() => {
                 Vue.ls.remove(ACCESS_TOKEN)
                 window.location.reload()
               })

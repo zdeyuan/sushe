@@ -4,8 +4,8 @@
  * date: 20190109
  */
 
-import {ajaxGetDictItems,getDictItemsFromCache} from '@/api/api'
-import {getAction} from '@/api/manage'
+import {ajaxGetDictItems,getDictItemsFromCache} from '@/api/common/api'
+import {getAction} from '@/api/common/manage'
 
 /**
  * 获取字典数组

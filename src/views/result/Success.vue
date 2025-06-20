@@ -9,11 +9,11 @@
       <div>
         <div style="font-size: 16px; color: rgba(0, 0, 0, 0.85); font-weight: 500; margin-bottom: 20px;">项目名称</div>
         <a-row style="margin-bottom: 16px">
-          <a-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+          <a-col :xs="24" :sm="12" :md="12" :lg="12" :xl="7">
             <span style="color: rgba(0, 0, 0, 0.85)">项目 ID：</span>
             20180724089
           </a-col>
-          <a-col :xs="24" :sm="12" :md="12" :lg="12" :xl="6">
+          <a-col :xs="24" :sm="12" :md="12" :lg="12" :xl="7">
             <span style="color: rgba(0, 0, 0, 0.85)">负责人：</span>
             曲丽丽是谁？
           </a-col>

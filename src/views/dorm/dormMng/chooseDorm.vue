@@ -1,21 +1,19 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			选择宿舍
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿务管理 > <span class="notTop">宿舍操作</span></div>
-			<div class="content-head">
-			</div>
+	<div >
+		<a-card :bordered="false">
 			<div class="content-content">
-				<div class="floor">
-					
-				</div>
+				<a-button type="primary" icon="arrow-left" @click="$router.go(-1);" style="margin-right:10px;">
+					返回
+				</a-button>
+				
 				<!-- 宿舍box -->
 				<div class="dormitoryContentBox" v-for='(val,key) in dorm'>
 				<!-- 	显示宿舍头部，信息为楼层宿舍信息 -->
-					<div class="dormitoryContentyTop">
-						楼层:{{val.lc}}  总宿舍数:{{val.allSushe}}  宿舍已用数:{{val.inNum}}  宿舍空置床数:{{val.noInNum}} 宿舍总床数:{{val.sleepNum}}
+					<div style="margin:10px 0;">
+						
+						<div class="dormitoryContentyTop" >
+							<div>楼层:<b>{{val.lc}}</b></div> <div> 总宿舍数:<b>{{val.allSushe}} </b></div> <div> 宿舍已用数:<b>{{val.inNum}} </b> 宿舍空置床数:<b>{{val.noInNum}}</b> </div> <div>宿舍总床数:<b>{{val.sleepNum}}</b></div>
+						</div>
 					</div>
 				<!-- 	显示宿舍底部，信息为各项宿舍人员信息 -->
 					<div class="dormitoryContentyButtom">
@@ -49,7 +47,7 @@
 					</template>
 				</a-modal>
 			</div>
-		</div>
+		</a-card>
 	</div>
 
 </template>
@@ -80,18 +78,28 @@
 			allocationstu(id) {
 				sessionStorage.setItem("dormId", id);
 				this.$router.push({
-					path: '/dorm/dormDistribute'
+					path: '/dormProperty/dormDistribute'
 				});
 			},
 			fixroom(id) {
 				sessionStorage.setItem("dormId", id);
 				this.$router.push({
-					path: '/dorm/dormFixMng'
+					path: '/dormProperty/dormFixMng'
 				})
 			},
 			clearroom(id) {
 				this.dormId = id;
-				this.visible = true;
+				let _this=this;;
+				this.$confirm({
+					title: '是否清空',
+					content: '确定要清空该宿舍吗',
+					okText: '确认',
+					cancelText: '取消',
+					onOk() {
+						_this.handleOk()
+					},
+					onCancel() {},
+				});
 			},
 			handleOk() {
 				axios({
@@ -114,7 +122,7 @@
 			meansmgr(id) {
 				sessionStorage.setItem("dormId", id);
 				this.$router.push({
-					path: '/dorm/assetMng'
+					path: '/dormProperty/assetMng'
 				})
 			},
 			getDormList() {
@@ -136,15 +144,20 @@
 	};
 </script>
 
-<style>
+<style lang="less" scoped>
 	.dormitoryContentBox{
 	/* 	margin-bottom: 40px; */
 	}
 	.dormitoryContentyTop{
-		height: 80px;
-		line-height: 80px;
-		font-size: 25px;
-		font-weight: 700;
+		display:flex;
+		>div{
+			margin-right:5px;
+			b{
+				color:#1BB2F3;
+				font-weight:normal;
+				font-size:16px;
+			}
+		}
 	}
 	.dormitoryContentyButtom{
 		width: 100%;

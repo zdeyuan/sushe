@@ -1,45 +1,6 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<!-- 		<span class="content-title" v-if="$route.query.type == 2">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="dormModifyApply" class="dorm-modify-item aottom">
-					<router-link class="link-active" to="/dorm/chooseBuild">宿舍分配管理</router-link>
-				</a-menu-item>
-				<a-menu-item key="dormInvoking" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormInvoking">宿舍调用</router-link>
-				</a-menu-item>
-				<a-menu-item key="3" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormBedChange">学生床位更换</router-link>
-				</a-menu-item>
-				<a-menu-item key="4" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormDistributionQuery">宿舍分配查询</router-link>
-				</a-menu-item>
-				<router-view></router-view>
-			</a-menu>
-		</span> -->
-		<span v-if="$route.query.type == 2">
-			<!-- <a-menu mode="horizontal" class="dorm-modify-top"> -->
-			<div class="content-title">
-				<router-link class="link-active" to="/dorm/chooseBuild">宿舍分配管理</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormInvoking">宿舍调用</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormBedChange">学生床位更换</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormDistributionQuery">宿舍分配查询</router-link>
-			</div>
-			<!-- 				<router-view></router-view>
-					</a-menu> -->
-		</span>
-		<span class="content-title" v-else>{{dormSumlName}}</span>
-		<!-- 		<hr align="left" color=#878787 SIZE=2 style="margin-left: 3px; width: 125px;" /> -->
+	<a-card :bordered="false">
 		<div class="pageContentBox">
-			<div class="headTop">{{dormName}} > <span class="notTop">{{dormSumlName}}</span></div>
-			<div class="content-head">
-			</div>
 			<div class="content-content">
 				<build-sub v-for="item in build" :key="item.key" :sextype="item.sex" :buildId="item.buildId"
 					:residueBedNum="item.residueBedNum" :liveratio="item.liveratio" :allFloorNum="item.allFloorNum"
@@ -48,7 +9,7 @@
 				</build-sub>
 			</div>
 		</div>
-	</div>
+	</a-card>
 
 
 </template>
@@ -110,7 +71,7 @@
 				sessionStorage.setItem("buildId", id);
 				sessionStorage.setItem("buildName", buildName);
 				this.$router.push({
-					path: '/dorm/chooseDorm'
+					path: '/dormProperty/chooseDorm'
 				})
 			},
 			getBuildList() {
@@ -161,7 +122,7 @@
 		flex-direction: row;
 		flex-wrap: wrap;
 		align-items: space;
-		justify-content: start;
+		justify-content: flex-start;
 	}
 
 	.dorm-modify-top {

@@ -8,7 +8,7 @@
 
 <script>
   import load from './load'
-  import '@/assets/less/codemirror_idea.css'
+  import '@/assets/scss/codemirror_idea.css'
   import './cm_sql_hint.js'
   import { sql_keyword } from './Resource'
 

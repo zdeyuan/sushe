@@ -77,7 +77,7 @@
 </template>
 
 <script>
-  import { getAction,putAction } from '@/api/manage'
+  import { getAction,putAction } from '@/api/common/manage'
   import ShowAnnouncement from './ShowAnnouncement'
   import store from '@/store/'
   import DynamicNotice from './DynamicNotice'

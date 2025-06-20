@@ -1,90 +1,63 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			寝室制度类别
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">制度管理 > <span class="notTop">寝室制度类别</span></div>
-			<div class="content-head">
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">类别名</span>
 				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff  " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
-					<a-modal title="添加" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk"
-						@cancel="handleCancel">
-						<table class="scanTable">
-							<tr>
-								<td class="single">制度类别名称:</td>
-								<td class="double">
-									<a-input class="scanInput" placeholder="请输入制度类别名称" v-model="addTypeName" />
-								</td>
-							</tr>
-						</table>
-						<template slot="footer" class="floor-footer">
-							<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="handleOk()">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="handleCancel()">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="patchDelete">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						删除
-					</a-button>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getRuleTypeList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
+					<a-input class="condition" placeholder="请输入类别名" v-model="typeName"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
-
-				<div style="min-width: 320px;"></div>
-
 				<div>
-					<span class="head-span">类别名</span>
-					<a-input class="condition" placeholder="请输入类别名" v-model="typeName" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getRuleTypeList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+					<a-button type="primary" @click="getRuleTypeList" icon="search" style="margin-left: 20px;">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="clearAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button type="danger" style="margin-left:20px;" icon="reset" @click="clearAll">
 						清空
 					</a-button>
 				</div>
 			</div>
 			<div>
-				<a-table :columns="columns" :data-source="data" :row-selection="{ selectedRowKeys: deleteList, onChange: onChange }" :defaultCurrent="6"
+				<a-table :columns="columns" :data-source="data"
+					:row-selection="{ selectedRowKeys: deleteList, onChange: onChange }" :defaultCurrent="6"
 					:pagination="pagination" @change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;border-bottom: 1px solid #66C3FD;" @click="editRuleType(record.key)">编辑</a>
-						<span>|</span>
-						<a style="font-size:18px;color:orange; border-bottom: 1px solid orange;"
-							@click="deleteRuleType(record.key)">删除</a>
+						<a @click="editRuleType(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a @click="deleteRuleType(record.key)">删除</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
-		<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel">
-			<table class="scanTable">
-				<tr>
-					<td class="single">制度类别名称:</td>
-					<td class="double">
-						<a-input class="scanInput" placeholder="请输入制度类别名称" v-model="editTypeName" />
-					</td>
-				</tr>
-			</table>
-			<template slot="footer" class="floor-footer">
-				<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="editOK">确定</a-button>
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel">取消</a-button>
-			</template>
-		</a-modal>
+			<a-modal title="添加" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk"
+				@cancel="handleCancel">
+				<table class="scanTable">
+					<tr>
+						<td class="single">制度类别名称:</td>
+						<td class="double">
+							<a-input class="scanInput" placeholder="请输入制度类别名称" v-model="addTypeName" />
+						</td>
+					</tr>
+				</table>
+				<template slot="footer" class="floor-footer">
+					<a-button @click="handleCancel()">取消</a-button>
+					<a-button type="primary" @click="handleOk()">确认</a-button>
+				</template>
+			</a-modal>
+			<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel">
+				<table class="scanTable">
+					<tr>
+						<td class="single">制度类别名称:</td>
+						<td class="double">
+							<a-input class="scanInput" placeholder="请输入制度类别名称" v-model="editTypeName" />
+						</td>
+					</tr>
+				</table>
+				<template slot="footer" class="floor-footer">
+					<a-button @click="editCancel">取消</a-button>
+					<a-button type="primary" @click="editOK">确定</a-button>
+				</template>
+			</a-modal>
+		</a-card>
 	</div>
-
 
 </template>
 
@@ -104,9 +77,6 @@
 			title: '类别名称',
 			dataIndex: 'name',
 			key: 'name',
-		},
-		{
-			width: '70%',
 		},
 		{
 			title: '操作',
@@ -139,7 +109,7 @@
 				/* 表格数据 */
 				data,
 				columns,
-				deleteList:[],
+				deleteList: [],
 				/* 按钮大小 */
 				size: 'small',
 				/* 添加-弹出框数据 */
@@ -312,6 +282,15 @@
 	};
 </script>
 
-<style>
+<style scoped>
+	.top {
+		display: flex;
+		margin-bottom:10px;
+		align-items: center;
+	}
 
+	.head-span {
+		margin: 0 10px;
+		text-align: right;
+	}
 </style>

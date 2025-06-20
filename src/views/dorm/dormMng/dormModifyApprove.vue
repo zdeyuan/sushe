@@ -1,57 +1,22 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="desktop" class="dorm-modify-item">
-					<router-link class="link" to="/dorm/dormModifyApply">宿舍变更申请</router-link>
-				</a-menu-item>
-				<a-menu-item key="defined" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link-active" to="/dorm/dormModifyApprove">宿舍变更审批</router-link>
-				</a-menu-item>
-				<a-menu-item key="this.$message.success" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormModifyQuery">宿舍变更查询</router-link>
-				</a-menu-item>
-				<router-view></router-view>
-			</a-menu>
-		</span> -->
-		<!-- <hr align="left" width=147 color=#878787 SIZE=2 style="margin-left: 185px;" /> -->
-		<span>
-			<div class="content-title not-title">
-				<router-link class="link-active" to="/dorm/dormModifyApply">宿舍变更申请</router-link>
-			</div>
-			<div class="content-title ">
-				<router-link class="link" to="/dorm/dormModifyApprove">宿舍变更审批</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormModifyQuery">宿舍变更查询</router-link>
-			</div>
-		</span>
-		<div class="pageContentBox">
-			<div class="headTop">宿舍管理 > 宿舍管理 > <span class="notTop">宿舍变更审批</span></div>
+	<div >
+		<div >
 			<div class="content-head">
-				<div>
-					<a-button :size="size" class="content-button button-skyblue" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getModifyApprove">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
-				</div>
-
-				<div style="min-width: 700px;"></div>
-
-				<div>
-					<span class="head-span">姓名</span>
-					<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getModifyApprove">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+				<div class="top">
+					<span class="head-span">姓名：</span>
+					<div>
+						<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+					</div>
+					<a-button type="primary" style="margin-left:20px" icon="search" @click="getModifyApprove">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button type="danger" style="margin-left:20px" @click="resetAll">
 						清空
+					</a-button>
+				</div>
+				<div>
+					<a-button type="primary" icon="reload" @click="getModifyApprove">
+						刷新
 					</a-button>
 				</div>
 			</div>
@@ -59,65 +24,60 @@
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange" class="long-table">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold;color:orange; border-bottom: 1px solid orange;"
-							@click="getApproveById(record.key)">审批</a>
-						<a-modal title="审批" :visible="approve" :confirm-loading="confirmLoading" @cancel="approveCancel"
-							width="872px">
-							<table class="scanTable">
-								<tr>
-									<td class="single">
-										<div>申请详情</div>
-									</td>
-									<td class="long">
-										<div>学生姓名: <span>{{ studentName }}</span></div>
-										<div>学号: <span>{{ studentId }}</span></div>
-										<div>原宿舍: <span>{{ oldDetail }}</span></div>
-										<div>更换到: <span>{{ newDetail }}</span></div>
-										<div>申请原因: <span>{{ approveCause }}</span></div>
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>审批结果</div>
-									</td>
-									<td class="long">
-										<label v-for="(item) in radioName"> {{ item.value }}
-											<input type="radio" name="approveResult" :value="item.index"
-												v-model="checkedValue">
-										</label>
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>分配到:</div>
-									</td>
-									<td class="long">
-										<a-cascader class="small" :options="newDorm" placeholder="请选择宿舍"
-											v-model="newDormId" />
-										床位号: <a-input class="small" placeholder="请输入床位号" v-model="bedId"></a-input>
-									</td>
-								</tr>
-
-								<tr>
-									<td class="single">
-										<div>审批说明</div>
-									</td>
-									<td class="long">
-										<a-input class="scanInput" placeholder="请输入审批说明" v-model="approveMessage">
-										</a-input>
-									</td>
-								</tr>
-							</table>
-
-							<template slot="footer">
-								<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="approveOK()" class="buttonOk">确定</a-button>
-								<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="approveCancel()" class="buttonCancel">取消</a-button>
-							</template>
-						</a-modal>
+						<a  @click="getApproveById(record.key)">审批</a>
 					</span>
 				</a-table>
+				<a-modal title="审批" :visible="approve" :confirm-loading="confirmLoading" @cancel="approveCancel"
+					width="872px">
+					<table class="scanTable">
+						<tr>
+							<td class="single">
+								<div>申请详情</div>
+							</td>
+							<td class="long">
+								<div>学生姓名: <span>{{ studentName }}</span></div>
+								<div>学号: <span>{{ studentId }}</span></div>
+								<div>原宿舍: <span>{{ oldDetail }}</span></div>
+								<div>更换到: <span>{{ newDetail }}</span></div>
+								<div>申请原因: <span>{{ approveCause }}</span></div>
+							</td>
+						</tr>
+						<tr>
+							<td class="single">
+								<div>审批结果</div>
+							</td>
+							<td class="long">
+								<label v-for="(item) in radioName"> {{ item.value }}
+									<input type="radio" name="approveResult" :value="item.index"
+										v-model="checkedValue">
+								</label>
+							</td>
+						</tr>
+						<tr>
+							<td class="single">
+								<div>分配到:</div>
+							</td>
+							<td class="long">
+								<a-cascader class="small" :options="newDorm" placeholder="请选择宿舍"
+									v-model="newDormId" />
+								床位号: <a-input class="small" placeholder="请输入床位号" v-model="bedId"></a-input>
+							</td>
+						</tr>
+						<tr>
+							<td class="single">
+								<div>审批说明</div>
+							</td>
+							<td class="long">
+								<a-input class="scanInput" placeholder="请输入审批说明" v-model="approveMessage">
+								</a-input>
+							</td>
+						</tr>
+					</table>
+					<template slot="footer">
+						<a-button   @click="approveCancel()" >取消</a-button>
+						<a-button type="primary"   @click="approveOK()">确定</a-button>
+					</template>
+				</a-modal>
 			</div>
 		</div>
 	</div>
@@ -146,12 +106,6 @@
 			key: 'name',
 		},
 		{
-			title: '原校区',
-			dataIndex: 'oldSchool',
-			key: 'oldSchool',
-			width: '10%',
-		},
-		{
 			title: '原宿舍楼',
 			dataIndex: 'oldBuild',
 			key: 'oldBuild',
@@ -160,12 +114,6 @@
 			title: '原宿舍',
 			dataIndex: 'oldDorm',
 			key: 'oldDorm',
-		},
-		{
-			title: '新校区',
-			dataIndex: 'newSchool',
-			key: 'newSchool',
-			width: '10%',
 		},
 		{
 			title: '新宿舍',
@@ -417,7 +365,12 @@
 	};
 </script>
 
-<style>
+<style scoped>
+	.top {
+		padding:30px;
+		display: flex;
+		align-items: center;
+	}
 	.dorm-modify-top {
 		width: 500px;
 		height: 40px;

@@ -33,7 +33,7 @@ import '@toast-ui/editor/dist/i18n/zh-cn';
 import Editor from '@toast-ui/editor';
 import defaultOptions from './default-options'
 import JUpload from '@/components/edu/JUpload'
-import { getFileAccessHttpUrl } from '@/api/manage'
+import { getFileAccessHttpUrl } from '@/api/common/manage'
 
 export default {
   name: 'JMarkdownEditor',

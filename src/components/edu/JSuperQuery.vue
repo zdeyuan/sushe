@@ -209,7 +209,7 @@
   import JSelectDepart from '@/components/edubiz/JSelectDepart'
   import JSelectMultiUser from '@/components/edubiz/JSelectMultiUser'
   import JMultiSelectTag from '@/components/dict/JMultiSelectTag'
-  import JAreaLinkage from '@comp/edu/JAreaLinkage'
+  import JAreaLinkage from '@/components/edu/JAreaLinkage'
 
   export default {
     name: 'JSuperQuery',
@@ -426,6 +426,8 @@
         if (filterList.length > 0) {
           this.$confirm({
             content: `${value} 已存在，是否覆盖？`,
+			okText: '确认',
+			cancelText:'取消',
             onOk: () => {
               this.prompt.visible = false
               filterList[0].records = records
@@ -461,6 +463,8 @@
 
         this.$confirm({
           content: '是否删除当前查询？',
+		  okText: '确认',
+		  cancelText:'取消',
           onOk: () => {
             let { eventKey } = vNode
             this.saveTreeData.splice(Number.parseInt(eventKey.substring(2)), 1)

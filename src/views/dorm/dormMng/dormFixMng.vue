@@ -1,21 +1,12 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			宿舍维修管理
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿务管理 > 宿舍维修 ><span class="notTop">查看详情(宿舍维修)</span></div>
-			<div class="content-head">
-				<div>
+	<div >
+		<a-card :bordered="false">
+			<div >
+				<div class="top">
 					<span class="head-span">维修信息：</span>
-					<a-input class="condition magin" placeholder="" v-model="repairMsg" />
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getFixList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+					<a-input class="condition magin" style="width:200px" placeholder="" v-model="repairMsg" />
+					<a-button type="primary" @click="getFixList" icon="search" style="margin-left: 20px;">
 						搜索
-					</a-button>
-					<a-button :size="size" class="content-button button-lightgreen button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff  " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
 					</a-button>
 					<a-modal title="添加宿舍维修" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk"
 						@cancel="handleCancel" :width="900">
@@ -35,35 +26,42 @@
 							<tr>
 								<td class="single">维修时间:</td>
 								<td class="long">
-									<input class="scanInput" v-model="addTime" type="date"></input>
+									<DatePickByCN
+									      v-model="addTime"
+									      placeholder="请选择维修时间"
+									    />
 								</td>
 							</tr>
 						</table>
 						<template slot="footer">
-							<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="handleOk()">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="handleCancel()">取消</a-button>
+							<a-button  @click="handleCancel()">取消</a-button>
+							<a-button type="primary" @click="handleOk()">确认</a-button>
 						</template>
 					</a-modal>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getFixList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
+					
 				</div>
 
-				<div style="min-width: 550px;"></div>
 			</div>
-			<div>
+			<a-button type="primary" icon="arrow-left" @click="$router.go(-1);" style="margin-right:10px;">
+				返回
+			</a-button>
+			<a-button type="primary" @click="showModal" icon="plus" style="margin-right:20px;">
+				添加
+			</a-button>
+			<a-button type="primary" icon="reload" @click="getFixList" style="margin-right: 20px;">
+				刷新
+			</a-button>
+			<div class="table-useful">
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="border-bottom: 1px solid #66C3FD;" @click="showEdit(record.key)">编辑</a>
-						<span>|</span>
-						<a style="color:orange; border-bottom: 1px solid orange;" @click="deleteFix(record.key)">删除</a>
+						<a   @click="showEdit(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a  @click="deleteFix(record.key)">删除</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
+		</a-card>
 		<a-modal title="添加宿舍维修" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel" :width="900">
 			<table class="scanTable">
 				<tr>
@@ -81,13 +79,17 @@
 				<tr>
 					<td class="single">维修时间:</td>
 					<td class="long">
-						<input class="scanInput" v-model="addTime" type="date"></input>
+						<DatePickByCN
+						      v-model="addTime"
+						      placeholder="请选择维修时间"
+						    />
+						<!-- <input class="scanInput" v-model="addTime" type="date"></input> -->
 					</td>
 				</tr>
 			</table>
 			<template slot="footer">
-				<a-button type="primary" @click="editOK">确定</a-button>
 				<a-button @click="editCancel">取消</a-button>
+				<a-button type="primary" @click="editOK">确认</a-button>
 			</template>
 		</a-modal>
 	</div>
@@ -133,12 +135,10 @@
 			key: 'djsj ',
 		},
 		{
-			width: '20%',
-		},
-		{
 			title: '操作',
 			dataIndex: 'operator',
 			key: 'operator',
+			align:'center',
 			scopedSlots: {
 				customRender: 'operator'
 			},
@@ -329,7 +329,7 @@
 	};
 </script>
 
-<style>
+<style lang="less" scoped>
 	.area {
 		resize: none;
 		width: 650px;
@@ -339,5 +339,14 @@
 	}
 	.magin{
 		margin-right: 10px;
+	}
+	.top {
+		display: flex;
+		align-items: center;
+		margin: 10px 0;
+	}
+	
+	.head-span {
+		margin: 0 10px;
 	}
 </style>

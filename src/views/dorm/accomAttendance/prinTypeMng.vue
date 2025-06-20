@@ -1,99 +1,76 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			违纪类型管理
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">住宿考勤 > <span class="notTop">违纪类型管理</span></div>
-			<div class="content-head">
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">名称：</span>
 				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
-					<a-modal title="添加" :visible="visible" :confirm-loading="confirmLoading" width="600px"
-						@cancel="handleCancel">
-						<table class="scanTale">
-							<tr>
-								<td class="single"><span class="spanRed">*</span>违纪名称:</td>
-								<td class="long">
-									<a-input class="scanInput" placeholder="请输入违纪名称" v-model="scanName"></a-input>
-								</td>
-							</tr>
-							<tr>
-								<td class="single">状态:</td>
-								<td class="long">
-									<label v-for="item in radioName"> {{ item.value }}
-										<input type="radio" name="approveResult" :value="item.index"
-											v-model="checkedValue">
-									</label>
-								</td>
-							</tr>
-						</table>
-						<template slot="footer" class="floor-footer">
-							<a-button style="background-color:#028be2;color:#ffffff;font-weight:bold" type="primary" @click="handleOk()">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="handleCancel()">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-green button-after" style="font-size:16px;width:88px;height:34px; "
-						@click="patchUpdateState(1)">
-						<icon-font type="iconqiyong" style="color: #FFFFFF;" />
-						启用
-					</a-button>
-
-					<a-button :size="size" class="content-button button-pink button-after" style="font-size:16px;width:88px;height:34px; " @click="patchUpdateState(0)">
-						<icon-font type="iconjinyong" style="color: #FFFFFF;" />
-						禁用
-					</a-button>
-					
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="patchDelete">
-						<icon-font type="iconjinyong" style="color: #FFFFFF;" />
-						删除
-					</a-button>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff "
-						@click="getPrinTypeMngList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
+					<a-input class="condition" placeholder="请输入名称" style="width: 120px;" v-model="name"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
-
-				<div style="min-width: 200px;"></div>
-
+				<span class="head-span">状态：</span>
 				<div>
-					<span class="head-span">名称</span>
-					<a-input class="condition" placeholder="请输入名称" style="width: 120px;" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<span class="head-span">状态</span>
 					<a-cascader class="condition" :options="state" placeholder="请选择状态" v-model="stateId" />
 				</div>
+				<a-button type="primary" @click="getPrinTypeMngList" icon="search" style="margin-left: 20px;">
+					搜索
+				</a-button>
+				<a-button type="danger" style="margin-left:20px;" icon="reset" @click="resetAll">
+					清空
+				</a-button>
+			</div>
+			<div>
+				<a-button type="primary" @click="showModal" icon="plus" style="margin-left:20px;">
+					添加
+				</a-button>
+				<a-button type="primary" @click="patchUpdateState(1)" style="margin-left:20px;">
+					启用
+				</a-button>
+				<a-button type="primary" @click="patchUpdateState(0)" style="margin-left: 20px;">
+					禁用
+				</a-button>
 
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getPrinTypeMngList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						搜索
-					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-						清空
-					</a-button>
-				</div>
+				<a-button type="danger" icon="delete" @click="patchDelete" style="margin-left: 20px;">
+					删除
+				</a-button>
+				<a-button type="primary" icon="reload" @click="getPrinTypeMngList" style="margin-left: 20px;">
+					刷新
+				</a-button>
 			</div>
 			<div>
 				<a-table :columns="columns" :data-source="data"
 					:row-selection="{ selectedRowKeys: deleteList, onChange: onChange}" :defaultCurrent="6"
 					:pagination="pagination" @change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;border-bottom: 1px solid #66C3FD;" @click="editType(record.key)">编辑</a>
-						<a style="font-size:18px;color:#fc8950;border-bottom: 1px solid #fc8950;" @click="deleteType(record)">删除</a>
+						<a @click="editType(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a @click="deleteType(record)">删除</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
+		</a-card>
+		<a-modal title="添加" :visible="visible" :confirm-loading="confirmLoading" width="600px" @cancel="handleCancel">
+			<table class="scanTale">
+				<tr>
+					<td class="single"><span class="spanRed">*</span>违纪名称:</td>
+					<td class="long">
+						<a-input class="scanInput" placeholder="请输入违纪名称" v-model="scanName"></a-input>
+					</td>
+				</tr>
+				<tr>
+					<td class="single">状态:</td>
+					<td class="long">
+						<label v-for="item in radioName"> {{ item.value }}
+							<input type="radio" name="approveResult" :value="item.index" v-model="checkedValue">
+						</label>
+					</td>
+				</tr>
+			</table>
+			<template slot="footer" class="floor-footer">
+				<a-button @click="handleCancel()">取消</a-button>
+				<a-button type="primary" @click="handleOk()">确认</a-button>
+			</template>
+		</a-modal>
+
 		<a-modal title="编辑" :visible="edit" width="600px" @cancel="editCancel">
 			<table class="scanTale">
 				<tr>
@@ -112,12 +89,11 @@
 				</tr>
 			</table>
 			<template slot="footer" class="floor-footer">
-				<a-button style="background-color:#028be2;color:#ffffff;font-weight:bold" type="primary" @click="editOK">确定</a-button>
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel">取消</a-button>
+				<a-button @click="editCancel">取消</a-button>
+				<a-button type="primary" @click="editOK">确认</a-button>
 			</template>
 		</a-modal>
 	</div>
-
 
 </template>
 
@@ -400,5 +376,14 @@
 	};
 </script>
 
-<style>
+<style scoped>
+	.top {
+		padding: 20px;
+		display: flex;
+		align-items: center;
+	}
+	.head-span {
+		margin: 0 10px;
+		text-align:right;
+	}
 </style>

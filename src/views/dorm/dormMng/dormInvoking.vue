@@ -1,44 +1,6 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="chooseBuild" class="dorm-modify-item">
-					<router-link class="link" to="/dorm/chooseBuild?type=2">宿舍分配管理</router-link>
-				</a-menu-item>
-				<a-menu-item key="dormInvoking" class="dorm-modify-item dorm-modify-after aottom">
-					<router-link class="link-active" to="/dorm/dormInvoking">宿舍调换</router-link>
-				</a-menu-item>
-				<a-menu-item key="3" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormBedChange">学生床位更换</router-link>
-				</a-menu-item>
-				<a-menu-item key="4" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormDistributionQuery">宿舍分配查询</router-link>
-				</a-menu-item>
-				<router-view></router-view>
-			</a-menu>
-		</span> -->
-		<span>
-			<!-- <a-menu mode="horizontal" class="dorm-modify-top"> -->
-			<div class="content-title not-title">
-				<router-link class="link-active" to="/dorm/chooseBuild?type=2">宿舍分配管理</router-link>
-			</div>
-			<div class="content-title">
-				<router-link class="link" to="/dorm/dormInvoking">宿舍调用</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormBedChange">学生床位更换</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormDistributionQuery">宿舍分配查询</router-link>
-			</div>
-			<!-- 				<router-view></router-view>
-					</a-menu> -->
-		</span>
+	<div >
 		<!-- <hr align="left" color=#878787 SIZE=2 style="margin-left: 185px; width: 125px;" /> -->
-		<div class="pageContentBox">
-			<div class="headTop">宿舍分配 > <span class="notTop">宿舍调换</span></div>
-			<div class="content-head">
-			</div>
 			<div class="content-content">
 				<div class="selsctBox">
 					<span class="names">宿舍一</span>
@@ -59,7 +21,6 @@
 					<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click='reset'>重置</a-button>
 				</div>
 			</div>
-		</div>
 	</div>
 </template>
 
@@ -407,8 +368,6 @@
 		line-height: 50px;
 	}
 	.names{
-		font-size: 20px;
-		font-weight: 700;
 		margin-right: 20px;
 	}
 	.selsctStyle{

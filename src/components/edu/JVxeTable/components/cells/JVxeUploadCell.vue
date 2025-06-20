@@ -63,7 +63,7 @@
 <script>
   import JVxeCellMixins from '@/components/edu/JVxeTable/mixins/JVxeCellMixins'
   import { ACCESS_TOKEN } from '@/store/mutation-types'
-  import { getFileAccessHttpUrl } from '@api/manage'
+  import { getFileAccessHttpUrl } from '@/api/common/manage'
 
   export default {
     name: 'JVxeUploadCell',

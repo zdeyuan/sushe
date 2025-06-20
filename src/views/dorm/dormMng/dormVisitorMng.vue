@@ -1,188 +1,167 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="defined" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link-active" to="/dorm/dormVisitorMng">来访登记</router-link>
-				</a-menu-item>
-				<router-view></router-view>
-			</a-menu>
-		</span> -->
-		<!-- <hr align="left" width=120 color=#878787 SIZE=2 style="margin-left: 44px;" /> -->
-		<div class="content-title ">
-			<router-link class="link-active" to="/dorm/dormVisitorMng">来访登记</router-link>
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿务管理 > 宿舍访客管理 > <span class="notTop">来访登记</span></div>
-			<div class="content-head">
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">姓名：</span>
 				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff  " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
-					<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel"
-						width="872px">
-						<table class="scanTable">
-							<tr>
-								<td class="single">
-									<div>姓名:</div>
-								</td>
-								<td class="long">
-									<a-input class="scanInput" placeholder="请输入姓名" v-model="addName" onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>身份证号:</div>
-								</td>
-								<td class="long">
-									<a-input class="scanInput" placeholder="请输入身份证号" v-model="addIdentify" onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>被探访人员:</div>
-								</td>
-								<td class="long">
-									<a-cascader class="small" :options="school" placeholder="请选择校区"
-										@change="schoolChange" v-model="schoolId" />
-									<a-cascader class="small" :options="build" placeholder="请选择宿舍楼"
-										@change="buildChange" v-model="buildId" />
-									<a-cascader class="small" :options="dorm" placeholder="请选择宿舍" @change="dormChange"
-										v-model="dormId" />
-									<a-cascader class="small" :options="student" placeholder="请选择学生"
-										v-model="studentId" />
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>探访事由:</div>
-								</td>
-								<td class="long">
-									<a-input class="scanInput" placeholder="请输入探访事由" v-model="addCause"></a-input>
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>探访类型:</div>
-								</td>
-								<td class="long">
-									<a-cascader class="small" :options="type" placeholder="请选择类型" v-model="typeId" />
-								</td>
-							</tr>
-						</table>
-
-						<template slot="footer">
-							<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="addOK()" class="buttonOk">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="addCancel()" class="buttonCancel">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="patchDelete">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						删除
-					</a-button>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getVisitor">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
-				</div>
-        
-				<div>
-					<span class="head-span">姓名</span>
-					<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+					<a-input class="condition" placeholder="请输入姓名" v-model="name"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
 
+				<span class="head-span">身份证号：</span>
 				<div>
-					<span class="head-span">身份证号</span>
-					<a-input class="condition" placeholder="身份证号" v-model="identify" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+					<a-input class="condition" placeholder="身份证号" v-model="identify"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
+				<a-button type="primary" style="margin-left:20px;"  icon="search" @click="getVisitor">
+					搜索
+				</a-button>
 
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getVisitor">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						搜索
-					</a-button>
+				<a-button type="danger" style="margin-left:20px;"  icon="reset" @click="resetAll">
+					清空
+				</a-button>
+			</div>
+			<div>
+				<a-button type="primary" style="margin-left:20px;"  icon="plus" @click="showModal">
+					添加
+				</a-button>
 
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-						清空
-					</a-button>
-				</div>
+				<a-button type="danger" style="margin-left:20px;" icon="reset" @click="patchDelete">
+					删除
+				</a-button>
+
+				<a-button type="primary"  style="margin-left:20px;"  icon="reload" @click="getVisitor">
+					刷新
+				</a-button>
 			</div>
 			<div>
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange" :row-selection="{ selectedRowKeys: selectId, onChange: onChange}">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold;border-bottom: 1px solid #66C3FD;" @click="editModal(record.key)">编辑</a>
-						<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel"
-							width="872px">
-							<table class="scanTable">
-								<tr>
-									<td class="single">
-										<div>姓名:</div>
-									</td>
-									<td class="long">
-										<a-input class="scanInput" placeholder="请输入姓名" v-model="editName"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">
-										<div>身份证号:</div>
-									</td>
-									<td class="long">
-										<a-input class="scanInput" placeholder="请输入身份证号" v-model="editIdentify">
-										</a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">
-										<div>被探访人员:</div>
-									</td>
-									<td class="long">
-										<a-cascader class="small" :options="editSchool" placeholder="请选择校区"
-											@change="editSchoolChange" v-model="editSchoolId" />
-										<a-cascader class="small" :options="editBuild" placeholder="请选择宿舍楼"
-											@change="editBuildChange" v-model="editBuildId" />
-										<a-cascader class="small" :options="editDorm" placeholder="请选择宿舍"
-											@change="editDormChange" v-model="editDormId" />
-										<a-cascader class="small" :options="editStudent" placeholder="请选择学生"
-											v-model="editStudentId" />
-									</td>
-								</tr>
-								<tr>
-									<td class="single">
-										<div>探访事由:</div>
-									</td>
-									<td class="long">
-										<a-input class="scanInput" placeholder="请输入探访事由" v-model="editCause"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">
-										<div>探访类型:</div>
-									</td>
-									<td class="long">
-										<a-cascader class="small" :options="type" placeholder="请选择类型"
-											@change="typeChange" v-model="editTypeId" />
-									</td>
-								</tr>
-							</table>
-
-							<template slot="footer">
-								<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="editOK()" class="buttonOk">确定</a-button>
-								<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel()" class="buttonCancel">取消</a-button>
-							</template>
-						</a-modal>
-						<span>|</span>
-						<a style="font-size:18px;font-weigth:bold;color:orange; border-bottom: 1px solid orange;"
-							@click="deleteVisitor(record.key)">删除</a>
+						<a @click="editModal(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a @click="deleteVisitor(record.key)">删除</a>
 					</span>
 
 				</a-table>
 			</div>
-		</div>
+			<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel"
+				width="1072px">
+				<table class="scanTable">
+					<tr>
+						<td class="single">
+							<div>姓名:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入姓名" v-model="editName"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>身份证号:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入身份证号" v-model="editIdentify">
+							</a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>被探访人员:</div>
+						</td>
+						<td class="long">
+							<a-cascader class="small" :options="editSchool" placeholder="请选择校区"
+								@change="editSchoolChange" v-model="editSchoolId" />
+							<a-cascader class="small" :options="editBuild" placeholder="请选择宿舍楼"
+								@change="editBuildChange" v-model="editBuildId" />
+							<a-cascader class="small" :options="editDorm" placeholder="请选择宿舍"
+								@change="editDormChange" v-model="editDormId" />
+							<a-cascader class="small" :options="editStudent" placeholder="请选择学生"
+								v-model="editStudentId" />
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>探访事由:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入探访事由" v-model="editCause"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>探访类型:</div>
+						</td>
+						<td class="long">
+							<a-cascader class="small" :options="type" placeholder="请选择类型"
+								@change="typeChange" v-model="editTypeId" />
+						</td>
+					</tr>
+				</table>
+			
+				<template slot="footer">
+					<a-button  @click="editCancel()" class="buttonCancel">取消</a-button>
+					<a-button type="primary" @click="editOK()" class="buttonOk">确定</a-button>
+				</template>
+			</a-modal>
+			<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel" width="1072px">
+				<table class="scanTable">
+					<tr>
+						<td class="single">
+							<div>姓名:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入姓名" v-model="addName"
+								onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>身份证号:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入身份证号" v-model="addIdentify"
+								onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>被探访人员:</div>
+						</td>
+						<td class="long">
+							<a-cascader class="small" :options="school" placeholder="请选择校区" @change="schoolChange"
+								v-model="schoolId" />
+							<a-cascader class="small" :options="build" placeholder="请选择宿舍楼" @change="buildChange"
+								v-model="buildId" />
+							<a-cascader class="small" :options="dorm" placeholder="请选择宿舍" @change="dormChange"
+								v-model="dormId" />
+							<a-cascader class="small" :options="student" placeholder="请选择学生" v-model="studentId" />
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>探访事由:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入探访事由" v-model="addCause"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>探访类型:</div>
+						</td>
+						<td class="long">
+							<a-cascader class="small" :options="type" placeholder="请选择类型" v-model="typeId" />
+						</td>
+					</tr>
+				</table>
+
+				<template slot="footer">
+					<a-button @click="addCancel()" class="buttonCancel">取消</a-button>
+					<a-button type="primary" @click="addOK()" class="buttonOk">确认</a-button>
+				</template>
+			</a-modal>
+		</a-card>
 	</div>
 </template>
 
@@ -289,7 +268,7 @@
 				/* 表格数据 */
 				data,
 				columns,
-				selectId:[],
+				selectId: [],
 				states: ['已登记', '已离开', '已申请'],
 				/* 按钮大小 */
 				size: 'small',
@@ -575,7 +554,7 @@
 					okText: '是',
 					okType: 'danger',
 					cancelText: '否',
-					onOk:() => {
+					onOk: () => {
 						axios({
 							url: 'dorm/laiFang/delete',
 							method: 'post',
@@ -589,7 +568,7 @@
 							this.$message.warning("此处有异常");
 						})
 					},
-					onCancel:()=> {
+					onCancel: () => {
 						return
 					},
 				});
@@ -682,7 +661,7 @@
 					okText: '是',
 					okType: 'danger',
 					cancelText: '否',
-					onOk:() => {
+					onOk: () => {
 						axios({
 							url: 'dorm/laiFang/deleteBatch',
 							method: 'post',
@@ -696,7 +675,7 @@
 							this.$message.warning("此处有异常");
 						})
 					},
-					onCancel:()=> {
+					onCancel: () => {
 						return
 					},
 				});
@@ -793,35 +772,16 @@
 	};
 </script>
 
-<style scoped="scoped">
-	.dorm-modify-top {
-		width: 500px;
-		height: 40px;
-		border: 0px;
-		background-color: #E9EDF6;
+<style scoped>
+	.top {
+		padding: 20px;
+		padding-top: 0;
+		display: flex;
+		align-items: center;
 	}
 
-	.dorm-modify-item {
-		width: 150px;
-	}
-
-	.dorm-modify-after {
-		margin-left: 30px;
-	}
-
-	.link {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #999999 !important;
-	}
-
-	.link-active {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #666666 !important;
+	.head-span {
+		width: 90px;
+		text-align: right;
 	}
 </style>

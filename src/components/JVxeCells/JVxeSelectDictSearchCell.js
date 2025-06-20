@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce'
-import { getAction } from '@/api/manage'
+import { getAction } from '@/api/common/manage'
 import { cloneObject } from '@/utils/util'
 import { filterDictText } from '@/components/dict/JDictSelectUtil'
 import { ajaxGetDictItems, getDictItemsFromCache } from '@/api/api'

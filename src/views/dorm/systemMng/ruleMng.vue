@@ -1,131 +1,64 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			制度管理
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">制度管理 > <span class="notTop">制度管理</span></div>
-			<div class="content-head">
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">标题</span>
 				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
-					<a-modal title="添加" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk"
-						@cancel="handleCancel">
-						<table class="scanTable">
-							<tr>
-								<td class="single">
-									<div><span class="spanRed">*</span>标题:</div>
-								</td>
-								<td class="double">
-									<a-input class="scanInput" placeholder="请输入标题" v-model="addTitle" />
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>内容:</div>
-								</td>
-								<td class="double"><textarea v-model="addConetnt"></textarea></td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>文件:</div>
-								</td>
-								<td class="long">
-									<a-input class="small" :disabled="true" v-model="fileName"></a-input>
-									<a-upload name="file" :showUploadList="false" :multiple="false"
-										:headers="tokenHeader" :action="url.importImgUrl" @change="handleImportImg">
-										<a-button :size="size" icon="import">选择文件</a-button>
-									</a-upload>
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>排序:</div>
-								</td>
-								<td class="double">
-									<a-input-number class="scanInput" placeholder="请输入排序" v-model="addListSort" />
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>类别:</div>
-								</td>
-								<td class="double">
-									<a-cascader class="scanInput" :options="addType" placeholder="请选择类别"
-										@change="addTypeChange" v-model="addTypeId" />
-								</td>
-							</tr>
-						</table>
-						<template slot="footer" class="floor-footer">
-							<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="handleOk()">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="handleCancel()">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="patchDelete">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						删除
-					</a-button>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getSystemList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
+					<a-input class="condition" placeholder="请输入标题" v-model="title"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
-
-				<div style="min-width: 320px;"></div>
-
+				<span class="head-span">类别：</span>
 				<div>
-					<span class="head-span">标题</span>
-					<a-input class="condition" placeholder="请输入标题" v-model="title" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<span class="head-span">类别</span>
 					<a-cascader class="condition" :options="type" placeholder="请选择类别" @change="typeChange"
 						v-model="typeId" />
 				</div>
+				<a-button type="primary" @click="getSystemList" icon="search" style="margin-left: 20px;">
+					搜索
+				</a-button>
+				<a-button type="danger" style="margin-left:20px;" icon="reset" @click="resetAll">
+					清空
+				</a-button>
 
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getSystemList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						搜索
-					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-						清空
-					</a-button>
-				</div>
+			</div>
+			<div style="margin-bottom:10px;">
+				<a-button type="primary" icon="plus" @click="showModal">
+					添加
+				</a-button>
+				<a-button type="danger" style="margin-left:20px;" icon="delete" @click="patchDelete">
+					删除
+				</a-button>
+				<a-button type="primary" icon="reload" style="margin-left:20px;" @click="getSystemList">
+					刷新
+				</a-button>
 			</div>
 			<div>
-				<a-table :columns="columns" :data-source="data" :row-selection="{ selectedRowKeys: deleteList, onChange: onChange }" :defaultCurrent="6"
+				<a-table :columns="columns" :data-source="data"
+					:row-selection="{ selectedRowKeys: deleteList, onChange: onChange }" :defaultCurrent="6"
 					:pagination="pagination" @change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;border-bottom: 1px solid #66C3FD;" @click="editRule(record.key)">编辑</a>
-						<span>|</span>
-						<a style="font-size:18px;color:orange; border-bottom: 1px solid orange;" @click="deleteRule(record.key)">删除</a>
+						<a @click="editRule(record.key)">编辑</a>
+						<a-divider type="vertical" />
+						<a @click="deleteRule(record.key)">删除</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
-		<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel">
+		</a-card>
+		<a-modal title="添加" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel"
+			width="1000px">
 			<table class="scanTable">
 				<tr>
 					<td class="single">
 						<div><span class="spanRed">*</span>标题:</div>
 					</td>
 					<td class="double">
-						<a-input placeholder="请输入标题" v-model="editTitle"/>
+						<a-input class="scanInput" placeholder="请输入标题" v-model="addTitle" />
 					</td>
 				</tr>
 				<tr>
 					<td class="single">
 						<div>内容:</div>
 					</td>
-					<td class="double"><textarea v-model="editContent"><textarea></textarea></td>
+					<td class="double"><a-textarea v-model="addConetnt" /></td>
 				</tr>
 				<tr>
 					<td class="single">
@@ -133,6 +66,58 @@
 					</td>
 					<td class="long">
 						<a-input class="small" :disabled="true" v-model="fileName"></a-input>
+						<a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader"
+							:action="url.importImgUrl" @change="handleImportImg">
+							<a-button :size="size" icon="import">选择文件</a-button>
+						</a-upload>
+					</td>
+				</tr>
+				<tr>
+					<td class="single">
+						<div>排序:</div>
+					</td>
+					<td class="double">
+						<a-input-number class="scanInput" placeholder="请输入排序" v-model="addListSort" />
+					</td>
+				</tr>
+				<tr>
+					<td class="single">
+						<div>类别:</div>
+					</td>
+					<td class="double">
+						<a-cascader class="scanInput" :options="addType" placeholder="请选择类别" @change="addTypeChange"
+							v-model="addTypeId" />
+					</td>
+				</tr>
+			</table>
+			<template slot="footer" class="floor-footer">
+				<a-button @click="handleCancel()">取消</a-button>
+				<a-button type="primary" @click="handleOk()">确认</a-button>
+			</template>
+		</a-modal>
+		<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel"
+			width="1000px">
+			<table class="scanTable">
+				<tr>
+					<td class="single">
+						<div><span class="spanRed">*</span>标题:</div>
+					</td>
+					<td class="double">
+						<a-input placeholder="请输入标题" v-model="editTitle" />
+					</td>
+				</tr>
+				<tr>
+					<td class="single">
+						<div>内容:</div>
+					</td>
+					<td class="double"><a-textarea v-model="editContent" /></td>
+				</tr>
+				<tr>
+					<td class="single">
+						<div>文件:</div>
+					</td>
+					<td class="long">
+						<a-input class="small" style="width:200px" :disabled="true" v-model="fileName"></a-input>
 						<a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader"
 							:action="url.importImgUrl" @change="handleImportImg">
 							<a-button :size="size" icon="import">选择文件</a-button>
@@ -158,8 +143,8 @@
 				</tr>
 			</table>
 			<template slot="footer" class="floor-footer">
-				<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="editOK()">确定</a-button>
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel()">取消</a-button>
+				<a-button @click="editCancel()">取消</a-button>
+				<a-button type="primary" @click="editOK()">确认</a-button>
 			</template>
 		</a-modal>
 	</div>
@@ -179,7 +164,7 @@
 	} from '@/mixins/EduListMixin';
 	import {
 		downFile
-	} from '@/api/manage';
+	} from '@/api/common/manage';
 
 	const IconFont = Icon.createFromIconfontCN({
 		scriptUrl: '//at.alicdn.com/t/font_2390461_f6v2cx4wmzq.js',
@@ -244,7 +229,7 @@
 				/* 表格数据 */
 				data,
 				columns,
-				deleteList:[],
+				deleteList: [],
 				/* 按钮大小 */
 				size: 'small',
 				/* 下拉框数据 */
@@ -542,13 +527,15 @@
 	};
 </script>
 
-<style scoped="scoped">
-	textarea {
-		resize: none;
-		width: 300px;
-		height: 100px;
-		border: 1px solid #D9D9D9;
-		outline: #D9D9D9;
-		outline-width: 1px;
+<style scoped>
+	.top {
+		margin-bottom:10px;
+		display: flex;
+		align-items: center;
+	}
+
+	.head-span {
+		margin: 0 10px;
+		text-align: right;
 	}
 </style>

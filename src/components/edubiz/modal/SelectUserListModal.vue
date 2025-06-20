@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import {getUserList} from '@/api/api'
+  import {getUserList} from '@/api/common/api'
   import {EduListMixin} from '@/mixins/EduListMixin'
 
   export default {

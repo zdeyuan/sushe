@@ -1,0 +1,357 @@
+/* 弹出框的 */
+.edu-form-size {
+  &.big {
+    .dialog-form {
+      top: 50px;
+      .form-content {
+        max-height: 700px;
+      }
+    }
+  }
+
+  .close-icon {
+    img {
+      width: 26px;
+    }
+  }
+  .dialog {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    transition: transform 0.3s cubic-bezier(0.7, 0.3, 0.1, 1);
+    top: 0;
+    height: 100vh;
+    left: 0;
+  }
+  .edu-mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.45);
+    filter: alpha(opacity=45);
+    transition: opacity 0.3s linear, height 0s ease 0.3s;
+  }
+
+  .view-form {
+    background: #fff;
+    margin: 0 auto;
+    .form_view_title {
+      background: #fff;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      color: #fff;
+      color: #fff;
+      font-size: 16px;
+      line-height: 60px;
+      padding: 0 15px;
+      font-weight: 500;
+      .title {
+        color: #000;
+      }
+      .close-icon {
+        color: #fff;
+        font-size: 25px;
+        float: right;
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+        display: inline-block;
+        padding: 0 15px;
+      }
+    }
+    .form-content {
+      padding: 15px;
+    }
+    .form-footer {
+      text-align: right;
+      /deep/.ant-btn {
+        margin-right: 15px;
+        font-size: 16px;
+        padding: 0 25px;
+        height: 36px;
+      }
+    }
+  }
+  .dialog-form {
+    background: #fff;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    border-radius: 8px;
+    .form_title {
+      font-size: 20px;
+      line-height: 60px;
+      padding: 0 15px;
+      font-weight: 500;
+      .title {
+      }
+      .close-icon {
+        color: rgba(0, 0, 0, 0.45);
+        font-size: 16px;
+        float: right;
+        position: absolute;
+        right: 15px;
+        cursor: pointer;
+        display: inline-block;
+        padding: 0 15px;
+      }
+    }
+    .form-content {
+      max-height: 600px;
+      padding: 15px;
+      overflow-y: auto;
+    }
+    .form-footer {
+      text-align: center;
+      padding: 15px;
+      /deep/.ant-btn {
+        margin-right: 15px;
+      }
+    }
+  }
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.2);
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+  .close-btn {
+    &:hover {
+      border-color: #777;
+      background-color: #777;
+      color: #fff;
+    }
+    background-color: #999;
+    color: #fff;
+  }
+}
+/* 弹出框的 */
+.extDialog {
+  .ant-modal-body {
+    padding: 0px 0px 24px 0px;
+  }
+  .ant-modal-confirm-body {
+    .anticon-question-circle {
+      display: none;
+    }
+    .ant-modal-confirm-title {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      padding-left: 15px;
+      line-height: 60px;
+      color: #fff;
+      background: #028be2;
+      border-radius: 4px 4px 0px 0px;
+    }
+    .ant-modal-confirm-content {
+      text-align: center;
+      margin-left: 0px !important;
+      color: #666666;
+      padding-top: 25px;
+      padding-bottom: 15px;
+    }
+  }
+  .ant-modal-confirm-btns {
+    margin-top: 24px;
+    float: none;
+    text-align: center;
+    padding-right: 0.9rem;
+  }
+  .ant-btn {
+    font-size: 16px;
+    padding: 0 25px;
+    height: 36px;
+  }
+  .ant-btn:not(.ant-btn-primary) {
+    &:active {
+      border-color: #777;
+      background-color: #777;
+    }
+    background-color: #999;
+    color: #fff;
+    right: -200px;
+  }
+}
+.delete_logo_div {
+  padding-bottom: 15px;
+  .delete_logo {
+    display: inline-block;
+    width: 72px;
+    height: 72px;
+    background: linear-gradient(180deg, rgba(255, 99, 103, 0.99), rgba(254, 172, 136, 0.99));
+    border-radius: 50%;
+  }
+  .iconshanchu {
+    color: #fff;
+    font-size: 35px;
+    margin-top: 10px;
+    display: inline-block;
+  }
+}
+.ytop.ant-form-item {
+  border-top-width: 1px !important;
+}
+/* 编辑页面的表单 */
+.edu-form-size {
+  .ant-form .ant-form-item:first-child {
+    border-top-width: 1px;
+  }
+  .ant-col-12 .ant-form-item:first-child {
+    border-top-width: 0px !important;
+  }
+  .ant-col-12:first-child .ant-form-item {
+    border-right-width: 0px !important;
+  }
+  .ant-form {
+    .need-top.ant-form-item {
+      border-top-width: 1px !important;
+    }
+    .ytop.ant-form-item {
+      border-top-width: 1px !important;
+    }
+    .ntop.ant-form-item {
+      border-top-width: 0px !important;
+    }
+  }
+
+  &.inline-form2 {
+  }
+
+  &.inline-form {
+  }
+
+  .ant-form-item {
+    display: flex;
+  }
+  .ant-form-item-label {
+    width: 140px;
+    min-width: 140px;
+    padding: 8px;
+  }
+  .ant-form-item-control-wrapper {
+    flex: 1;
+    padding: 8px;
+  }
+  .ant-row.ant-form-item {
+    margin-bottom: 0px !important;
+  }
+  /* 表单的 */
+  .ant-form-item {
+    border: 1px solid #dee2e6;
+    border-top-width: 0px;
+    .ant-form-item-label {
+      background-color: #f8f8f9;
+    }
+  }
+}
+
+.count{
+		padding: 0px;
+		margin-top:10px;
+	}
+	.tb {
+		text-align: left;
+	}
+	
+	.scanTable{
+		width:100%;
+	}
+	/* 表行高样式 */
+	.tr-style {
+		height: 49px;
+		border: 1px solid #dee2e6;
+	}
+	
+	/* 行颜色 */
+	.tr-color {
+		padding-left:10px;
+		box-sizing: border-box;
+		height: 60px;
+		width: 100%;
+		background: #66c3fd;
+		color:#fff;
+	}
+	
+	.input-style-reply {
+		color: #666666;
+		width: 300px;
+		background-color: #ffffff;
+		border: 0;
+		margin-left: 5px;
+	}
+	
+	.input-style-replyTwo {
+		color: #666666;
+		width: 180px;
+		background-color: #ffffff;
+		border: 0;
+		margin-left: 5px;
+	}
+	
+	.td-div {
+		padding-left:10px;
+		box-sizing: border-box;
+		width: 159px;
+	}
+	
+	.btn {
+		// width: 100px;
+		height: 40px;
+		background: #0098f8;
+		border-radius: 5px;
+		font-family: Microsoft YaHei;
+		color: #ffffff;
+	}
+	
+	.applyBtn-div {
+		width: 100%;
+	}
+	.tip-star{
+		color:#f5222d;
+		font-size: 14px;
+		margin-right:4px;
+	}
+	
+	
+	
+	.date-style-Apply .ant-input {
+		width: 300px;
+		height: 34px;
+	}
+	.icon-img {
+		margin-bottom: 5px;
+		margin-right: 1px;
+	}
+	
+	.info-tip {
+		width: 94px;
+		height: 19px;
+		
+		font-family: Microsoft YaHei;
+		font-weight: 700;
+		color: #666666;
+		line-height: 24px;
+	}
+	
+
+	.tableClean-button {
+		width: 88px;
+		height: 34px;
+		margin-right: 0px;
+		margin-left: 10px;
+		background: #028BE2;
+		border-radius: 5px;
+		color:#fff;
+		&:hover{
+			background: #028BE2;
+			color:#fff;
+		}
+	}

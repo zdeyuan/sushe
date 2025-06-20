@@ -1,74 +1,58 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-				<div class="content-title">
-					违纪统计
-				</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿舍统计 > <span class="notTop">违纪统计</span></div>
-			<div class="content-head">
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
 
-				<div style="min-width: 450px;"></div>
+				<span class="head-span">违纪类型</span>
 				<div>
-					<span class="head-span">违纪类型</span>
 					<a-cascader class="condition" :options="type" placeholder="请选择类型" v-model="typeId" />
 				</div>
 
+
+				<span class="head-span">宿舍楼</span>
 				<div>
-					<span class="head-span">宿舍楼</span>
 					<a-cascader class="condition" :options="build" placeholder="请选择宿舍楼" v-model="buildId" />
 				</div>
 
+
+				<span class="head-span">房间</span>
 				<div>
-					<span class="head-span">房间</span>
 					<a-input class="condition" placeholder="请输入房间号" v-model="dorm" />
 				</div>
 
-				<a-button :size="size" class="content-button button-orange" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="clearAll">
-					<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-					清空
-				</a-button>
 			</div>
-			<div class="content-head" style="margin-top: 8px;">
-				<a-button :size="size" class="content-button button-skyblue" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getPrinList">
-					<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-					刷新
-				</a-button>
-
-				<div style="min-width: 320px;"></div>
-
+			<div class="top">
+				<span class="head-span">专业部</span>
 				<div>
-					<span class="head-span">专业部</span>
 					<a-cascader class="condition" :options="depart" placeholder="请选择专业部" @change="departChange"
 						v-model="departId" />
 				</div>
-
+				<span class="head-span">专业</span>
 				<div>
-					<span class="head-span">专业</span>
 					<a-cascader class="condition" :options="major" placeholder="请选择专业" @change="majorChange"
 						v-model="majorId" />
 				</div>
 
+				<span class="head-span">班级</span>
 				<div>
-					<span class="head-span">班级</span>
 					<a-cascader class="condition" :options="clazz" placeholder="请选择班级" v-model="clazzId" />
 				</div>
-
-				<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getPrinList">
-					<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+				<a-button type="primary" @click="getPrinList" icon="search" style="margin-left: 20px;">
 					搜索
+				</a-button>
+				<a-button type="danger" style="margin-left:20px;" icon="reset" @click="clearAll">
+					清空
+				</a-button>
+				<a-button type="primary" icon="reload" style="margin-left:20px;" @click="getPrinList">
+					刷新
 				</a-button>
 			</div>
 			<div>
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
-					<span slot="operator">
-						<a style="border-bottom: 1px solid #66C3FD;">编辑</a>
-						<span>|</span>
-						<a style="color:orange; border-bottom: 1px solid orange;">删除</a>
-					</span>
 				</a-table>
 			</div>
-		</div>
+		</a-card>
 	</div>
 
 
@@ -375,6 +359,16 @@
 	};
 </script>
 
-<style>
+<style scoped>
+	.top {
+		padding-bottom: 20px;
+		display: flex;
+		align-items: center;
+	}
 
+	.head-span {
+		margin: 0 10px;
+		width: 90px;
+		text-align: right;
+	}
 </style>

@@ -7,7 +7,7 @@
     switchFullscreen
     @ok="handleOk"
     @cancel="close"
-    cancelText="关闭">
+    okText="确认"  cancelText="取消">
 
     <a-row :gutter="18">
       <a-col :span="16">
@@ -20,7 +20,7 @@
           <!-- 动态生成的查询条件 -->
           <j-select-biz-query-item v-if="queryConfig.length>0" v-show="showMoreQueryItems" :queryParam="queryParam" :queryConfig="queryConfig" @pressEnter="searchQuery"/>
           <!-- 按钮 -->
-          <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+          <a-button type="primary" @click="searchQuery" icon="search"  style="margin-right: 10px;">查询</a-button>
           <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
           <a v-if="queryConfig.length>0" @click="showMoreQueryItems=!showMoreQueryItems" style="margin-left: 8px">
             {{ showMoreQueryItems ? '收起' : '展开' }}
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-  import { getAction } from '@/api/manage'
+  import { getAction } from '@/api/common/manage'
   import Ellipsis from '@/components/Ellipsis'
   import { EduListMixin } from '@/mixins/EduListMixin'
   import { cloneObject, pushIfNotExist } from '@/utils/util'

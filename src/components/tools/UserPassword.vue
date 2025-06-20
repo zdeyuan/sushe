@@ -39,7 +39,7 @@
 
 <script>
 
-  import { putAction } from '@/api/manage'
+  import { putAction } from '@/api/common/manage'
 
   export default {
     name: "UserPassword",

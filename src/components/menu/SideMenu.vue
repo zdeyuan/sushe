@@ -1,19 +1,20 @@
 <template>
- <a-layout-sider
+<a-layout-sider
     :class="['sider', isDesktop() ? null : 'shadow', theme, fixSiderbar ? 'ant-fixed-sidemenu' : null ]"
-    width="208px"
+    width="400px"
     :collapsible="collapsible"
     v-model="collapsed"
     :trigger="null">
-    <logo />
-   <s-menu
+	<logo></logo>
+<!--   <s-menu
       :collapsed="collapsed"
       :menu="menus"
       :theme="theme"
       @select="onSelect"
       :mode="mode"
       :style="smenuStyle">
-    </s-menu>
+    </s-menu> -->
+	<leftBar :menu="menus"></leftBar>
   </a-layout-sider>
 
 </template>
@@ -21,12 +22,17 @@
 <script>
   import ALayoutSider from "ant-design-vue/es/layout/Sider"
   import Logo from '../tools/Logo'
-  import SMenu from './index'
+  // import SMenu from './index'
+  import leftBar from './leftBar.vue'
   import { mixin, mixinDevice } from '@/utils/mixin.js'
 
   export default {
     name: "SideMenu",
-    components: { ALayoutSider, Logo, SMenu },
+    components: { 
+		ALayoutSider, 
+		Logo, 
+		leftBar
+	},
     mixins: [mixin, mixinDevice],
     props: {
       mode: {
@@ -188,7 +194,7 @@
 
       &.ant-menu-item-selected {
         & > a, & > a:hover {
-          color: @primary-color;
+          color: #fff;
         }
       }
     }

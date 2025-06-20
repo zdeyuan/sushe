@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import {postAction} from '@/api/manage'
+  import {postAction} from '@/api/common/manage'
 
   export default {
     name: "Step2",

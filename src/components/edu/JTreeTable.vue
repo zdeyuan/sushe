@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import { getAction } from '@/api/manage'
+  import { getAction } from '@/api/common/manage'
 
   export default {
     name: 'JTreeTable',

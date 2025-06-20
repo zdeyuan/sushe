@@ -1,180 +1,162 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="desktop" class="dorm-modify-item">
-					<router-link class="link-active" to="/dorm/notice">通知管理</router-link>
-				</a-menu-item>
-				<a-menu-item key="defined" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/noticeQuery">通知查询</router-link>
-				</a-menu-item>
+	<div>
+			<a-menu v-model="current" mode="horizontal">
+				<a-menu-item key="notice"> 通知管理 </a-menu-item>
+				<a-menu-item key="noticeQuery"> 通知查询 </a-menu-item>
 			</a-menu>
-		</span> -->
-		<!-- <hr align="left" width=147 color=#878787 SIZE=2 style="margin-left: 3px;" /> -->
-		<span>
-			<div class="content-title ">
-				<router-link class="link-active" to="/dorm/notice">通知管理</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/noticeQuery">通知查询</router-link>
-			</div>
-		</span>
-		<div class="pageContentBox">
-			<div class="headTop">通知公告 > <span class="notTop">通知管理</span></div>
-			<div class="content-head">
-				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="addNotice">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
+			<div  v-if="current=='notice'" style="padding:0 20px">
+				<div class="top" >
+					<span class="head-span">标题：</span>
+					<div>
+						<a-input class="condition" placeholder="请输入标题" v-model="title"
+							onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
+					</div>
+					<a-button type="primary" style="margin-left:20px;" icon="search" @click="getNoticeList">
+						搜索
+					</a-button>
+					<a-button type="danger" style="margin-left:20px;" icon="reset" @click="resetAll">
+						清空
+					</a-button>
+					<a-button type="primary" style="margin-left:20px;" icon="plus" @click="addNotice">
 						添加
 					</a-button>
-
-					<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel"
-						width="872px">
-						<table class="scanTable">
-							<tr>
-								<td class="single">
-									<div>接收范围:</div>
-								</td>
-								<td class="long">
-									<a-cascader class="small" :options="school" placeholder="请选择校区"
-										@change="schoolChange" v-model="schoolId" />
-									<a-cascader class="small" :options="build" placeholder="请选择宿舍楼" v-model="buildId" />
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>标题:</div>
-								</td>
-								<td class="long">
-									<a-input class="scanInput" placeholder="请输入标题" v-model="addTitle" onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
-								</td>
-							</tr>
-							<tr>
-								<td class="single">
-									<div>内容:</div>
-								</td>
-								<td class="long">
-									<textarea v-model="addContent"></textarea>
-								</td>
-							</tr>
-						</table>
-
-						<template slot="footer">
-							<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="addOK()" class="buttonOk">确定</a-button>
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="addCancel()" class="buttonCancel">取消</a-button>
-						</template>
-					</a-modal>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getNoticeList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
+					<a-button  type="primary" style="margin-left:20px;" icon="reload" @click="getNoticeList">
 						刷新
 					</a-button>
 				</div>
-
-				<div style="min-width: 600px;"></div>
-
 				<div>
-					<span class="head-span">标题</span>
-					<a-input class="condition" placeholder="请输入标题" v-model="title" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+					<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
+						@change="tableChange" >
+						<span slot="operator" slot-scope="text, record">
+							<a @click="showNotice(record.key)">查看</a>
+							<a-divider type="vertical" />
+							<a @click="editNotice(record.key)">编辑</a>
+							<a-divider type="vertical" />
+							<a @click="deleteNotice(record.key)">删除</a>
+						</span>
+					</a-table>
 				</div>
+			<a-modal title="添加" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel" width="872px">
+				<table class="scanTable">
+					<tr>
+						<td class="single">
+							<div>接收范围:</div>
+						</td>
+						<td class="long">
+							<a-cascader class="small" :options="school" placeholder="请选择校区" @change="schoolChange"
+								v-model="schoolId" />
+							<a-cascader class="small" :options="build" placeholder="请选择宿舍楼" v-model="buildId" />
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>标题:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入标题" v-model="addTitle"
+								onkeyup="this.value=this.value.replace(/[, ]/g,'')"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>内容:</div>
+						</td>
+						<td class="long">
+							<a-textarea
+							      v-model="addContent"
+							      :auto-size="{ minRows: 3, maxRows: 5 }"
+							    />
+						</td>
+					</tr>
+				</table>
 
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getNoticeList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						搜索
-					</a-button>
+				<template slot="footer">
+					<a-button  @click="addCancel()" class="buttonCancel">取消</a-button>
+					<a-button type="primary" @click="addOK()" class="buttonOk">确认</a-button>
+				</template>
+			</a-modal>
+			<a-modal title="查看" :visible="show" :confirm-loading="confirmLoading" @cancel="showCancel" width="872px">
+				<table class="scanTable">
+					<tr>
+						<td class="single">
+							<div>接收范围:</div>
+						</td>
+						<td class="long">
+							<a-cascader :disabled="true" class="small" :options="school" placeholder="请选择校区"
+								@change="schoolChange" v-model="schoolId" />
+							<a-cascader :disabled="true" class="small" :options="build" placeholder="请选择宿舍楼"
+								v-model="buildId" />
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>标题:</div>
+						</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" placeholder="请输入标题"
+								v-model="addTitle"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>内容:</div>
+						</td>
+						<td class="long">
+							<a-textarea
+								:disabled="true"
+							      v-model="addContent"
+							      :auto-size="{ minRows: 3, maxRows: 5 }"
+							    />
+						</td>
+					</tr>
+				</table>
 
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-						清空
-					</a-button>
-				</div>
+				<template slot="footer">
+					<a-button s @click="showCancel"
+						class="buttonCancel">取消</a-button>
+				</template>
+			</a-modal>
+			<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel" width="872px">
+				<table class="scanTable">
+					<tr>
+						<td class="single">
+							<div>接收范围:</div>
+						</td>
+						<td class="long">
+							<a-cascader class="small" :options="school" placeholder="请选择校区" @change="schoolChange"
+								v-model="schoolId" />
+							<a-cascader class="small" :options="build" placeholder="请选择宿舍楼" v-model="buildId" />
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>标题:</div>
+						</td>
+						<td class="long">
+							<a-input class="scanInput" placeholder="请输入标题" v-model="addTitle"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>内容:</div>
+						</td>
+						<td class="long">
+							<a-textarea
+								:disabled="true"
+							      v-model="addContent"
+							      :auto-size="{ minRows: 3, maxRows: 5 }"
+							    />
+						</td>
+					</tr>
+				</table>
+
+				<template slot="footer">
+					<a-button   @click="editCancel" class="buttonCancel">取消</a-button>
+					<a-button type="primary"  @click="editOK" class="buttonOK">确认</a-button>
+				</template>
+			</a-modal>
 			</div>
-			<div>
-				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
-					@change="tableChange" class="long-table">
-					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold;color:#3CCADB; border-bottom: 1px solid #3CCADB;"
-							@click="showNotice(record.key)">查看</a>
-						<span>|</span>
-						<a style="font-size:18px;font-weigth:bold;border-bottom: 1px solid #66C3FD;" @click="editNotice(record.key)">编辑</a>
-						<span>|</span>
-						<a style="font-size:18px;color:orange; border-bottom: 1px solid orange;"
-							@click="deleteNotice(record.key)">删除</a>
-					</span>
-				</a-table>
-			</div>
-		</div>
-		<a-modal title="查看" :visible="show" :confirm-loading="confirmLoading" @cancel="showCancel" width="872px">
-			<table class="scanTable">
-				<tr>
-					<td class="single">
-						<div>接收范围:</div>
-					</td>
-					<td class="long">
-						<a-cascader :disabled="true" class="small" :options="school" placeholder="请选择校区"
-							@change="schoolChange" v-model="schoolId" />
-						<a-cascader :disabled="true" class="small" :options="build" placeholder="请选择宿舍楼"
-							v-model="buildId" />
-					</td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>标题:</div>
-					</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" placeholder="请输入标题" v-model="addTitle"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>内容:</div>
-					</td>
-					<td class="long">
-						<textarea :disabled="true" v-model="addContent"></textarea>
-					</td>
-				</tr>
-			</table>
-
-			<template slot="footer">
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="showCancel" class="buttonCancel">取消</a-button>
-			</template>
-		</a-modal>
-		<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @cancel="editCancel" width="872px">
-			<table class="scanTable">
-				<tr>
-					<td class="single">
-						<div>接收范围:</div>
-					</td>
-					<td class="long">
-						<a-cascader class="small" :options="school" placeholder="请选择校区" @change="schoolChange"
-							v-model="schoolId" />
-						<a-cascader class="small" :options="build" placeholder="请选择宿舍楼" v-model="buildId" />
-					</td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>标题:</div>
-					</td>
-					<td class="long">
-						<a-input class="scanInput" placeholder="请输入标题" v-model="addTitle"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>内容:</div>
-					</td>
-					<td class="long">
-						<textarea v-model="addContent"></textarea>
-					</td>
-				</tr>
-			</table>
-
-			<template slot="footer">
-				<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="editOK" class="buttonOK">确定</a-button>
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="editCancel" class="buttonCancel">取消</a-button>
-			</template>
-		</a-modal>
+			<noticeQuery v-if="current=='noticeQuery'" ></noticeQuery>
 	</div>
 </template>
 
@@ -182,10 +164,8 @@
 	import {
 		Icon
 	} from 'ant-design-vue';
-	import {
-		axios
-	} from '@/utils/request';
-
+	import {axios} from '@/utils/request';
+	import noticeQuery from '@/views/dorm/dormMng/noticeQuery'
 	const IconFont = Icon.createFromIconfontCN({
 		scriptUrl: '//at.alicdn.com/t/font_2390461_vvis3tohqh.js',
 	});
@@ -226,8 +206,14 @@
 	let data = [];
 
 	export default {
+		components: {
+			noticeQuery,
+			IconFont
+		},
 		data() {
 			return {
+				
+				current: ['notice'],
 				pagination: {
 					current: 1,
 					pageSize: 10,
@@ -262,9 +248,6 @@
 		},
 		mounted() {
 			this.getSchoolList();
-		},
-		components: {
-			IconFont,
 		},
 		methods: {
 			addNotice() {
@@ -367,9 +350,9 @@
 					data.splice(0, data.length);
 					for (let notice of res.result) {
 						var range = this.school.find(item => item.value == notice.campusId)
-						if(range === undefined){
-							range={ 
-								label:'全校'
+						if (range === undefined) {
+							range = {
+								label: '全校'
 							}
 						}
 						data.push({
@@ -407,7 +390,6 @@
 				this.buildId = [];
 				this.editId = id;
 				this.getSchoolList()
-				this.
 				axios({
 					url: 'dorm/notice/updateMessage',
 					method: 'post',
@@ -507,48 +489,10 @@
 	};
 </script>
 
-<style>
-	.dorm-modify-top {
-		width: 500px;
-		height: 40px;
-		border: 0px;
-		background-color: #E9EDF6;
-	}
-
-	.dorm-modify-item {
-		width: 150px;
-	}
-
-	.dorm-modify-after {
-		margin-left: 30px;
-	}
-
-	.link {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #999999 !important;
-	}
-
-	.link-active {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #666666 !important;
-	}
-
-	.long-table tr {
-		font-size: 20px;
-	}
-
-	textarea {
-		resize: none;
-		width: 650px;
-		height: 200px;
-		border: 1px solid #D9D9D9;
-		outline: #D9D9D9;
-		outline-width: 1px;
+<style scoped>
+	.top {
+		padding: 30px;
+		display: flex;
+		align-items: center;
 	}
 </style>

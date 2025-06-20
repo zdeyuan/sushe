@@ -26,7 +26,13 @@ import JSlider from './JSlider.vue'
 import JSwitch from './JSwitch.vue'
 import JTime from './JTime.vue'
 import JTreeTable from './JTreeTable.vue'
-
+import EduButton from './button/EduButton'
+import EduButtonDelete from './button/EduButtonDelete'
+import EduCaozuoButton from './button/EduCaozuoButton'
+import EduDeleteButton from './button/EduDeleteButton'
+import EduBatchDeleteButton from './button/EduBatchDeleteButton'
+import EduLabelButton from './button/EduLabelButton'
+import EduLabel from './button/EduLabel'
 export default {
   install(Vue) {
     Vue.component('JMarkdownEditor', JMarkdownEditor)
@@ -57,5 +63,12 @@ export default {
     Vue.component('JTreeSelect', JTreeSelect)
     Vue.component('JTreeTable', JTreeTable)
     Vue.component('JUpload', JUpload)
+	Vue.component("EduButton",EduButton);
+	Vue.component("EduDeleteButton",EduDeleteButton);
+	Vue.component("EduLabelButton",EduLabelButton);
+	Vue.component("EduCaozuoButton",EduCaozuoButton);
+	Vue.component("EduBatchDeleteButton",EduBatchDeleteButton);
+	Vue.component("EduButtonDelete",EduButtonDelete);
+	Vue.component("EduLabel",EduLabel);
   }
 }

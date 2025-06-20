@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import JDate from '@comp/edu/JDate'
+  import JDate from '@/components/edu/JDate'
   import JSelectBizComponent from './JSelectBizComponent'
 
   export default {

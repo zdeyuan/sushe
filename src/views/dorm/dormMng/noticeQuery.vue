@@ -1,58 +1,27 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="desktop" class="dorm-modify-item">
-					<router-link class="link" to="notice">通知管理</router-link>
-				</a-menu-item>
-				<a-menu-item key="defined" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link-active" to="noticeQuery">通知查询</router-link>
-				</a-menu-item>
-			</a-menu>
-		</span>
-		<hr align="left" width=147 color=#878787 SIZE=2 style="margin-left: 185px;" /> -->
-		<span>
-			<div class="content-title not-title">
-				<router-link class="link-active" to="/dorm/notice">通知管理</router-link>
-			</div>
-			<div class="content-title ">
-				<router-link class="link" to="/dorm/noticeQuery">通知查询</router-link>
-			</div>
-		</span>
+	<div  style="padding:0 20px">
 		<div class="pageContentBox">
-			<div class="headTop">通知公告 > <span class="notTop">通知查询</span></div>
-			<div class="content-head">
+			<div class="top">
+				<span class="head-span">标题：</span>
 				<div>
-					<a-button :size="size" class="content-button button-skyblue" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getNoticeList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
+					<a-input class="condition" placeholder="请输入标题" v-model="title"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
-
-				<div style="min-width: 600px;"></div>
-
-				<div>
-					<span class="head-span">标题</span>
-					<a-input class="condition" placeholder="请输入标题" v-model="title" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getNoticeList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						搜索
-					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-						清空
-					</a-button>
-				</div>
+				<a-button type="primary" style="margin-left:20px;" icon="search" @click="getNoticeList">
+					搜索
+				</a-button>
+				<a-button type="danger" style="margin-left:20px;" @click="resetAll">
+					清空
+				</a-button>
+				<a-button  type="primary" style="margin-left:20px;" icon="reload" @click="getNoticeList">
+					刷新
+				</a-button>
 			</div>
 			<div>
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange" class="long-table">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold;color:#00d09d; border-bottom: 1px solid #00d09d;" @click="showNotice(record.key)">查看</a>
+						<a @click="showNotice(record.key)">查看</a>
 					</span>
 				</a-table>
 			</div>
@@ -64,7 +33,7 @@
 						<div>接收范围:</div>
 					</td>
 					<td class="long">
-					<!-- 	<a-cascader :disabled="true" class="small" :options="school" placeholder="请选择校区"
+						<!-- 	<a-cascader :disabled="true" class="small" :options="school" placeholder="请选择校区"
 							@change="schoolChange" v-model="schoolId" /> -->
 						<a-cascader :disabled="true" class="small" :options="build" placeholder="请选择宿舍楼"
 							v-model="buildId" />
@@ -83,13 +52,17 @@
 						<div>内容:</div>
 					</td>
 					<td class="long">
-						<textarea :disabled="true" v-model="addContent"></textarea>
+						<a-textarea
+							:disabled="true"
+						      v-model="addContent"
+						      :auto-size="{ minRows: 3, maxRows: 5 }"
+						    />
 					</td>
 				</tr>
 			</table>
-		
+
 			<template slot="footer">
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="showCancel" class="buttonCancel">取消</a-button>
+				<a-button  @click="showCancel" class="buttonCancel">取消</a-button>
 			</template>
 		</a-modal>
 	</div>
@@ -250,7 +223,7 @@
 						id: id
 					}
 				}).then(res => {
-			
+
 					this.addTitle = res.result.title;
 					this.addContent = res.result.content;
 					if (res.result.type == 2) {
@@ -273,7 +246,7 @@
 					method: 'post',
 					params: {}
 				}).then(res => {
-			
+
 					this.school.splice(0, this.school.length);
 					for (let school of res.result) {
 						this.school.push({
@@ -299,7 +272,7 @@
 						"XQBH": this.schoolId[0]
 					}
 				}).then(res => {
-			
+
 					this.build.splice(0, this.build.length);
 					for (let build of res.result) {
 						this.build.push({
@@ -316,38 +289,9 @@
 </script>
 
 <style>
-	.dorm-modify-top {
-		width: 500px;
-		height: 40px;
-		border: 0px;
-		background-color: #E9EDF6;
-	}
-
-	.dorm-modify-item {
-		width: 150px;
-	}
-
-	.dorm-modify-after {
-		margin-left: 30px;
-	}
-
-	.link {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #999999 !important;
-	}
-
-	.link-active {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #666666 !important;
-	}
-
-	.long-table tr {
-		font-size: 20px;
+	.top {
+		padding: 20px;
+		display: flex;
+		align-items: center;
 	}
 </style>

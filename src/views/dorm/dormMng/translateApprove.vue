@@ -1,205 +1,200 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			留宿审核
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿务管理 > <span class="notTop">留宿审核</span></div>
-			<div class="content-head">
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">学生姓名：</span>
 				<div>
-					<a-button :size="size" class="content-button button-green" style="font-size:16px;width:88px;height:34px; " @click="changeSuam">
-						<icon-font type="iconfanhui1" style="color: #FFFFFF;" />
-						导出
-					</a-button>
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getTranslateList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
+					<a-input class="condition" placeholder="请输入姓名" v-model="name"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
+
+				<span class="head-span">留宿类型：</span>
 				<div>
-					<span class="head-span">学生姓名</span>
-					<a-input class="condition" placeholder="请输入姓名" v-model="name" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
+					<a-select class="condition" :options="type" placeholder="请选择类型" v-model="typeId" />
 				</div>
-				<div>
-					<span class="head-span">留宿类型</span>
-					<a-cascader class="condition" :options="type" placeholder="请选择类型" v-model="typeId" />
-				</div>
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getTranslateList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						搜索
-					</a-button>
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="clearAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-						清空
-					</a-button>
-				</div>
+				<a-button type="primary" icon="search" style="margin-left:20px" @click="getTranslateList">
+					搜索
+				</a-button>
+				<a-button type="danger" icon="reset" style="margin-left:20px" @click="clearAll">
+					清空
+				</a-button>
 			</div>
+			<a-button type="primary" icon="plus" v-if="$hasPer(['student'])" style="margin-left:20px;margin-bottom:10px;" @click="showType='add'">
+				留宿申请
+			</a-button>
+			<a-button type="primary" v-else icon="upload" style="margin-left:20px" @click="changeSuam">
+				导出
+			</a-button>
+			
+			<a-button type="primary" icon="reload" style="margin-left:20px" @click="getTranslateList">
+				刷新
+			</a-button>
 			<div>
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;color:#00d09d;border-bottom: 1px solid #66C3FD;" @click="showTrans(record.key)">查看</a>
-						<a-modal title="查看" :visible="show" :confirm-loading="confirmLoading" @cancel="showCancel"
-							width="872px">
-							<table class="scanTable">
-								<tr>
-									<td class="single">院系名称:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addDepart"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">专业名称:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addMajor"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">班级名称:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addClazz"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">学号:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addStuId"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">姓名:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addName"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">宿舍名称:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addDorm"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">留宿类型:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addType"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">申请时间:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addTime"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">留宿原因:</td>
-									<td class="long">
-										<a-input :disabled="true" class="scanInput" v-model="addCause"></a-input>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">审核状态:</td>
-									<td class="long">
-										<label v-for="(item) in radioName"> {{ item.value }}
-											<input :disabled="true" type="radio" name="approveResult"
-												:value="item.index" v-model="checkedValue">
-										</label>
-									</td>
-								</tr>
-								<tr>
-									<td class="single">不通过原因:</td>
-									<td class="long">
-										<textarea :disabled="true" v-model="refuseCause"></textarea>
-									</td>
-								</tr>
-							</table>
-							<template slot="footer">
-								<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="showCancel" class="buttonCancel">取消</a-button>
-							</template>
-						</a-modal>
-						<span>|</span>
-						<a style="font-size:18px;font-weigth:bold;color:#fc9d50; border-bottom: 1px solid #fc9d50;" @click="showModal(record.key)">审核</a>
+						<a @click="showTrans(record.key)">查看</a>
+						<a-divider type="vertical" />
+						<a 	@click="showModal(record.key)" v-if="$hasPer(['system'])">审核</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
-		<a-modal title="审核" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel" width="872px">
-			<table class="scanTable">
-				<tr>
-					<td class="single">院系名称:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addDepart"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">专业名称:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addMajor"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">班级名称:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addClazz"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">学号:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addStuId"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">姓名:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addName"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">宿舍名称:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addDorm"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">留宿类型:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addType"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">申请时间:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addTime"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">留宿原因:</td>
-					<td class="long">
-						<a-input :disabled="true" class="scanInput" v-model="addCause"></a-input>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">审核状态:</td>
-					<td class="long">
-						<label v-for="(item) in radioName"> {{ item.value }}
-							<input type="radio" name="approveResult" :value="item.index" v-model="checkedValue">
-						</label>
-					</td>
-				</tr>
-				<tr>
-					<td class="single">不通过原因:</td>
-					<td class="long">
-						<textarea v-model="refuseCause"></textarea>
-					</td>
-				</tr>
-			</table>
+			<a-modal title="查看" :visible="show" :confirm-loading="confirmLoading" @cancel="showCancel"
+				width="872px">
+				<table class="scanTable">
+					<tr>
+						<td class="single">院系名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addDepart"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">专业名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addMajor"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">班级名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addClazz"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">学号:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addStuId"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">姓名:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addName"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">宿舍名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addDorm"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">留宿类型:</td>
+						<td class="long">
+							<a-select class="condition" :options="type" placeholder="请选择类型" v-model="addType" />
+						</td>
+					</tr>
+					<tr>
+						<td class="single">申请时间:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addTime"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">留宿原因:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addCause"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">审核状态:</td>
+						<td class="long">
+							<label v-for="(item) in radioName"> {{ item.value }}
+								<input :disabled="true" type="radio" name="approveResult"
+									:value="item.index" v-model="checkedValue">
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">不通过原因:</td>
+						<td class="long">
+							<textarea :disabled="true" v-model="refuseCause"></textarea>
+						</td>
+					</tr>
+				</table>
+				<template slot="footer">
+					<a-button  @click="showCancel" class="buttonCancel">取消</a-button>
+				</template>
+			</a-modal>
+			<a-modal title="审核" :visible="add" :confirm-loading="confirmLoading" @cancel="addCancel" width="872px">
+				<table class="scanTable">
+					<tr>
+						<td class="single">院系名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addDepart"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">专业名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addMajor"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">班级名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addClazz"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">学号:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addStuId"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">姓名:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addName"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">宿舍名称:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addDorm"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">留宿类型:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addType"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">申请时间:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addTime"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">留宿原因:</td>
+						<td class="long">
+							<a-input :disabled="true" class="scanInput" v-model="addCause"></a-input>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">审核状态:</td>
+						<td class="long">
+							<label v-for="(item) in radioName"> {{ item.value }}
+								<input type="radio" name="approveResult" :value="item.index" v-model="checkedValue">
+							</label>
+						</td>
+					</tr>
+					<tr>
+						<td class="single">不通过原因:</td>
+						<td class="long">
+							<textarea v-model="refuseCause"></textarea>
+						</td>
+					</tr>
+				</table>
 
-			<template slot="footer">
-				<a-button type="primary" style="background-color:#028be2;color:#ffffff;font-weight:bold" @click="addOK()" class="buttonOk">确定</a-button>
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="addCancel()" class="buttonCancel">取消</a-button>
-			</template>
-		</a-modal>
+				<template slot="footer">
+					<a-button @click="addCancel()" class="buttonCancel">取消</a-button>
+					<a-button type="primary" @click="addOK()" class="buttonOk">确认</a-button>
+				</template>
+			</a-modal>
+		</a-card>
+		<translateApproveEdit v-if="showType == 'add'" ref="translateApproveEdit" @onOk="editOk" @onCancel="editCancel"> </translateApproveEdit>
 	</div>
 
 
@@ -209,6 +204,7 @@
 	import {
 		Icon
 	} from 'ant-design-vue';
+	import translateApproveEdit from './base/translateApproveEdit';
 	import {
 		axios
 	} from '@/utils/request';
@@ -288,6 +284,9 @@
 
 	export default {
 		mixins: [EduListMixin],
+		components: {
+		  translateApproveEdit,
+		},
 		data() {
 			return {
 				pagination: {
@@ -303,6 +302,8 @@
 				},
 				/* 表格数据 */
 				data,
+				showType: 'table',
+				applyObj:{},
 				columns,
 				/* 按钮大小 */
 				size: 'small',
@@ -353,18 +354,36 @@
 			this.getTranslateList();
 		},
 		methods: {
-			changeSuam(){
-					var arr = []
-					let type = this.typeId.length == 0 ? '' : this.typeId[0];
-						arr.push({
-							key: "xm",
-							value: this.name
-						})
-						arr.push({
-							key: "type",
-							value: type
-						})
-					this.handleExportXls('留宿审核',arr)
+			applyDorm(){
+				this.apply=true;
+			},
+			// 留宿时间
+			applyChange(val){
+				this.applyObj.stime=val[0];
+				this.applyObj.etime=val[1]
+			},
+			changeSuam() {
+				var arr = []
+				let type = this.typeId.length == 0 ? '' : this.typeId[0];
+				arr.push({
+					key: "xm",
+					value: this.name
+				})
+				arr.push({
+					key: "type",
+					value: type
+				})
+				this.handleExportXls('留宿审核', arr)
+			},
+			editCancel() {
+			  this.showType = 'table';
+			},
+			/**
+			 * @msg: 编辑页成功事件
+			 */
+			editOk() {
+			  this.showType = 'table';
+			  this.$refs.hqStuPositionTable.reload();
 			},
 			showModal(id) {
 				this.addId = id;
@@ -431,7 +450,6 @@
 			},
 			getTranslateList() {
 				let type = this.typeId.length == 0 ? '' : this.typeId[0];
-				console.log(this.name, type);
 				axios({
 					url: 'dorm/change/lodgingAuditTable',
 					method: 'post',
@@ -440,7 +458,6 @@
 						type: type
 					}
 				}).then(res => {
-
 					let status = ['不通过', '通过'];
 					data.splice(0, data.length);
 					for (let approve of res.result) {
@@ -515,12 +532,16 @@
 	};
 </script>
 
-<style scoped="scoped">
-	textarea {
-		resize: none;
-		width: 650px;
-		height: 200px;
-		border: 1px solid #D9D9D9;
-		outline-color: #D9D9D9;
+<style scoped>
+	.top {
+		padding: 20px;
+		padding-top: 0;
+		display: flex;
+		align-items: center;
+	}
+
+	.head-span {
+		width: 90px;
+		text-align: right;
 	}
 </style>

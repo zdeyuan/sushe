@@ -1,4 +1,5 @@
 <template>
+	<a-config-provider :locale="zh_CN">
   <a-date-picker
     dropdownClassName="j-date-picker"
     :disabled="disabled || readOnly"
@@ -7,10 +8,13 @@
     :value="momVal"
     :showTime="showTime"
     :format="dateFormat"
+	:style="{width:width}"
     :getCalendarContainer="getCalendarContainer"
   />
+  </a-config-provider>
 </template>
 <script>
+	import zh_CN from 'ant-design-vue/lib/locale-provider/zh_CN';
   import moment from 'moment'
   export default {
     name: 'JDate',
@@ -29,6 +33,10 @@
         default: 'YYYY-MM-DD',
         required: false
       },
+	  width:{
+		  type:String,
+		  default:"200px"
+	  },
       //此属性可以被废弃了
       triggerChange:{
         type: Boolean,
@@ -58,6 +66,7 @@
     data () {
       let dateStr = this.value;
       return {
+		  zh_CN,
         decorator:"",
         momVal:!dateStr?null:moment(dateStr,this.dateFormat)
       }

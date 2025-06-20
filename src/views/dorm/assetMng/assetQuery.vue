@@ -1,66 +1,54 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			资产查询
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿舍资产管理 > <span class="notTop">资产查询</span></div>
+	<div >
+		<a-card :bordered="false">
 			<div class="content-head">
-				<div>
-					<a-button :size="size" class="content-button button-blue"
-						style="font-size:16px;width:88px;height:34px; " @click="changeSuam">
-						<icon-font type="iconfanhui1" style="color: #FFFFFF;" />
-						导出
-					</a-button>
+				
 
-					<a-button :size="size" class="content-button button-skyblue button-after"
-						style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getAsset">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" @click="getAsset()" />
-						刷新
-					</a-button>
-				</div>
+				<!-- <div style="width: 120px;"></div> -->
 
-				<div style="width: 120px;"></div>
-
-				<div>
-					<span class="head-span">资产名称</span>
-					<a-input class="condition"  v-model="assetName" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
-				</div>
-
-				<div>
-					<span class="head-span">资产类别</span>
-					<a-cascader class="condition" :options="type" placeholder="请选择资产类别" v-model="typeId" />
-				</div>
-
-				<div>
-					<span class="head-span">资产状态</span>
-					<a-cascader class="condition" :options="state" placeholder="" v-model='stateId' />
-				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue"
-						style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getAsset()">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+				<div class="top">
+					<div class="head-label">
+						<span class="head-span">资产名称</span>
+						<a-input class="condition"  v-model="assetName" onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
+					</div>
+					
+					<div class="head-label">
+						<span class="head-span">资产类别</span>
+						<a-cascader class="condition" :options="type" placeholder="请选择资产类别" v-model="typeId" />
+					</div>
+					
+					<div class="head-label">
+						<span class="head-span">资产状态</span>
+						<a-cascader class="condition" :options="state" placeholder="" v-model='stateId' />
+					</div>
+					<a-button type="primary" @click="getAsset" icon="search" style="margin-left: 20px;">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after"
-						style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll()">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button type="danger" @click="resetAll" style="margin-left: 20px;">
 						清空
 					</a-button>
 				</div>
+				<div>
+					
+				</div>
 			</div>
-			<div>
+			<div style="margin-bottom:10px;">
+				<!-- <a-button type="primary" @click="changeSuam" icon="export" style="margin-right:10px;">
+					导出
+				</a-button> -->
+				<a-button type="primary"  icon="reload" @click="getAsset">
+					刷新
+				</a-button>
+			</div>
+			<div class="table-useful">
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;font-weigth:bold; color:#00d09d; border-bottom: 1px solid #66C3FD;"
-							@click="showModal(record.key)">查看</a>
+						<a @click="showModal(record.key)">查看</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
+		</a-card>
 		<a-modal title="查看" :visible="show" :confirm-loading="confirmLoading" @cancel="showCancel" width="872px">
 			<table class="scanTable">
 				<tr>
@@ -68,7 +56,7 @@
 						<div>资产名称:</div>
 					</td>
 					<td class="long">
-						<a-input :disabled="true" class="scanInput" placeholder="请输入资产名称" v-model="editName"></a-input>
+						<a-input :disabled="true" style="width:200px" class="scanInput" placeholder="请输入资产名称" v-model="editName"></a-input>
 					</td>
 				</tr>
 				<tr>
@@ -76,7 +64,7 @@
 						<div>资产个数:</div>
 					</td>
 					<td class="long">
-						<a-input-number :disabled="true" class="scanInput" placeholder="请输入资产个数" v-model="editNum">
+						<a-input-number :disabled="true" style="width:200px" class="scanInput" placeholder="请输入资产个数" v-model="editNum">
 						</a-input-number>
 					</td>
 				</tr>
@@ -103,7 +91,7 @@
 						<div>排序:</div>
 					</td>
 					<td class="long">
-						<a-input-number :disabled="true" class="scanInput" placeholder="请输入排序" v-model="editListSort">
+						<a-input-number :disabled="true" style="width:200px" class="scanInput" placeholder="请输入排序" v-model="editListSort">
 						</a-input-number>
 					</td>
 				</tr>
@@ -175,9 +163,6 @@
 			title: '资产状态',
 			dataIndex: 'state',
 			key: 'state',
-		},
-		{
-			width: '35%',
 		},
 		{
 			title: '操作',
@@ -392,5 +377,18 @@
 	};
 </script>
 
-<style>
+<style lang="less" scoped>
+	.top {
+		display: flex;
+		align-items: center;
+		margin: 10px 0;
+	}
+	.head-label{
+		display: flex;
+		align-items: center;
+	}
+	.head-span {
+		margin: 0 10px;
+		width:100px;
+	}
 </style>

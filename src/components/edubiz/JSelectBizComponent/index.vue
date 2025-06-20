@@ -18,7 +18,7 @@
     </a-col>
 
     <a-col v-if="buttons" class="right">
-      <a-button type="primary" icon="search" :disabled="disabled" @click="visible=true">{{selectButtonText}}</a-button>
+      <a-button type="primary" icon="search"  style="margin-right: 10px;" :disabled="disabled" @click="visible=true">{{selectButtonText}}</a-button>
     </a-col>
 
     <j-select-biz-component-modal

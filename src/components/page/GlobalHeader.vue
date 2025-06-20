@@ -1,12 +1,12 @@
 <template>
   <!-- , width: fixedHeader ? `calc(100% - ${sidebarOpened ? 256 : 80}px)` : '100%'  -->
-  <a-layout-header
+ <a-layout-header
     v-if="!headerBarFixed"
     :class="[fixedHeader && 'ant-header-fixedHeader', sidebarOpened ? 'ant-header-side-opened' : 'ant-header-side-closed', ]"
     :style="{ padding: '0' }">
 
     <div v-if="mode === 'sidemenu'" class="header" :class="theme">
-      <a-icon
+<!--      <a-icon
         v-if="device==='mobile'"
         class="trigger"
         :type="collapsed ? 'menu-fold' : 'menu-unfold'"
@@ -15,10 +15,10 @@
         v-else
         class="trigger"
         :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-        @click="toggle"/>
+        @click="toggle"/> -->
 
-      <span v-if="device === 'desktop'">教育平台</span>
-      <span v-else>Edu-Boot</span>
+ <!--     <span v-if="device === 'desktop'">教育平台</span>
+      <span v-else>Edu-Boot</span> -->
 
       <user-menu :theme="theme"/>
     </div>
@@ -188,11 +188,11 @@
 
     .header {
       z-index: 2;
-      color: white;
+      color: #000000;
       height: @height;
-      background-color: @primary-color;
+      background-color: #FFFFFF;
       transition: background 300ms;
-
+		
       /* dark 样式 */
       &.dark {
         color: #000000;

@@ -1,16 +1,9 @@
 <template>
-  <div style="background:#E9EDF6; padding:30px">
-    <div class="content-title">
-    	宿舍管理
-    </div>
-		<div class="pageContentBox">
-		  <div class="headTop">基础管理 > <span class="notTop">宿舍管理</span></div>
+  <div>
+	<a-card :bordered="false">
       <div class="content-head">
         <div>
-          <a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="showModal">
-            <icon-font type="icontianjia" style="color: #FFFFFF;" />
-            添加
-          </a-button>
+         
           <a-modal title="添加宿舍" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk" @cancel="handleCancel"
             :width="1000">
             <table class="scanTable">
@@ -106,15 +99,11 @@
               </tr>
             </table>
             <template slot="footer">
-              <a-button type="primary" style="background-color:#0098f8;font-weight:bold;color:#ffffff" @click="handleOk()">确定</a-button>
-              <a-button style="background-color:#999999;font-weight:bold;color:#ffffff" @click="handleCancel()">取消</a-button>
+              <a-button  @click="handleCancel()">取消</a-button>
+			  <a-button type="primary"  @click="handleOk()">确认</a-button>
             </template>
           </a-modal>
-
-          <a-button :size="size" class="content-button button-blue button-after" style="font-size:16px;width:88px;height:34px; " @click="showUpload">
-            <icon-font type="iconfanhui" style="color: #FFFFFF;" />
-            导入
-          </a-button>
+		  
           <a-modal v-model="upload" title="导入" @ok="uploadCancel" @cancel="uploadCancel">
             <table class="scanTable">
               <tr>
@@ -135,50 +124,54 @@
               </tr>
             </table>
           </a-modal>
-
-          <a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getDormList">
-            <icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-            刷新
-          </a-button>
+		 
         </div>
 
-        <div>
-          <span class="head-span">校区</span>
-          <a-cascader class="condition" :options="school" placeholder="请选择校区" @change="schoolChange" v-model="schoolId" />
-        </div>
-
-        <div>
-          <span class="head-span">宿舍楼</span>
-          <a-cascader class="condition" :options="build" placeholder="请选择宿舍楼" @change="buildChange" v-model="buildId" />
-        </div>
-
-        <div>
-          <span class="head-span">楼层</span>
-          <a-cascader class="condition" :options="floor" placeholder="请选择楼层" v-model="floorId" />
-        </div>
-
-        <div>
-          <a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getDormList">
-            <icon-font type="iconsousuo" style="color: #FFFFFF;" />
-            搜索
-          </a-button>
-
-          <a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="clearAll">
-            <icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-            清空
-          </a-button>
-        </div>
+        <div class="top">
+			<div class="head-label">
+			  <span class="head-span">校区</span>
+			  <a-cascader class="condition" :options="school" placeholder="请选择校区" @change="schoolChange" v-model="schoolId" />
+			</div>
+			
+			<div class="head-label">
+			  <span class="head-span">宿舍楼</span>
+			  <a-cascader class="condition" :options="build" placeholder="请选择宿舍楼" @change="buildChange" v-model="buildId" />
+			</div>
+			
+			<div class="head-label">
+			  <span class="head-span">楼层</span>
+			  <a-cascader class="condition" :options="floor" placeholder="请选择楼层" v-model="floorId" />
+			</div>
+			<a-button type="primary" @click="getDormList" icon="search" style="margin-left: 20px;">
+				搜索
+			</a-button>
+			<a-button type="danger" @click="clearAll" style="margin-left: 20px;">
+				清空
+			</a-button>
+		</div>
       </div>
-      <div>
-        <a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination" @change="tableChange">
+	  <a-button type="primary" @click="showModal" icon="plus" style="margin-right:10px;">
+	  	添加
+	  </a-button>
+	  <a-button type="primary" icon="import" @click="showUpload"   style="margin-right:10px;">
+	  	导入
+	  </a-button>
+	  <a-button type="danger" icon="delete" @click="patchDelete" style="margin-right: 20px;">
+	  	批量删除
+	  </a-button>
+	  <a-button type="primary"  icon="reload" @click="getDormList"  style="margin-right:10px;">
+	  	刷新
+	  </a-button>
+      <div class="table-useful">
+        <a-table :columns="columns" :row-selection="{ selectedRowKeys: deleteList, onChange: onSelectChange }" :data-source="data" :defaultCurrent="6" :pagination="pagination" @change="tableChange">
           <span slot="operator" slot-scope="text, record">
-            <a style="font-size:18px;font-weigth:bold;border-bottom: 1px solid #66C3FD;" @click="editDorm(record.key)">编辑</a>
-            <span>|</span>
-            <a style="font-size:18px;font-weigth:bold;color:orange; border-bottom: 1px solid orange;" @click="deleteDorm(record.key)">删除</a>
+            <a @click="editDorm(record.key)">编辑</a>
+			<a-divider type="vertical" />
+            <a @click="deleteDorm(record.key)">删除</a>
           </span>
         </a-table>
       </div>
-    </div>
+    </a-card>
     <a-modal title="编辑宿舍" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel"
       :width="1000">
       <table class="scanTable">
@@ -280,8 +273,8 @@
         </tr>
       </table>
       <template slot="footer">
-        <a-button type="primary" style="background-color:#0098f8;font-weight:bold;color:#ffffff" @click="editOK()">确定</a-button>
-        <a-button style="background-color:#999999;font-weight:bold;color:#ffffff" @click="editCancel()">取消</a-button>
+        <a-button  @click="editCancel()">取消</a-button>
+		 <a-button type="primary"   @click="editOK()">确认</a-button>
       </template>
     </a-modal>
   </div>
@@ -301,7 +294,7 @@
   } from '@/mixins/EduListMixin';
   import {
     downFile
-  } from '@/api/manage'
+  } from '@/api/common/manage'
 
   const IconFont = Icon.createFromIconfontCN({
     scriptUrl: '//at.alicdn.com/t/font_2390461_vvis3tohqh.js',
@@ -426,6 +419,7 @@
         waterCode: '',
         phone: '',
         name: '',
+		deleteList: [],
         sex: [{
           value: 0,
           label: '暂无',
@@ -461,6 +455,9 @@
       IconFont,
     },
     methods: {
+		onSelectChange(selectedRowKeys) {
+			this.deleteList = selectedRowKeys;
+		},
       showModal() {
         this.name = '';
         this.bedNum = '';
@@ -526,6 +523,7 @@
       },
       /* 获取宿舍列表 */
       getDormList() {
+		this.deleteList = []
         let xqId = this.schoolId.length == 0 ? null : this.schoolId[0];
         let jzwId = this.buildId.length == 0 ? null : this.buildId[0];
         let lcId = this.floorId.length == 0 ? null : this.floorId[0];
@@ -723,6 +721,34 @@
           })
         }
       },
+	  patchDelete() {
+	  	if (this.deleteList.length == 0) {
+	  		this.$message.warning("请选中要删除的列");
+	  		return;
+	  	}
+	  	let re = confirm("确认批量删除?");
+	  	let deleteStr = '';
+	  	for (let i = 0; i < this.deleteList.length; i++) {
+	  		deleteStr += this.deleteList[i];
+	  		if (i < this.deleteList.length - 1) {
+	  			deleteStr += ',';
+	  		}
+	  	}
+	  	if (re) {
+	  		axios({
+	  			url: 'dorm/floorMng/deleteMany',
+	  			method: 'post',
+	  			params: {
+	  				"ids": deleteStr,
+	  			}
+	  		}).then(res => {
+	  			this.$message.success(res.message);
+	  			this.getFloorList();
+	  		}).catch(err => {
+	  			this.$message.warning("批量删除失败");
+	  		})
+	  	}
+	  },
       editDorm(id) {
         this.editId = id;
         axios({
@@ -802,7 +828,19 @@
   };
 </script>
 
-<style>
-  
-
+<style lang="less" scoped>
+	.top {
+		display: flex;
+		align-items: center;
+		margin: 10px 0;
+	}
+	.head-label{
+		display: flex;
+		align-items: center;
+	}
+	.head-span {
+		margin: 0 10px;
+		width:50px;
+		text-align:right;
+	}
 </style>

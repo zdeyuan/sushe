@@ -21,7 +21,7 @@
   * 异步树加载组件 通过传入表名 显示字段 存储字段 加载一个树控件
   * <j-tree-select dict="aa_tree_test,aad,id" pid-field="pid" ></j-tree-select>
   * */
-  import { getAction } from '@/api/manage'
+  import { getAction } from '@/api/common/manage'
 
   export default {
     name: 'JTreeSelect',
@@ -194,6 +194,7 @@
           condition:this.condition
         }
         getAction(this.url,param).then(res=>{
+			
           if(res.success && res.result){
             for(let i of res.result){
               i.value = i.key

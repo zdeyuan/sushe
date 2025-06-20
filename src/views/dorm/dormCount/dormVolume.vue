@@ -1,16 +1,13 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			宿舍容量统计
-		</div>
+	<div>
+		<a-card :bordered="false">
 		<div class="pageContentBox">
-			<div class="headTop">宿舍统计 > <span class="notTop">宿舍容量统计</span></div>
 			<div class="content-head">
 				<div id="myChart" :style="{height:'700px',width:'100%'}"></div>
 			</div>
 		</div>
+		</a-card>
 	</div>
-
 
 </template>
 

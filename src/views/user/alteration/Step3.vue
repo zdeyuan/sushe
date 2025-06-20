@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import { putAction,getAction } from '@/api/manage'
+  import { putAction,getAction } from '@/api/common/manage'
   export default {
     name: "Step3",
 //    components: {

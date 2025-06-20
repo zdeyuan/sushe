@@ -625,7 +625,7 @@
   import { cloneObject, randomString, randomNumber, getEventPath } from '@/utils/util'
   import JDate from '@/components/edu/JDate'
   import { filterDictText, initDictOptions } from '@/components/dict/JDictSelectUtil'
-  import { getFileAccessHttpUrl } from '@/api/manage';
+  import { getFileAccessHttpUrl } from '@/api/common/manage';
   import JInputPop from '@/components/edu/minipop/JInputPop'
   import JFilePop from '@/components/edu/minipop/JFilePop'
 

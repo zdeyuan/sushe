@@ -8,7 +8,7 @@
 
 <script>
 
-  import '@/assets/less/codemirror_idea.css'
+  import '@/assets/scss/codemirror_idea.css'
   import './cm_hint.js'
 
   export default {

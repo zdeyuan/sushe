@@ -7,18 +7,18 @@
     <a-radio-button v-for="(item, key) in dictOptions" :key="key" :value="item.value">{{ item.text }}</a-radio-button>
   </a-radio-group>
 
-  <a-select v-else-if="tagType=='select'" :getPopupContainer = "getPopupContainer" :placeholder="placeholder" :disabled="disabled" :value="getValueSting" @change="handleInput">
+  <a-select v-else-if="tagType=='select'" :getPopupContainer = "getPopupContainer" :style="{width:width}" :placeholder="placeholder" :disabled="disabled" :value="getValueSting" @change="handleInput">
     <a-select-option :value="undefined">请选择</a-select-option>
-    <a-select-option v-for="(item, key) in dictOptions" :key="key" :value="item.value">
-      <span style="display: inline-block;width: 100%" :title=" item.text || item.label ">
-        {{ item.text || item.label }}
+    <a-select-option v-for="(item, key) in dictOptions" :key="key" :value="item.value || item.code">
+      <span style="display: inline-block;width: 100%" :title=" item.text || item.label || item.title ">
+        {{ item.text || item.label || item.title}}
       </span>
     </a-select-option>
   </a-select>
 </template>
 
 <script>
-  import {ajaxGetDictItems,getDictItemsFromCache} from '@/api/api'
+  import {ajaxGetDictItems,getDictItemsFromCache} from '@/api/common/api'
 
   export default {
     name: "JDictSelectTag",
@@ -29,6 +29,10 @@
       disabled: Boolean,
       value: [String, Number],
       type: String,
+	  width:{
+	  		type:String,
+	  		default:'200px'
+	  },
       getPopupContainer:{
         type: Function,
         default: (node) => node.parentNode
@@ -73,14 +77,9 @@
           this.dictOptions = getDictItemsFromCache(this.dictCode);
           return
         }
-
+		
         //根据字典Code, 初始化字典数组
-        ajaxGetDictItems(this.dictCode, null).then((res) => {
-          if (res.success) {
-//                console.log(res.result);
-            this.dictOptions = res.result;
-          }
-        })
+        this.dictOptions=ajaxGetDictItems(this.dictCode, null);
       },
       handleInput(e) {
         let val;

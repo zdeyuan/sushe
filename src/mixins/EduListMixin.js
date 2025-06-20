@@ -4,7 +4,7 @@
  * data中url定义 list为查询列表  delete为删除单条记录  deleteBatch为批量删除
  */
 import { filterObj } from '@/utils/util';
-import { deleteAction, getAction,downFile,getFileAccessHttpUrl } from '@/api/manage'
+import { deleteAction, getAction,downFile,getFileAccessHttpUrl } from '@/api/common/manage'
 import Vue from 'vue'
 import { ACCESS_TOKEN } from "@/store/mutation-types"
 import store from '@/store'
@@ -19,6 +19,7 @@ export const EduListMixin = {
       queryParam: {},
       /* 数据源 */
       dataSource:[],
+	  confirmLoading:false,
       /* 分页参数 */
       ipagination:{
         current: 1,
@@ -52,11 +53,13 @@ export const EduListMixin = {
       superQueryParams: '',
       /** 高级查询拼接方式 */
       superQueryMatchType: 'and',
+      /** 查询条件 */
+      conditions:{},
     }
   },
   created() {
       if(!this.disableMixinCreated){
-        console.log(' -- mixin created -- ')
+		this.columns = this.columns || [];   
         this.loadData();
         //初始化字典配置 在自己页面定义
         this.initDictConfig();
@@ -78,10 +81,8 @@ export const EduListMixin = {
         if (res.success) {
           //update-begin---author:zhangyafei    Date:20201118  for：适配不分页的数据列表------------
           this.dataSource = res.result.records||res.result;
-          if(res.result.total)
-          {
-            this.ipagination.total = res.result.total;
-          }
+          this.ipagination.total = res.result.total;
+		  
           //update-end---author:zhangyafei    Date:20201118  for：适配不分页的数据列表------------
         }
         if(res.code===510){
@@ -91,7 +92,6 @@ export const EduListMixin = {
       })
     },
     initDictConfig(){
-      console.log("--这是一个假的方法!")
     },
     handleSuperQuery(params, matchType) {
       //高级查询方法
@@ -120,11 +120,13 @@ export const EduListMixin = {
     },
     getQueryField() {
       //TODO 字段权限控制
-      var str = "id,";
-      this.columns.forEach(function (value) {
-        str += "," + value.dataIndex;
-      });
-      return str;
+	  let str = "id,";
+	    if (this.columns && Array.isArray(this.columns)) {
+	      this.columns.forEach(function (value) {
+	        str += "," + (value.dataIndex || "");
+	      });
+	    }
+	    return str;
     },
 
     onSelectChange(selectedRowKeys, selectionRows) {
@@ -162,6 +164,8 @@ export const EduListMixin = {
         this.$confirm({
           title: "确认删除",
           content: "是否删除选中数据?",
+		  okText: '确认',
+		  cancelText:'取消',
           onOk: function () {
             that.loading = true;
             deleteAction(that.url.deleteBatch, {ids: ids}).then((res) => {
@@ -194,7 +198,11 @@ export const EduListMixin = {
         }
       });
     },
-    handleEdit: function (record) {
+    handleEdit: function (record,isDelete = false) {
+		if(isDelete){
+			  console.log("删除了")
+			  delete record.children;
+		}
       this.$refs.modalForm.edit(record);
       this.$refs.modalForm.title = "编辑";
       this.$refs.modalForm.disableSubmit = false;
@@ -236,17 +244,19 @@ export const EduListMixin = {
       let url = `${window._CONFIG['domianURL']}/${this.url.exportXlsUrl}?paramsStr=${paramsStr}`;
       window.location.href = url;
     },
-    handleExportXls(fileName,conditionArr = []){
+    handleExportXls(fileName,conditions){
+      this.conditions = conditions;
+      console.log(this.conditions)
+      
       if(!fileName || typeof fileName != "string"){
         fileName = "导出文件"
       }
+	  window.console.log(fileName)
       let param = this.getQueryParams();
+      param['conditions'] = this.conditions;
       if(this.selectedRowKeys && this.selectedRowKeys.length>0){
         param['selections'] = this.selectedRowKeys.join(",")
       }
-		for(let i = 0 ; i< conditionArr.length ; i ++){
-			param[conditionArr[i].key] = conditionArr[i].value
-		}
       console.log("导出参数",param)
       downFile(this.url.exportXlsUrl,param).then((data)=>{
         if (!data) {
@@ -254,12 +264,14 @@ export const EduListMixin = {
           return
         }
         if (typeof window.navigator.msSaveBlob !== 'undefined') {
+			 window.console.log(fileName)
           window.navigator.msSaveBlob(new Blob([data],{type: 'application/vnd.ms-excel'}), fileName+'.xls')
         }else{
           let url = window.URL.createObjectURL(new Blob([data],{type: 'application/vnd.ms-excel'}))
           let link = document.createElement('a')
           link.style.display = 'none'
           link.href = url
+		  window.console.log(fileName)
           link.setAttribute('download', fileName+'.xls')
           document.body.appendChild(link)
           link.click()
@@ -306,7 +318,7 @@ export const EduListMixin = {
               okText: '重新登录',
               mask: false,
               onOk: () => {
-                store.dispatch('Logout').then(() => {
+                store.dispatch('user/Logout').then(() => {
                   Vue.ls.remove(ACCESS_TOKEN)
                   window.location.reload();
                 })

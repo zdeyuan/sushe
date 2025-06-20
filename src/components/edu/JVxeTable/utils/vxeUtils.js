@@ -1,5 +1,5 @@
 import { getVmParentByName } from '@/utils/util'
-import { JVXETypes } from '@comp/edu/JVxeTable/index'
+import { JVXETypes } from '@/components/edu/JVxeTable/index'
 
 export const VALIDATE_FAILED = Symbol()
 

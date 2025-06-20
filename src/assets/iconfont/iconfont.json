@@ -1,0 +1,58 @@
+{
+  "id": "2203532",
+  "name": "HRM",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "20596138",
+      "name": "button-add",
+      "font_class": "button-add",
+      "unicode": "e745",
+      "unicode_decimal": 59205
+    },
+    {
+      "icon_id": "20596139",
+      "name": "button-export",
+      "font_class": "button-export",
+      "unicode": "e746",
+      "unicode_decimal": 59206
+    },
+    {
+      "icon_id": "20596140",
+      "name": "button-delete",
+      "font_class": "button-delete",
+      "unicode": "e747",
+      "unicode_decimal": 59207
+    },
+    {
+      "icon_id": "20596141",
+      "name": "button-refresh",
+      "font_class": "button-refresh",
+      "unicode": "e748",
+      "unicode_decimal": 59208
+    },
+    {
+      "icon_id": "20596142",
+      "name": "button-clear",
+      "font_class": "button-clear",
+      "unicode": "e749",
+      "unicode_decimal": 59209
+    },
+    {
+      "icon_id": "20596143",
+      "name": "button-search",
+      "font_class": "button-search",
+      "unicode": "e74a",
+      "unicode_decimal": 59210
+    },
+    {
+      "icon_id": "20596144",
+      "name": "button-import",
+      "font_class": "button-import",
+      "unicode": "e74b",
+      "unicode_decimal": 59211
+    }
+  ]
+}

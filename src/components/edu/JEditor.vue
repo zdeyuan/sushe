@@ -25,7 +25,7 @@
   import 'tinymce/plugins/textcolor'
   import 'tinymce/plugins/fullscreen'
   import 'tinymce/icons/default'
-  import { uploadAction,getFileAccessHttpUrl } from '@/api/manage'
+  import { uploadAction,getFileAccessHttpUrl } from '@/api/common/manage'
   import { getVmParentByName } from '@/utils/util'
   export default {
     components: {

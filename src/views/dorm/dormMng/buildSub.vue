@@ -1,5 +1,5 @@
 <template>
-	<a-col :span="6">
+	<a-col :span="8">
 		<div class="hello">
 			<div class="frame">
 				<div class="title-frame">
@@ -86,7 +86,8 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: flex-start;
-		width: 300px;
+		/* width: 300px; */
+		width:90%;
 		height: 300px;
 		border-radius: 15px;
 		box-shadow: 0px 0px 10px #ccc;
@@ -157,7 +158,7 @@
 		display: flex;
 		flex-direction: column;
 		flex-wrap: nowrap;
-		align-items: start;
+		align-items: flex-start;
 		justify-content: center;
 		width: 35%;
 		font-size:	12px;

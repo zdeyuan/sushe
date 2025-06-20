@@ -1,39 +1,25 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			制度查询
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">制度管理 > <span class="notTop">制度查询</span></div>
-			<div class="content-head">
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">标题</span>
 				<div>
-					<a-button :size="size" class="content-button button-skyblue" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getSystemList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
+					<a-input class="condition" placeholder="请输入标题" v-model="title"
+						onkeyup="this.value=this.value.replace(/[, ]/g,'')" />
 				</div>
-
-				<div style="min-width: 400px;"></div>
-
+				<span class="head-span">类别</span>
 				<div>
-					<span class="head-span">标题</span>
-					<a-input class="condition" placeholder="请输入标题" v-model="title" onkeyup="this.value=this.value.replace(/[, ]/g,'')"/>
-				</div>
-
-				<div>
-					<span class="head-span">类别</span>
 					<a-cascader class="condition" :options="type" placeholder="请选择类别" v-model="typeId" />
 				</div>
-
 				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getSystemList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+					<a-button type="primary" @click="getSystemList" icon="search" style="margin-left: 20px;">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll()">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button type="danger" style="margin-left:20px;" icon="reset" @click="resetAll">
 						清空
+					</a-button>
+					<a-button type="primary" icon="reload" @click="getSystemList" style="margin-left: 20px;">
+						刷新
 					</a-button>
 				</div>
 			</div>
@@ -41,11 +27,11 @@
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;color:#00d09d;border-bottom: 1px solid #00d09d;" @click="showModal(record.key)">查看</a>
+						<a  @click="showModal(record.key)">查看</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
+		</a-card>
 		<a-modal width='800px' title="查看" :visible="visible" :confirm-loading="confirmLoading" @cancel="handleCancel">
 			<div class="systemSeeBox">
 				<div class="systemTop">
@@ -66,43 +52,11 @@
 				</div>
 				<div class="systemType">
 					类别：{{editTypeName}}
-				</div>	
+				</div>
 			</div>
-<!-- 			<table class="scanTable">
-				<tr>
-					<td class="single">
-						<div><span class="spanRed">*</span>标题:</div>
-					</td>
-					<td class="double">
-						<a-input :disabled="true" v-model="editTitle" />
-					</td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>内容:</div>
-					</td>
-					<td class="double"><textarea :disabled="true" class="scanInput"
-							v-model="editContent"><textarea></textarea></td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>排序:</div>
-					</td>
-					<td class="double">
-						<a-input-number :disabled="true" class="scanInput" v-model="editListSort" />
-					</td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>类别:</div>
-					</td>
-					<td class="double">
-						<a-cascader :disabled="true" class="scanInput" :options="editType" v-model="editTypeId" />
-					</td>
-				</tr>
-			</table> -->
+			
 			<template slot="footer" class="floor-footer">
-				<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="handleCancel">取消</a-button>
+				<a-button @click="handleCancel">取消</a-button>
 			</template>
 		</a-modal>
 	</div>
@@ -186,8 +140,8 @@
 				editType: [],
 				editTypeId: [],
 				editTitle: '',
-				editTime:'',
-				editName:'',
+				editTime: '',
+				editName: '',
 				editContent: '',
 				editListSort: '',
 				editTypeName: ''
@@ -201,21 +155,21 @@
 			IconFont,
 		},
 		methods: {
-			js_date_time_second(time){
-			  var date = new Date(time * 1000);
-			  var y = date.getFullYear();
-			  var m = date.getMonth() + 1;
-			  m = m < 10 ? ('0' + m) : m;
-			  var d = date.getDate();
-			  d = d < 10 ? ('0' + d) : d;
-			  var h = date.getHours();
-			  h = h < 10 ? ('0' + h) : h;
-			  var minute = date.getMinutes();
-			  var second = date.getSeconds();
-			  minute = minute < 10 ? ('0' + minute) : minute;
-			  second = second < 10 ? ('0' + second) : second;
-			  var timeStr = y + '-' + m + '-' + d + '　' + h + ':' + minute + ':' + second;
-			  return timeStr;
+			js_date_time_second(time) {
+				var date = new Date(time * 1000);
+				var y = date.getFullYear();
+				var m = date.getMonth() + 1;
+				m = m < 10 ? ('0' + m) : m;
+				var d = date.getDate();
+				d = d < 10 ? ('0' + d) : d;
+				var h = date.getHours();
+				h = h < 10 ? ('0' + h) : h;
+				var minute = date.getMinutes();
+				var second = date.getSeconds();
+				minute = minute < 10 ? ('0' + minute) : minute;
+				second = second < 10 ? ('0' + second) : second;
+				var timeStr = y + '-' + m + '-' + d + '　' + h + ':' + minute + ':' + second;
+				return timeStr;
 			},
 			showModal(id) {
 				axios({
@@ -325,43 +279,45 @@
 	};
 </script>
 
-<style scoped="scoped">
-	textarea {
-		resize: none;
-		width: 300px;
-		height: 100px;
-		border: 1px solid #D9D9D9;
-		outline: #D9D9D9;
-		outline-width: 1px;
+<style scoped>
+	.top {
+		display: flex;
+		align-items: center;
 	}
-	.systemSeeBox{
+
+	.head-span {
+		margin: 0 10px;
+		text-align: right;
+	}
+	
+	.systemSeeBox {
 		padding: 10px;
 	}
-	.systemTop{
-		font-size: 30px;
+	
+	.systemTop {
+		font-size: 16px;
 		font-weight: 700;
 		text-align: center;
-		color: #1885EA;
 	}
-	.systemReleaseMsg{
+	
+	.systemReleaseMsg {
 		text-align: center;
 		margin: 5px 0;
 	}
-	.msgs{
-		font-size: 24px;
+	
+	.msgs {
 		margin: 10px;
 	}
-	.tips{
-		
-		color: #1885EA;
+	
+	.tips {
+	
 	}
-	.systemType{
-		font-size: 24px;
+	
+	.systemType {
 		margin: 10px 0;
-		color: #1885EA;
 	}
-	.systemCount{
-		font-size: 24px;
+	
+	.systemCount {
 		margin: 20px 0;
 	}
 </style>

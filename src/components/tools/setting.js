@@ -48,7 +48,7 @@ const updateTheme = primaryColor => {
     }
     // less.modifyVars可用
     window.less.modifyVars({
-        '@primary-color': primaryColor,
+        '#fff': primaryColor,
       })
       .then(() => {
         hideMessage();

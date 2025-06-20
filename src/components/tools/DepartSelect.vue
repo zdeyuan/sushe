@@ -40,7 +40,7 @@
 </template>
 
 <script>
-  import { getAction,putAction } from '@/api/manage'
+  import { getAction,putAction } from '@/api/common/manage'
   import Vue from 'vue'
   import store from '@/store/'
   import { USER_INFO } from "@/store/mutation-types"

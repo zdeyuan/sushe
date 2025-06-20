@@ -1,40 +1,21 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			考勤统计
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿舍统计 > <span class="notTop">考勤统计</span></div>
-			<div class="content-head">
-        <div style="min-width: 420px;"></div>
+	<div>
+		<a-card :bordered="false">
+			<div class="top">
+				<span class="head-span">考勤类型</span>
 				<div>
-					<span class="head-span">考勤类型</span>
 					<a-cascader class="condition" :options="type" placeholder="请选择类型" v-model="typeId" />
 				</div>
-
+				<span class="head-span">宿舍楼</span>
 				<div>
-					<span class="head-span">宿舍楼</span>
 					<a-cascader class="condition" :options="build" placeholder="请选择宿舍楼" v-model="buildId" />
 				</div>
-
+				<span class="head-span">房间</span>
 				<div>
-					<span class="head-span">房间</span>
 					<a-input class="condition" placeholder="请输入房间号" v-model="dorm" />
 				</div>
-
-				<a-button :size="size" class="content-button button-orange" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="clearAll">
-					<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
-					清空
-				</a-button>
 			</div>
-			<div class="content-head" style="margin-top: 8px;" @click="getAttenList">
-				<a-button :size="size" class="content-button button-skyblue" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff ">
-					<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-					刷新
-				</a-button>
-
-				<div style="min-width: 330px;"></div>
-
+			<div class="top">
 				<div>
 					<span class="head-span">专 业 部</span>
 					<a-cascader class="condition" :options="depart" placeholder="请选择专业部" @change="departChange"
@@ -51,18 +32,23 @@
 					<span class="head-span">班级</span>
 					<a-cascader class="condition" :options="clazz" placeholder="请选择班级" v-model="clazzId" />
 				</div>
-
-				<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getAttenList">
-					<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+				<a-button type="primary" @click="getAttenList" icon="search" style="margin-left: 20px;">
 					搜索
 				</a-button>
+				<a-button type="danger" style="margin-left:20px;" icon="reset" @click="clearAll">
+					清空
+				</a-button>
+				<a-button type="primary" icon="reload" style="margin-left:20px;" @click="getAttenList">
+					刷新
+				</a-button>
+
 			</div>
 			<div>
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 				</a-table>
 			</div>
-		</div>
+		</a-card>
 	</div>
 
 
@@ -251,7 +237,7 @@
 					str += date.getDate();
 				}
 				return str;
-			},//李少君+
+			}, //李少君+
 			getBuildList() {
 				axios({
 					url: '/dorm/bulidMng/querySuSheLou',
@@ -294,7 +280,7 @@
 				this.clazz = [];
 				this.clazzId = [];
 				console.log(this.departId[0])
-				if (this.depart.length == 0  ||this.departId[0] == undefined) {
+				if (this.depart.length == 0 || this.departId[0] == undefined) {
 					return;
 				}
 				axios({
@@ -360,9 +346,16 @@
 	};
 </script>
 
-<style scoped="scoped">
-	.ant-pagination {
-		position: absolute;
-		bottom: 200px;
+<style scoped>
+	.top {
+		padding-bottom: 10px;
+		display: flex;
+		align-items: center;
+	}
+
+	.head-span {
+		margin: 0 10px;
+		width: 90px;
+		text-align: right;
 	}
 </style>

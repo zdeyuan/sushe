@@ -1,85 +1,29 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-<!-- 		<span class="content-title">
-			<a-menu mode="horizontal" class="dorm-modify-top">
-				<a-menu-item key="chooseBuild" class="dorm-modify-item">
-					<router-link class="link" to="/dorm/chooseBuild?type=2">宿舍分配管理</router-link>
-				</a-menu-item>
-				<a-menu-item key="dormInvoking" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormInvoking">宿舍调用</router-link>
-				</a-menu-item>
-				<a-menu-item key="3" class="dorm-modify-item dorm-modify-after">
-					<router-link class="link" to="/dorm/dormBedChange">学生床位更换</router-link>
-				</a-menu-item>
-				<a-menu-item key="4" class="dorm-modify-item dorm-modify-after aottom">
-					<router-link class="link-active" to="/dorm/dormDistributionQuery">宿舍分配查询</router-link>
-				</a-menu-item>
-				<router-view></router-view>
-			</a-menu>
-		</span> -->
-		<span>
-			<!-- <a-menu mode="horizontal" class="dorm-modify-top"> -->
-			<div class="content-title not-title">
-				<router-link class="link-active" to="/dorm/chooseBuild?type=2">宿舍分配管理</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormInvoking">宿舍调用</router-link>
-			</div>
-			<div class="content-title not-title">
-				<router-link class="link" to="/dorm/dormBedChange">学生床位更换</router-link>
-			</div>
-			<div class="content-title ">
-				<router-link class="link" to="/dorm/dormDistributionQuery">宿舍分配查询</router-link>
-			</div>
-			<!-- 				<router-view></router-view>
-					</a-menu> -->
-		</span>
-		<!-- <hr align="left" width=147 color=#878787 SIZE=2 style="margin-left: 540px;" /> -->
-		<div class="pageContentBox">
-			<div class="headTop">宿舍分配 > <span class="notTop">宿舍分配查询</span></div>
-			<div class="content-head">
+	<div >
+			<div class="top">
 
-				<!-- <div style="min-width: 1000px;"></div> -->
-
-				<div>
-					<span class="head-span">校区</span>
+					<span class="head-span">校区：</span>
 					<a-cascader class="condition selsctStyle" :options="school" placeholder="请选择校区" v-model="campus" @change="editOldSchoolChange" />
-				</div>
-				
-				<div>
-					<span class="head-span">宿舍</span>
+					<span class="head-span">宿舍：</span>
 					<a-cascader class="condition selsctStyle" :options="Build" placeholder="请选择宿舍" v-model="floor" @change="editOldBuildChange"/>
-				</div>
-				
-				<div>
-					<span class="head-span">房间</span>
+					<span class="head-span">房间：</span>
 					<a-cascader class="condition selsctStyle" :options="Dorm" placeholder="请选择房间" v-model="room" @change="editOldDormChange"/>
-				</div>
-
-
-				<div>
-					<span class="head-span">姓名</span>
+					<span class="head-span">姓名：</span>
 					<a-cascader class="condition selsctStyle" :options="stuName" placeholder="请选择学生" v-model="name" />
-				</div>
 
-				<div>
-					<a-button  class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642 " @click="getDistriList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+					<a-button  type="primary" style="margin-left: 20px;" icon="search" @click="getDistriList">
 						搜索
 					</a-button>
 
-					<a-button  class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button style="margin-left: 20px;"  @click="resetAll" type="danger" icon="reset">
 						清空
 					</a-button>
-				</div>
 			</div>
 			<div>
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange" class="long-table">
 				</a-table>
 			</div>
-		</div>
 	</div>
 </template>
 
@@ -317,69 +261,15 @@
 	}
 </script>
 
-<style scoped="scoped">
-	.dorm-modify-top {
-		width: 1000px;
-		height: 80px;
-		border: 0px;
-		background-color: #E9EDF6;
-		
+<style scoped>
+	.top {
+		padding:20px;
+		display: flex;
+		align-items: center;
 	}
-	.aottom{
-		border-bottom: 3px solid #666;
-	}
-
-	.dorm-modify-item {
-		width: 150px;
-	}
-
-	.dorm-modify-after {
-		margin-left: 30px;
-	}
-
-	.link {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #999999 !important;
-	}
-
-	.link-active {
-		font-family: "MicrosoftYaHei";
-		font-size: 20px;
-		text-align: center;
-		font-weight: bold;
-		color: #666666 !important;
-	}
-
-	.long-table tr {
-		font-size: 20px;
-	}
-	
-	.content-content{
-		padding: 30px;
-		min-height: 500px;
-	}
-	
-	.selsctBox{
-		margin: 10px 0;
-		height: 50px;
-		line-height: 50px;
-	}
-	.names{
-		font-size: 20px;
-		font-weight: 700;
-		margin-right: 20px;
-	}
-	.selsctStyle{
-		margin: 0 15px;
-	}
-	.btns{
-		margin-top: 300px;
-		text-align: center;
-	}
-	.btns button{
-		margin: 0 10px;
+	.head-span{
+		text-align:right;
+		width:90px;
+		display: inline-block;
 	}
 </style>

@@ -1,18 +1,10 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title">
-			楼层管理
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">基础管理 > <span class="notTop">楼层管理</span></div>
+	<div>
+		<a-card :bordered="false">
 			<div class="content-head">
 				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF; " />
-						添加
-					</a-button>
 					<a-modal title="添加" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk"
-						@cancel="handleCancel">
+						@cancel="handleCancel" width="800px">
 						<table class="scanTable">
 							<tr>
 								<td class="single">
@@ -43,84 +35,80 @@
 							</tr>
 						</table>
 						<template slot="footer" class="floor-footer">
-							<a-button type="primary" style="background-color:#0098f8;font-weight:bold;color:#ffffff" @click="handleOk()">确定</a-button>
-							<a-button style="background-color:#999999;font-weight:bold;color:#ffffff" @click="handleCancel()">取消</a-button>
+							<a-button @click="handleCancel()">取消</a-button>
+							<a-button type="primary" @click="handleOk()">确认</a-button>
 						</template>
 					</a-modal>
 
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A " @click="patchDelete">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
-						删除
-					</a-button>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getFloorList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
-						刷新
-					</a-button>
 				</div>
 
-				<div style="min-width: 320px;"></div>
 
-				<div>
+				<div class="top">
 					<span class="head-span">校区</span>
 					<a-cascader class="condition" :options="school" placeholder="请选择校区" @change="schoolChange"
 						v-model="schoolId" />
-				</div>
-
-				<div>
 					<span class="head-span">宿舍楼</span>
 					<a-cascader class="condition" :options="build" placeholder="请选择宿舍楼" v-model="buildId" />
-				</div>
-
-				<div>
-					<a-button :size="size" class="content-button button-blue" style="font-size:16px;width:88px;height:34px;background-color:#1AE642  " @click="getFloorList">
-						<icon-font type="iconsousuo" style="color: #FFFFFF;" />
+					<a-button type="primary" @click="getFloorList" icon="search" style="margin-left: 20px;">
 						搜索
 					</a-button>
-
-					<a-button :size="size" class="content-button button-orange button-after" style="font-size:16px;width:88px;height:34px;background-color:#E61A1A  " @click="resetAll">
-						<icon-font type="iconqingkong1" style="color: #FFFFFF;" />
+					<a-button type="danger" @click="resetAll" style="margin-left: 20px;">
 						清空
 					</a-button>
 				</div>
+
+				<div>
+
+				</div>
 			</div>
 			<div>
-				<a-table :columns="columns" :data-source="data" :row-selection="{ selectedRowKeys: deleteList, onChange: onSelectChange }" :defaultCurrent="6"
-					:pagination="pagination" @change="tableChange">
-					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px; border-bottom: 1px solid #66C3FD;" @click="editFloor(record.key)">编辑</a>
-						<span>|</span>
-						<a style="font-size:18px;color:orange; border-bottom: 1px solid orange;"
-							@click="deleteFloor(record.key)">删除</a>
-					</span>
-				</a-table>
+				<a-button type="primary" @click="showModal" icon="plus" style="margin:0 20px;">
+					添加
+				</a-button>
+				<a-button type="danger" icon="delete" @click="patchDelete" style="margin-right: 20px;">
+					批量删除
+				</a-button>
+				<a-button type="primary" icon="reload" @click="getFloorList" style="margin-right: 20px;">
+					刷新
+				</a-button>
+				<div class="table-useful">
+					<a-table :columns="columns" :data-source="data"
+						:row-selection="{ selectedRowKeys: deleteList, onChange: onSelectChange }" :defaultCurrent="6"
+						:pagination="pagination" @change="tableChange">
+						<span slot="operator" slot-scope="text, record">
+							<a @click="editFloor(record.key)" >编辑</a>
+							<a-divider type="vertical" />
+							<a @click="deleteFloor(record.key)">删除</a>
+						</span>
+					</a-table>
+				</div>
 			</div>
-		</div>
-		<!-- </a-card> -->
-		<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel">
-			<table class="scanTable">
-				<tr>
-					<td class="single">
-						<div>楼层名称:</div>
-					</td>
-					<td class="double">
-						<a-input class="scanInput" placeholder="请输入楼层名称" v-model="editName" />
-					</td>
-				</tr>
-				<tr>
-					<td class="single">
-						<div>楼层代码:</div>
-					</td>
-					<td class="double">
-						<a-input class="scanInput" placeholder="请输入楼层代码" v-model="editCode" />
-					</td>
-				</tr>
-			</table>
-			<template slot="footer" class="floor-footer">
-				<a-button type="primary" @click="editOK()">确定</a-button>
-				<a-button @click="editCancel()">取消</a-button>
-			</template>
-		</a-modal>
+			<!-- </a-card> -->
+			<a-modal title="编辑" :visible="edit" :confirm-loading="confirmLoading" @ok="editOK" @cancel="editCancel">
+				<table class="scanTable">
+					<tr>
+						<td class="single">
+							<div>楼层名称:</div>
+						</td>
+						<td class="double">
+							<a-input class="scanInput" placeholder="请输入楼层名称" v-model="editName" />
+						</td>
+					</tr>
+					<tr>
+						<td class="single">
+							<div>楼层代码:</div>
+						</td>
+						<td class="double">
+							<a-input class="scanInput" placeholder="请输入楼层代码" v-model="editCode" />
+						</td>
+					</tr>
+				</table>
+				<template slot="footer" class="floor-footer">
+					<a-button @click="editCancel()">取消</a-button>
+					<a-button type="primary" @click="editOK()">确认</a-button>
+				</template>
+			</a-modal>
+		</a-card>
 	</div>
 
 
@@ -142,7 +130,6 @@
 	const columns = [{
 			title: '楼层名称',
 			dataIndex: 'name',
-			width: '15%',
 			key: 'name',
 		},
 		{
@@ -150,20 +137,10 @@
 			dataIndex: 'code',
 			key: 'code',
 		},
-		// {
-		// 	title: '宿舍楼',
-		// 	dataIndex: 'jzwmc',
-		// 	key: 'jzwmc',
-		// },
-		// {
-		// 	title: '校区',
-		// 	dataIndex: 'xqmc',
-		// 	key: 'xqmc',
-		// },
 		{
 			title: '操作',
 			dataIndex: 'operator',
-			width: '15%',
+			align: "center",
 			key: 'operator',
 			scopedSlots: {
 				customRender: 'operator'
@@ -210,7 +187,7 @@
 				edit: false,
 				editName: '',
 				editCode: '',
-				deleteList:[]
+				deleteList: []
 			};
 		},
 		mounted() {
@@ -221,7 +198,7 @@
 			IconFont,
 		},
 		methods: {
-			onSelectChange(selectedRowKeys){
+			onSelectChange(selectedRowKeys) {
 				this.deleteList = selectedRowKeys;
 			},
 			showModal() {
@@ -397,6 +374,7 @@
 					this.$message.warning("请将信息输入完整");
 					return;
 				}
+
 				axios({
 					url: 'dorm/floorMng/edit',
 					method: 'post',
@@ -417,21 +395,28 @@
 				this.edit = false;
 			},
 			deleteFloor(id) {
-				let re = confirm("确认删除?");
-				if (re) {
-					axios({
-						url: 'dorm/floorMng/delete',
-						method: 'post',
-						params: {
-							"id": id,
-						}
-					}).then(res => {
-						this.$message.success(res.message);
-						this.getFloorList();
-					}).catch(err => {
-						this.$message.warning("删除失败");
-					})
-				}
+				this.$confirm({
+					title: '是否删除',
+					content: '是否删除这条数据',
+					okText: '确认',
+					cancelText: '取消',
+					onOk() {
+						axios({
+							url: 'dorm/floorMng/delete',
+							method: 'post',
+							params: {
+								"id": id,
+							}
+						}).then(res => {
+							this.$message.success(res.message);
+							this.getFloorList();
+						}).catch(err => {
+							this.$message.warning("删除失败");
+						})
+					},
+					onCancel() {},
+				});
+
 			},
 			patchDelete() {
 				if (this.deleteList.length == 0) {
@@ -465,5 +450,14 @@
 	};
 </script>
 
-<style>
+<style lang="less" scoped>
+	.top {
+		display: flex;
+		align-items: center;
+		margin: 10px 0;
+	}
+
+	.head-span {
+		margin: 0 10px;
+	}
 </style>

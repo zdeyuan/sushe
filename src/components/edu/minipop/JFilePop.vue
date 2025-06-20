@@ -15,7 +15,7 @@
 
 <script>
   import JUpload from '@/components/edu/JUpload'
-  import { getFileAccessHttpUrl } from '@/api/manage';
+  import { getFileAccessHttpUrl } from '@/api/common/manage';
 
   const getFileName=(path)=>{
     if(path.lastIndexOf("\\")>=0){

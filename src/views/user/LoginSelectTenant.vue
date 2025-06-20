@@ -51,7 +51,7 @@
 <script>
 
   import Vue from 'vue'
-  import { getAction,putAction } from '@/api/manage'
+  import { getAction,putAction } from '@/api/common/manage'
   import { USER_INFO } from "@/store/mutation-types"
   import store from './Login'
 
@@ -166,7 +166,7 @@
                 resolve();
               }else{
                 this.requestFailed(res)
-                this.$store.dispatch('Logout');
+                this.$store.dispatch('user/Logout');
                 reject();
               }
             })

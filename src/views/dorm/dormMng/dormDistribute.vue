@@ -1,29 +1,21 @@
 <template>
-	<div style="background:#E9EDF6; padding:30px">
-		<div class="content-title ">
-			宿舍分配
-		</div>
-		<div class="pageContentBox">
-			<div class="headTop">宿务管理 > 宿舍分配 ><span class="notTop">查看详情(学生分配)</span></div>
+	<div >
+		<a-card :bordered="false">
 			<div class="content-head">
 				<div>
-					<a-button :size="size" class="content-button button-lightgreen" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="showModal">
-						<icon-font type="icontianjia" style="color: #FFFFFF;" />
-						添加
-					</a-button>
 					<a-modal title="分配学生" :visible="visible" :confirm-loading="confirmLoading" @ok="handleOk"
 						@cancel="handleCancel" :width="900">
-						<table class="scanTable">
+						<table class="scanTable" style="width:90%">
 							<tr>
 								<td class="single">
 									<div><span class="spanRed">*</span>选择学生:</div>
 								</td>
 								<td class="long">
 									<a-input class="scanInput" placeholder="请选择学生" v-model="chooseName"
-										:disabled="true"></a-input>
-									<a-button type="danger" :size="size" @click="searchStudent"
-										style="margin-left: 10px;">预览</a-button>
-									<a-button type="primary" :size="size" style="margin-left: 10px;"
+										:disabled="true" style="width:50%"></a-input>
+									<a-button type="danger"  @click="searchStudent"
+										style="margin-left: 10px;">选择</a-button>
+									<a-button type="primary"  style="margin-left: 10px;"
 										@click="clearChoose">清空</a-button>
 								</td>
 							</tr>
@@ -32,7 +24,7 @@
 									<div>床位号:</div>
 								</td>
 								<td class="long">
-									<a-input class="scanInput" placeholder="请输入床位号" v-model="addBedNum"></a-input>
+									<a-input class="scanInput" style="width:50%" placeholder="请输入床位号" v-model="addBedNum"></a-input>
 								</td>
 							</tr>
 							<tr>
@@ -40,18 +32,22 @@
 									<div><span class="spanRed">*</span>入住时间:</div>
 								</td>
 								<td class="long">
-									<input class="scanInput" type="date" v-model="addTime"></input>
+									<DatePickByCN
+									      v-model="addTime"
+									      placeholder="请选择入住时间"
+									    />
+									<!-- <input class="scanInput" type="date" ></input> -->
 								</td>
 							</tr>
 						</table>
 						<template slot="footer">
-							<a-button type="primary" style="background-color:#0098f8;font-weight:bold;color:#ffffff" @click="handleOk">确定</a-button>
-							<a-button style="background-color:#999999;font-weight:bold;color:#ffffff" @click="handleCancel">取消</a-button>
+							<a-button @click="handleCancel">取消</a-button>
+							<a-button type="primary" @click="handleOk">确定</a-button>
 						</template>
 					</a-modal>
 
 					<a-modal title="查找学生" :visible="find" :confirm-loading="confirmLoading" @cancel="findCancel"
-						:width="800">
+						:width="1200">
 						<div>
 							年级:
 							<a-cascader class="small" :options="grade" placeholder="请选择年级" v-model="gradeId" />
@@ -67,40 +63,43 @@
 
 						<div style="margin-top: 20px;">
 							<a-cascader :allowClear="false" style="width: 80px;" :options="way" v-model="wayId" />
-							<a-input class="scanInput" placeholder="请输入信息" v-model="message"></a-input>
-							<a-button @click="queryStudent" style="margin-left: 30px; height: 24px;background-color:#028be2;color:#ffffff;font-weight:bold">搜索</a-button>
-							<a-button @click="clearQuery" style="margin-left: 30px; height: 24px;background-color:#f88600;color:#ffffff;font-weight:bold">清空</a-button>
+							<a-input class="scanInput" placeholder="请输入信息" v-model="message" style="width:200px;margin-left:10px;"></a-input>
+							<a-button @click="queryStudent" type="primary" style="margin-left: 10px;">搜索</a-button>
+							<a-button @click="clearQuery" style="margin-left: 10px;">清空</a-button>
 						</div>
-
-						<a-table :columns="stuCol" :data-source="stuData" :defaultCurrent="6" :pagination="stuPag"
-							@change="stuChange">
-							<span slot="operator" slot-scope="text, record">
-								<a style="color:orange; border-bottom: 1px solid orange;font-weight:bold;font-size:18px" @click="findOK(record)">选择</a>
-							</span>
-						</a-table>
+						<div class="table-useful">
+							<a-table :columns="stuCol" :data-source="stuData" :defaultCurrent="6" :pagination="stuPag"
+								@change="stuChange">
+								<span slot="operator" slot-scope="text, record">
+									<a style="color:orange; border-bottom: 1px solid orange;font-weight:bold;font-size:18px" @click="findOK(record)">选择</a>
+								</span>
+							</a-table>
+						</div>
 						<template slot="footer">
-							<a-button style="background-color:#999999;color:#ffffff;font-weight:bold" @click="findCancel">取消</a-button>
+							<a-button @click="findCancel">取消</a-button>
 						</template>
 					</a-modal>
-
-					<a-button :size="size" class="content-button button-skyblue button-after" style="font-size:16px;width:88px;height:34px;background-color:#3a3aff " @click="getDormList">
-						<icon-font type="iconxindongfang-shuaxintubiao" style="color: #FFFFFF;" />
+					<a-button type="primary" icon="arrow-left" @click="$router.go(-1);" style="margin-right:10px;">
+						返回
+					</a-button>
+					<a-button type="primary" icon="plus" @click="showModal" style="margin-right:10px;">
+						添加
+					</a-button>
+					<a-button type="primary" icon="reload" @click="getDormList">
 						刷新
 					</a-button>
 				</div>
 
-				<div style="min-width: 550px;"></div>
 			</div>
-			<div>
+			<div class="table-useful">
 				<a-table :columns="columns" :data-source="data" :defaultCurrent="6" :pagination="pagination"
 					@change="tableChange">
 					<span slot="operator" slot-scope="text, record">
-						<a style="font-size:18px;color:orange; border-bottom: 1px solid orange;"
-							@click="deleteStudent(record.key)">删除</a>
+						<a @click="deleteStudent(record.key)">删除</a>
 					</span>
 				</a-table>
 			</div>
-		</div>
+		</a-card>
 	</div>
 
 

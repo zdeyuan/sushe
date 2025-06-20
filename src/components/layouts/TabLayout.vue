@@ -3,7 +3,7 @@
     <!-- update-begin- author:sunjianlei --- date:20191009 --- for: 提升右键菜单的层级 -->
     <contextmenu :itemList="menuItemList" :visible.sync="menuVisible" style="z-index: 9999;" @select="onMenuSelect"/>
     <!-- update-end- author:sunjianlei --- date:20191009 --- for: 提升右键菜单的层级 -->
-    <a-tabs
+<!--    <a-tabs
       @contextmenu.native="e => onContextmenu(e)"
       v-if="multipage"
       :active-key="activePage"
@@ -14,13 +14,13 @@
       @change="changePage"
       @tabClick="tabCallBack"
       @edit="editPage">
-      <a-tab-pane :id="page.fullPath" :key="page.fullPath" v-for="page in pageList" :closable="!(page.meta.title=='首页')">
+     <a-tab-pane :id="page.fullPath" :key="page.fullPath" v-for="page in pageList" :closable="!(page.meta.title=='首页')">
         <span slot="tab" :pagekey="page.fullPath">{{ page.meta.title }}</span>
       </a-tab-pane>
-    </a-tabs>
+    </a-tabs> -->
     <div style="margin: 12px 12px 0;">
       <transition name="page-toggle">
-        <keep-alive v-if="multipage">
+       <keep-alive v-if="multipage">
           <router-view v-if="reloadFlag"/>
         </keep-alive>
         <template v-else>
@@ -36,7 +36,7 @@
   import Contextmenu from '@/components/menu/Contextmenu'
   import { mixin, mixinDevice } from '@/utils/mixin.js'
   import { triggerWindowResizeEvent } from '@/utils/util'
-  const indexKey = '/dorm/floorMng'
+  const indexKey = '/dashboard/go'
   import Vue from 'vue'
   import { CACHE_INCLUDED_ROUTES } from "@/store/mutation-types"
 
@@ -171,7 +171,7 @@
 
       // update-begin-author:sunjianlei date:20200120 for: 动态更改页面标题
       changeTitle(title) {
-        let projectTitle = "教育平台"
+        let projectTitle = "人力资源管理系统"
         // 首页特殊处理
         if (this.$route.path === indexKey) {
           document.title = projectTitle
@@ -418,7 +418,7 @@
       border-bottom: 1px solid transparent !important;
     }
     .ant-tabs-tab-active {
-      border-color: @primary-color!important;
+      border-color: #fff!important;
     }
   }
 

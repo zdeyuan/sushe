@@ -29,7 +29,7 @@
         </a-col>
         <a-col :span="10" style="text-align: right">
           <img v-if="requestCodeSuccess" style="margin-top: 2px;" :src="randCodeImage" @click="handleChangeCheckCode"/>
-          <img v-else style="margin-top: 2px;" src="../../../assets/checkcode.png" @click="handleChangeCheckCode"/>
+          <img v-else style="margin-top: 2px;" src="@/assets/checkcode.png" @click="handleChangeCheckCode"/>
         </a-col>
       </a-row>
       <a-form-item :wrapperCol="{span: 19, offset: 5}">
@@ -41,8 +41,8 @@
 </template>
 
 <script>
-  import { getAction,postAction } from '@/api/manage'
-  import { checkOnlyUser } from '@/api/api'
+  import { getAction,postAction } from '@/api/common/manage'
+  import { checkOnlyUser } from '@/api/common/api'
 
   export default {
     name: "Step1",

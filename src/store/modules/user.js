@@ -5,7 +5,7 @@ import {
 	phoneLogin,
 	thirdLogin,
 	sLogin
-} from "@/api/login"
+} from "@/api/common/login"
 import {
 	ACCESS_TOKEN,
 	USER_NAME,
@@ -21,12 +21,16 @@ import {
 } from "@/utils/util"
 import {
 	queryPermissionsByUser
-} from '@/api/api'
+} from '@/api/common/api'
 import {
 	getAction
-} from '@/api/manage'
-
+} from '@/api/common/manage'
+import {
+	annountCement,
+	getNoReadAnnount
+} from '@/api/index/index'
 const user = {
+	namespaced: true,
 	state: {
 		token: '',
 		username: '',
@@ -34,8 +38,11 @@ const user = {
 		tenantid: '',
 		welcome: '',
 		avatar: '',
+		roles: [],
 		permissionList: [],
-		info: {}
+		info: {},
+		unreadMessages: JSON.parse(localStorage.getItem('unreadMessages')) || [],
+		unreadCount: JSON.parse(localStorage.getItem('unreadCount')) || 0,
 	},
 
 	mutations: {
@@ -60,19 +67,31 @@ const user = {
 		SET_INFO: (state, info) => {
 			state.info = info
 		},
+		SET_ROLE: (state, roles) => {
+			state.roles = roles
+		},
 		SET_TENANT: (state, id) => {
 			state.tenantid = id
 		},
+		// 更新未读消息列表
+		SET_UNREAD_MESSAGES(state, messages) {
+			state.unreadMessages = messages;
+			localStorage.setItem('unreadMessages', JSON.stringify(messages));
+		},
+		// 更新未读消息数量
+		SET_UNREAD_COUNT(state, count) {
+			state.unreadCount = count;
+			localStorage.setItem('unreadCount', JSON.stringify(count));
+		},
 	},
-
 	actions: {
+		
 		// CAS验证登录
 		ValidateLogin({
 			commit
 		}, userInfo) {
 			return new Promise((resolve, reject) => {
 				getAction("/sys/cas/client/validateLogin", userInfo).then(response => {
-					console.log("----cas 登录--------", response);
 					if (response.success) {
 						const result = response.result
 						const userInfo = result.userInfo
@@ -98,38 +117,63 @@ const user = {
 		},
 		// 登录
 		Login({
-			commit
+			commit, dispatch
 		}, userInfo) {
 			return new Promise((resolve, reject) => {
-				if (userInfo.appId == null || userInfo.appId == '') {
-					userInfo.appId = window._CONFIG['domianAppId'];
-				}
+				userInfo.appId = 'dbb2eb1bbc9a4e9daeb847082faa8fa2'
 				sLogin(userInfo).then(response => {
 					if (response.code == '200') {
-						window.localStorage.setItem('response',JSON.stringify(response))
 						const result = response.result
 						const userInfo = result.userInfo
 						Vue.ls.set(ACCESS_TOKEN, result.token, 7 * 24 * 60 * 60 * 1000)
 						Vue.ls.set(USER_NAME, userInfo.username, 7 * 24 * 60 * 60 * 1000)
 						Vue.ls.set(USER_INFO, userInfo, 7 * 24 * 60 * 60 * 1000)
-						Vue.ls.set(UI_CACHE_DB_DICT_DATA, result.sysAllDictItems, 7 * 24 * 60 * 60 * 1000)
-						// commit('SET_TOKEN', result.token)
-						// commit('SET_INFO', userInfo)
-						// commit('SET_NAME', { username: userInfo.username,realname: userInfo.realname, welcome: welcome() })
-						// commit('SET_AVATAR', userInfo.avatar)
-						window.sessionStorage.setItem('load', JSON.stringify(response.result.sysAllDictItems))
-						window.sessionStorage.setItem('menu', JSON.stringify(response.result.menuList))
-						window.sessionStorage.setItem('manage', JSON.stringify(response.result.manageList))
-						window.sessionStorage.setItem('role', JSON.stringify(response.result.roleList))
-						window.sessionStorage.setItem('userInfo', JSON.stringify(response.result.userInfo))
-						window.sessionStorage.setItem('token',response.result.token),
-						window.sessionStorage.setItem('appId','78eb6f51fbd44297a528e6b01bbe72cf'),
-						window.localStorage.setItem('load', JSON.stringify(response.result.sysAllDictItems))
-						window.localStorage.setItem('menu', JSON.stringify(response.result.menuList))
-						window.localStorage.setItem('manage', JSON.stringify(response.result.manageList))
-						window.localStorage.setItem('role', JSON.stringify(response.result.roleList))
-						window.localStorage.setItem('userInfo', JSON.stringify(response.result.userInfo))
-						window.localStorage.setItem('token',response.result.token),
+						Vue.ls.set(UI_CACHE_DB_DICT_DATA, result.sysAllDictItems, 7 * 24 * 60 * 60 *
+							1000)
+						commit('SET_TOKEN', result.token)
+						commit('SET_INFO', userInfo);
+						commit('SET_NAME', {
+							username: userInfo.username,
+							realname: userInfo.realname,
+							welcome: welcome()
+						})
+						commit('SET_AVATAR', userInfo.avatar)
+						window.sessionStorage.setItem('load', JSON.stringify(response.result
+							.sysAllDictItems))
+						window.sessionStorage.setItem('role', JSON.stringify(response.result
+							.roleList))
+						window.sessionStorage.setItem('userInfo', JSON.stringify(response.result
+							.userInfo))
+						window.sessionStorage.setItem('token', response.result.token),
+							window.sessionStorage.setItem('appId',
+								'78eb6f51fbd44297a528e6b01bbe72cf'),
+							window.localStorage.setItem('load', JSON.stringify(response.result
+								.sysAllDictItems))
+						window.localStorage.setItem('userInfo', JSON.stringify(response.result
+							.userInfo))
+						var role = response.result.roleList;
+						let roles=[];
+						if(role.length>0&&role){
+							roles = response.result.roleList.map(role => role.code);
+							commit('SET_ROLE', roles);
+						}else{
+							reject("暂未分配权限")
+						}
+						window.localStorage.setItem('role', JSON.stringify(roles));
+						try {
+							this.dispatch('GenerateRoutes', roles).then(routers => {
+								let arr = [{
+									path: '/',
+									name: '首页'
+								}];
+								let menus = arr.concat(transformRouter(routers,roles));
+								window.localStorage.setItem('menus', JSON.stringify(menus));
+							});
+						} catch (err) {
+							console.log(err)
+						}
+
+
 						resolve(response)
 					} else {
 						reject(response)
@@ -138,6 +182,42 @@ const user = {
 					reject(error)
 				})
 			})
+		},
+		// store/index.js
+		fetchUnreadMessages({
+			commit
+		}) {
+			return new Promise((resolve, reject) => {
+				getNoReadAnnount()
+					.then((res) => {
+						if (res.code == 0) {
+							let list = res.result.anntMsgList.map((e) => {
+								return {
+									title: e.titile,
+									id:e.id,
+									description: e.description,
+									actions: [{
+											type: '发布时间',
+											text: e.createTime,
+										},
+										{
+											type: '发布人',
+											text: e.sender,
+										},
+									],
+								};
+							});
+							commit('SET_UNREAD_MESSAGES', list);
+							commit('SET_UNREAD_COUNT', res.result.anntMsgTotal);
+							resolve(list);
+						} else {
+							reject(res);
+						}
+					})
+					.catch((error) => {
+						reject(error);
+					});
+			});
 		},
 		//手机号登录
 		PhoneLogin({
@@ -174,123 +254,35 @@ const user = {
 		GetPermissionList({
 			commit
 		}) {
-			window.localStorage.getItem('token')
-			var token = window.localStorage.getItem('token')
-			console.log(token)
-			var url = 'http://172.16.20.40:8080/student/#'
 			return new Promise((resolve, reject) => {
-				// queryPermissionsByUser().then(response => {
-				let response = {
-					'success': true,
-					'message': '查询成功',
-					'code': 200,
-					'result': {
-						'allAuth': [{
-							'action': 'online:goGenerateCode',
-							'describe': '代码生成按钮',
-							'type': '1',
-							'status': '1'
-						}, {
-							'action': 'user:add',
-							'describe': '添加按钮',
-							'type': '1',
-							'status': '1'
-						}, {
-							'action': 'user:edit',
-							'describe': '用户编辑',
-							'type': '1',
-							'status': '1'
-						}, {
-							'action': 'user:sex',
-							'describe': '表单性别可见',
-							'type': '1',
-							'status': '1'
-						}, {
-							'action': 'user:form:birthday',
-							'describe': '禁用生日字段',
-							'type': '2',
-							'status': '1'
-						}, {
-							'action': 'user:form:phone',
-							'describe': '手机号禁用',
-							'type': '2',
-							'status': '1'
-						}],
-						'auth': [{
-							'action': 'user:edit',
-							'describe': '用户编辑',
-							'type': '1'
-						}, {
-							'action': 'user:form:phone',
-							'describe': '手机号禁用',
-							'type': '2'
-						}, {
-							'action': 'user:sex',
-							'describe': '表单性别可见',
-							'type': '1'
-						}, {
-							'action': 'user:add',
-							'describe': '添加按钮',
-							'type': '1'
-						}, {
-							'action': 'user:form:birthday',
-							'describe': '禁用生日字段',
-							'type': '2'
-						}, {
-							'action': 'online:goGenerateCode',
-							'describe': '代码生成按钮',
-							'type': '1'
-						}],
-						'menu': [
-						  {
-						    'redirect': null,
-						    'path': '/dashboard/analysis',
-						    'component': 'dashboard/Analysis',
-						    'route': '1',
-						    'meta': {
-						      'keepAlive': false,
-						      'internalOrExternal': false,
-						      'icon': 'home',
-						      'componentName': 'Analysis',
-						      'title': '首页'
-						    },
-						    'name': 'dashboard-analysis',
-						    'id': '9502685863ab87f0ad1134142788a385'
-						  },
-						]
-					},
-					'timestamp': 1622270623470
-				}
-
-				const menuData = response.result.menu
-				const authData = response.result.auth
-				const allAuthData = response.result.allAuth
-
-				//Vue.ls.set(USER_AUTH,authData);
-				sessionStorage.setItem(USER_AUTH, JSON.stringify(authData))
-				sessionStorage.setItem(SYS_BUTTON_AUTH, JSON.stringify(allAuthData))
-				if (menuData && menuData.length > 0) {
-					//update--begin--autor:qinfeng-----date:20200109------for：edu-63 一级菜单的子菜单全部是隐藏路由，则一级菜单不显示------
-					menuData.forEach((item, index) => {
-						if (item['children']) {
-							let hasChildrenMenu = item['children'].filter((i) => {
-								return !i.hidden || i.hidden == false
-							})
-							if (hasChildrenMenu == null || hasChildrenMenu.length == 0) {
-								item['hidden'] = true
+				queryPermissionsByUser().then(response => {
+					const menuData = response.result.menu;
+					const authData = response.result.auth;
+					const allAuthData = response.result.allAuth;
+					//Vue.ls.set(USER_AUTH,authData);
+					sessionStorage.setItem(USER_AUTH, JSON.stringify(authData));
+					sessionStorage.setItem(SYS_BUTTON_AUTH, JSON.stringify(allAuthData));
+					if (menuData && menuData.length > 0) {
+						//update--begin--autor:qinfeng-----date:20200109------for：edu-63 一级菜单的子菜单全部是隐藏路由，则一级菜单不显示------
+						menuData.forEach((item, index) => {
+							if (item["children"]) {
+								let hasChildrenMenu = item["children"].filter((i) => {
+									return !i.hidden || i.hidden == false
+								})
+								if (hasChildrenMenu == null || hasChildrenMenu.length ==
+									0) {
+									item["hidden"] = true
+								}
 							}
-						}
-					})
-					//console.log(" menu show json ", menuData)
-					//update--end--autor:qinfeng-----date:20200109------for：edu-63 一级菜单的子菜单全部是隐藏路由，则一级菜单不显示------
-					commit('SET_PERMISSIONLIST', menuData)
-				} else {
-					reject('getPermissionList: permissions must be a non-null array !')
-				}
-				resolve(response)
-				// }).catch(error => {
-				//   reject(error)
-				// })
+						})
+						commit('SET_PERMISSIONLIST', menuData)
+					} else {
+						reject('getPermissionList: permissions must be a non-null array !')
+					}
+					resolve(response)
+				}).catch(error => {
+					reject(error)
+				})
 			})
 		},
 
@@ -305,17 +297,11 @@ const user = {
 				Vue.ls.remove(ACCESS_TOKEN)
 				Vue.ls.remove(UI_CACHE_DB_DICT_DATA)
 				Vue.ls.remove(CACHE_INCLUDED_ROUTES)
+				window.localStorage.clear();
+				window.sessionStorage.clear();
 				let logoutToken = window.sessionStorage.getItem('token')
-				//console.log('logoutToken: '+ logoutToken)
+				console.log('logoutToken: ' + logoutToken)
 				logout(logoutToken).then(() => {
-					if (process.env.VUE_APP_SSO == 'true') {
-						window.sessionStorage.removeItem('appId')
-						window.sessionStorage.removeItem('token')
-						let sevice = 'http://' + window.location.host + '/'
-						let serviceUrl = encodeURIComponent(sevice)
-						window.location.href = process.env.VUE_APP_CAS_BASE_URL +
-							'/logout?service=' + serviceUrl
-					}
 					resolve()
 				}).catch(() => {
 					resolve()
@@ -362,4 +348,43 @@ const user = {
 	}
 }
 
+function transformRouter(router,roles) {
+	return router.reduce((acc, item) => {
+		let temp=roles.find(e=>e=='system');
+		const systemName = item.meta.breadcrumbs[0];
+		const parentName = !temp?item.meta.breadcrumbs[1]=='学生信息维护'?'学生信息':item.meta.breadcrumbs[1]:item.meta.breadcrumbs[1];
+		
+		// 查找系统对象是否已经存在
+		let systemObj = acc.find((obj) => obj.name === systemName);
+		
+		if (!systemObj) {
+			systemObj = {
+				name: systemName,
+				children: []
+			};
+			acc.push(systemObj);
+		}
+		// 查找父级对象是否已经存在
+		let parentObj = systemObj.children.find((obj) => obj.name === parentName);
+		if (!parentObj) {
+			const parentPath = item.redirect || item.path;
+			parentObj = {
+				name: parentName,
+				path: parentPath,
+				children: []
+			};
+			systemObj.children.push(parentObj);
+		}
+		// 添加子元素
+		if (item.children) {
+			item.children.forEach((child) => {
+				parentObj.children.push({
+					name: !temp?child.meta.title=='学生信息维护'?'学生信息':child.meta.title:child.meta.title,
+					path: child.path,
+				});
+			});
+		}
+		return acc;
+	}, []);
+}
 export default user

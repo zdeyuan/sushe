@@ -8,7 +8,7 @@
     wrapClassName="j-popup-modal"
     @ok="handleSubmit"
     @cancel="handleCancel"
-    cancelText="关闭">
+    okText="确认"  cancelText="取消">
 
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchByquery">
@@ -28,7 +28,7 @@
 
           <a-col :md="8" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchByquery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchByquery" icon="search"  style="margin-right: 10px;">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
               <a @click="handleToggleSearch" style="margin-left: 8px">
                 {{ toggleSearchStatus ? '收起' : '展开' }}
@@ -70,10 +70,10 @@
 </template>
 
 <script>
-  import { getAction } from '@/api/manage'
+  import { getAction } from '@/api/common/manage'
   import {filterObj} from '@/utils/util'
   import { filterMultiDictText } from '@/components/dict/JDictSelectUtil'
-  import { httpGroupRequest } from '@/api/GroupRequest.js'
+  import { httpGroupRequest } from '@/api/common/GroupRequest.js'
 
   const MODAL_WIDTH = 1200;
   export default {

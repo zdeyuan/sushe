@@ -1,5 +1,5 @@
 <template>
-	<a-col :span="6">
+	<a-col :span="8">
 		<div class="hello">
 			<div class="frame">
 				<div class="title-frame">
@@ -135,6 +135,7 @@
 		flex-direction: column;
 		flex-wrap: nowrap;
 		align-items: center;
+		font-size:16px;
 		justify-content: center;
 		background-color: #1BB2F3;
 		width: 100%;
@@ -172,6 +173,7 @@
 
 	.bed-img {
 		/* width: 30px; */
+		font-size:25px;
 		color: #999999;
 	}
 
