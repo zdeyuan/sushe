@@ -4,8 +4,11 @@
 
 宿舍管理系统是基于VUE+ elementui的开源宿舍管理平台系统；其中提供包含如宿舍资产、宿务、住宿考勤、制度管理、宿舍统计等各个方面的服务，方便用户可以使用本系统快捷、简洁、从容的完成关于学生宿舍相关的数据操作、管理。
 
-### 提示：该项目为前后端分离，如需要后端请点击<a href='https://gitee.com/dysxsoft/dormitory-management-backend'>这里</a>
-
+### 提示：该项目为前后端分离，如需要后端请点击<a href='https://gitee.com/dysxsoft/enrollment-management-backend'>这里</a>
+### 演示环境地址可以看看<a href='http://101.132.191.146/zhongmei/front/'>这里</a>
+账号管理员 admin  密码 123456<br/>
+账号教师 20240728 密码 123456<br/>
+账号学生 20260106 密码 123456<br/>
 
 ### 软件架构
 
