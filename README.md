@@ -27,7 +27,7 @@
 
 ### 功能清单
 
-![输入图片说明](src/assets/image5.png)
+![输入图片说明](src/assets/image.png)
 
 ### 项目下载和运行
 - 拉取项目代码
@@ -44,19 +44,17 @@ npm run build
 ![输入图片说明](src/assets/image1.png)
 ![输入图片说明](src/assets/image2.png)
 ![输入图片说明](src/assets/image3.png)
-
-
-###相关证书
-![输入图片说明](src/assets/9559befe22b102c4f42dc7e0eab0b19.jpg)
+![输入图片说明](src/assets/image4.png)
+![输入图片说明](src/assets/image5.png)
 
 ### 联系方式
 ### 微信联系方式
 
-![输入图片说明](src/assets/1715140097145.png)</br>
+![输入图片说明](src/assets/1715140097145.png)
 
 ### QQ群
-
 ![输入图片说明](src/assets/63d9778d009ea49532a243ad744328c.png)
+
 ### 期待您的联系
 
 
